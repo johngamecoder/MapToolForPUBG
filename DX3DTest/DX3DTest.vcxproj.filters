@@ -1,0 +1,554 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>
+      </Extensions>
+    </Filter>
+    <Filter Include="Source Files\1.Main">
+      <UniqueIdentifier>{c95df676-ae98-495e-9618-0dc9ddcdcb4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\3.Object">
+      <UniqueIdentifier>{23dcd468-0105-48f8-8495-65caf861c0ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\3.Object\UI">
+      <UniqueIdentifier>{2aac5572-72d4-46a9-91d5-93d60324f71f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\4.Scenes">
+      <UniqueIdentifier>{d09c0ee8-af51-4484-9bdb-df47f494c29f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\3.Object\Action">
+      <UniqueIdentifier>{ca2c7089-79ba-4983-9594-2a4e42c6a4be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\2.Manager">
+      <UniqueIdentifier>{a0c20171-b80e-4c1b-b747-81709ba381b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\0.System">
+      <UniqueIdentifier>{39f032cf-8e09-4bb3-b383-6a7c831e0a8e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\3.Object\AseModel">
+      <UniqueIdentifier>{9affc079-90c1-4040-95b5-6980a87f3984}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\3.Object\ObjModel">
+      <UniqueIdentifier>{dcfefe5d-d491-46fd-8e41-b09a0f47b649}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\3.Object\XModel">
+      <UniqueIdentifier>{3a59be5c-da2f-447d-b547-94e2578bcaaf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Sample">
+      <UniqueIdentifier>{0679d174-92e8-4254-b44e-c106d0d7dece}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Sample\Shader">
+      <UniqueIdentifier>{d3f83118-aac6-43d7-bd71-7b3559ceb197}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Sample\Cube">
+      <UniqueIdentifier>{9d2cf050-d5cd-4748-8dfa-7d50d784c672}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Sample\Grid">
+      <UniqueIdentifier>{41ffead8-f106-4522-a27b-e607599408f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Sample\DisplayObject">
+      <UniqueIdentifier>{a0a5f031-2fdc-4550-9ef3-fe034076d300}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\3.Object\_interface">
+      <UniqueIdentifier>{e5eb759c-6f58-4679-9126-671f8ba10153}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Utility">
+      <UniqueIdentifier>{6daabc83-f222-4e2a-98e6-a5a7a05735c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Sample\Shader\Effects">
+      <UniqueIdentifier>{7bd3c073-c7d1-4ef9-8f7a-b56771225b37}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DX3DTest.h">
+      <Filter>Source Files\1.Main</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobalDefinition.h">
+      <Filter>Source Files\1.Main</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Source Files\1.Main</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Source Files\1.Main</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Source Files\1.Main</Filter>
+    </ClInclude>
+    <ClInclude Include="AStar.h">
+      <Filter>Source Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Ray.h">
+      <Filter>Source Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="AStarNode.h">
+      <Filter>Source Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Heap.h">
+      <Filter>Source Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneUI.h">
+      <Filter>Source Files\4.Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Comment.h">
+      <Filter>Source Files\1.Main</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleSystem.h">
+      <Filter>Source Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="HeightMap.h">
+      <Filter>Source Files\3.Object</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexBlending.h">
+      <Filter>Source Files\Sample\DisplayObject</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Keyboard.h">
+      <Filter>Source Files\0.System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Mouse.h">
+      <Filter>Source Files\0.System</Filter>
+    </ClInclude>
+    <ClInclude Include="AlphaBlending.h">
+      <Filter>Source Files\Sample\DisplayObject</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureBlending.h">
+      <Filter>Source Files\Sample\DisplayObject</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Debug.h">
+      <Filter>Source Files\0.System</Filter>
+    </ClInclude>
+    <ClInclude Include="Sample\MipmapFilter.h">
+      <Filter>Source Files\Sample</Filter>
+    </ClInclude>
+    <ClInclude Include="Sample\Frustum.h">
+      <Filter>Source Files\Sample</Filter>
+    </ClInclude>
+    <ClInclude Include="Sample\Picking.h">
+      <Filter>Source Files\Sample</Filter>
+    </ClInclude>
+    <ClInclude Include="scene\SceneGrid.h">
+      <Filter>Source Files\4.Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="scene\SceneHeightmap.h">
+      <Filter>Source Files\4.Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="scene\SceneObjMap.h">
+      <Filter>Source Files\4.Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="scene\SceneTest.h">
+      <Filter>Source Files\4.Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="model\obj\DrawingGroup.h">
+      <Filter>Source Files\3.Object\ObjModel</Filter>
+    </ClInclude>
+    <ClInclude Include="model\obj\ObjLoader.h">
+      <Filter>Source Files\3.Object\ObjModel</Filter>
+    </ClInclude>
+    <ClInclude Include="model\obj\ObjMap.h">
+      <Filter>Source Files\3.Object\ObjModel</Filter>
+    </ClInclude>
+    <ClInclude Include="model\ase\Asciitok.h">
+      <Filter>Source Files\3.Object\AseModel</Filter>
+    </ClInclude>
+    <ClInclude Include="model\ase\AseLoader.h">
+      <Filter>Source Files\3.Object\AseModel</Filter>
+    </ClInclude>
+    <ClInclude Include="model\ase\AseObject.h">
+      <Filter>Source Files\3.Object\AseModel</Filter>
+    </ClInclude>
+    <ClInclude Include="model\ase\AseUnit.h">
+      <Filter>Source Files\3.Object\AseModel</Filter>
+    </ClInclude>
+    <ClInclude Include="Application.h">
+      <Filter>Source Files\1.Main</Filter>
+    </ClInclude>
+    <ClInclude Include="sample\Viewport.h">
+      <Filter>Source Files\Sample</Filter>
+    </ClInclude>
+    <ClInclude Include="system\Window.h">
+      <Filter>Source Files\0.System</Filter>
+    </ClInclude>
+    <ClInclude Include="system\DX.h">
+      <Filter>Source Files\0.System</Filter>
+    </ClInclude>
+    <ClInclude Include="system\Time.h">
+      <Filter>Source Files\0.System</Filter>
+    </ClInclude>
+    <ClInclude Include="system\Camera.h">
+      <Filter>Source Files\0.System</Filter>
+    </ClInclude>
+    <ClInclude Include="manager\FontManager.h">
+      <Filter>Source Files\2.Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="manager\MapManager.h">
+      <Filter>Source Files\2.Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="manager\ObjectManager.h">
+      <Filter>Source Files\2.Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="manager\SceneManager.h">
+      <Filter>Source Files\2.Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="manager\TextureManager.h">
+      <Filter>Source Files\2.Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="manager\ShaderManager.h">
+      <Filter>Source Files\2.Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="sample\shader\ToonShader.h">
+      <Filter>Source Files\Sample\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="sample\shader\LightingDiffuseShader.h">
+      <Filter>Source Files\Sample\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="SampleUI.h">
+      <Filter>Source Files\Sample</Filter>
+    </ClInclude>
+    <ClInclude Include="sample\cube\CubemanParts.h">
+      <Filter>Source Files\Sample\Cube</Filter>
+    </ClInclude>
+    <ClInclude Include="sample\cube\ActionCube.h">
+      <Filter>Source Files\Sample\Cube</Filter>
+    </ClInclude>
+    <ClInclude Include="sample\cube\ColorCube.h">
+      <Filter>Source Files\Sample\Cube</Filter>
+    </ClInclude>
+    <ClInclude Include="sample\cube\Cubeman.h">
+      <Filter>Source Files\Sample\Cube</Filter>
+    </ClInclude>
+    <ClInclude Include="object\action\ActionMoveTo.h">
+      <Filter>Source Files\3.Object\Action</Filter>
+    </ClInclude>
+    <ClInclude Include="object\action\ActionRepeat.h">
+      <Filter>Source Files\3.Object\Action</Filter>
+    </ClInclude>
+    <ClInclude Include="object\action\ActionSequence.h">
+      <Filter>Source Files\3.Object\Action</Filter>
+    </ClInclude>
+    <ClInclude Include="object\action\IAction.h">
+      <Filter>Source Files\3.Object\Action</Filter>
+    </ClInclude>
+    <ClInclude Include="object\action\IActionObject.h">
+      <Filter>Source Files\3.Object\Action</Filter>
+    </ClInclude>
+    <ClInclude Include="object\interface\IDisplayObject.h">
+      <Filter>Source Files\3.Object\_interface</Filter>
+    </ClInclude>
+    <ClInclude Include="object\interface\IMap.h">
+      <Filter>Source Files\3.Object\_interface</Filter>
+    </ClInclude>
+    <ClInclude Include="object\interface\IScene.h">
+      <Filter>Source Files\3.Object\_interface</Filter>
+    </ClInclude>
+    <ClInclude Include="object\interface\IUnitObject.h">
+      <Filter>Source Files\3.Object\_interface</Filter>
+    </ClInclude>
+    <ClInclude Include="object\ui\IUIObject.h">
+      <Filter>Source Files\3.Object\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="object\ui\UIButton.h">
+      <Filter>Source Files\3.Object\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="object\ui\UIImage.h">
+      <Filter>Source Files\3.Object\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="object\ui\UIText.h">
+      <Filter>Source Files\3.Object\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="sample\grid\Grid.h">
+      <Filter>Source Files\Sample\Grid</Filter>
+    </ClInclude>
+    <ClInclude Include="sample\grid\Hexagon.h">
+      <Filter>Source Files\Sample\Grid</Filter>
+    </ClInclude>
+    <ClInclude Include="sample\grid\Pyramid.h">
+      <Filter>Source Files\Sample\Grid</Filter>
+    </ClInclude>
+    <ClInclude Include="sample\grid\Walls.h">
+      <Filter>Source Files\Sample\Grid</Filter>
+    </ClInclude>
+    <ClInclude Include="object\interface\IObject.h">
+      <Filter>Source Files\3.Object\_interface</Filter>
+    </ClInclude>
+    <ClInclude Include="sample\shader\ColorShader.h">
+      <Filter>Source Files\Sample\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="sample\shader\TextureMapping.h">
+      <Filter>Source Files\Sample\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="sample\shader\NormalMapping.h">
+      <Filter>Source Files\Sample\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="sample\shader\Lighting.h">
+      <Filter>Source Files\Sample\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="imconfig.h" />
+    <ClInclude Include="imgui.h" />
+    <ClInclude Include="imgui_impl_dx9.h" />
+    <ClInclude Include="imgui_internal.h" />
+    <ClInclude Include="stb_rect_pack.h" />
+    <ClInclude Include="stb_textedit.h" />
+    <ClInclude Include="stb_truetype.h" />
+    <ClInclude Include="ImGuiManager.h" />
+    <ClInclude Include="imgui_impl_win32.h" />
+    <ClInclude Include="SceneMapTool.h" />
+    <ClInclude Include="ImGuizmo.h" />
+    <ClInclude Include="ImSequencer.h" />
+    <ClInclude Include="ImGuizmoManager.h" />
+    <ClInclude Include="ResourceManager.h" />
+    <ClInclude Include="ResourceStructure.h" />
+    <ClInclude Include="Church.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="DX3DTest.cpp">
+      <Filter>Source Files\1.Main</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files\1.Main</Filter>
+    </ClCompile>
+    <ClCompile Include="AStar.cpp">
+      <Filter>Source Files\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Ray.cpp">
+      <Filter>Source Files\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="AStarNode.cpp">
+      <Filter>Source Files\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Heap.cpp">
+      <Filter>Source Files\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneUI.cpp">
+      <Filter>Source Files\4.Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="GlobalDefinition.cpp">
+      <Filter>Source Files\1.Main</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleSystem.cpp">
+      <Filter>Source Files\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="HeightMap.cpp">
+      <Filter>Source Files\3.Object</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexBlending.cpp">
+      <Filter>Source Files\Sample\DisplayObject</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Keyboard.cpp">
+      <Filter>Source Files\0.System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Mouse.cpp">
+      <Filter>Source Files\0.System</Filter>
+    </ClCompile>
+    <ClCompile Include="AlphaBlending.cpp">
+      <Filter>Source Files\Sample\DisplayObject</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureBlending.cpp">
+      <Filter>Source Files\Sample\DisplayObject</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Debug.cpp">
+      <Filter>Source Files\0.System</Filter>
+    </ClCompile>
+    <ClCompile Include="scene\SceneGrid.cpp">
+      <Filter>Source Files\4.Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="scene\SceneHeightmap.cpp">
+      <Filter>Source Files\4.Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="scene\SceneObjMap.cpp">
+      <Filter>Source Files\4.Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="scene\SceneTest.cpp">
+      <Filter>Source Files\4.Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="model\obj\DrawingGroup.cpp">
+      <Filter>Source Files\3.Object\ObjModel</Filter>
+    </ClCompile>
+    <ClCompile Include="model\obj\ObjLoader.cpp">
+      <Filter>Source Files\3.Object\ObjModel</Filter>
+    </ClCompile>
+    <ClCompile Include="model\obj\ObjMap.cpp">
+      <Filter>Source Files\3.Object\ObjModel</Filter>
+    </ClCompile>
+    <ClCompile Include="model\ase\AseLoader.cpp">
+      <Filter>Source Files\3.Object\AseModel</Filter>
+    </ClCompile>
+    <ClCompile Include="model\ase\AseObject.cpp">
+      <Filter>Source Files\3.Object\AseModel</Filter>
+    </ClCompile>
+    <ClCompile Include="model\ase\AseUnit.cpp">
+      <Filter>Source Files\3.Object\AseModel</Filter>
+    </ClCompile>
+    <ClCompile Include="Application.cpp">
+      <Filter>Source Files\1.Main</Filter>
+    </ClCompile>
+    <ClCompile Include="system\Window.cpp">
+      <Filter>Source Files\0.System</Filter>
+    </ClCompile>
+    <ClCompile Include="system\DX.cpp">
+      <Filter>Source Files\0.System</Filter>
+    </ClCompile>
+    <ClCompile Include="system\Time.cpp">
+      <Filter>Source Files\0.System</Filter>
+    </ClCompile>
+    <ClCompile Include="system\Camera.cpp">
+      <Filter>Source Files\0.System</Filter>
+    </ClCompile>
+    <ClCompile Include="manager\FontManager.cpp">
+      <Filter>Source Files\2.Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="manager\MapManager.cpp">
+      <Filter>Source Files\2.Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="manager\ObjectManager.cpp">
+      <Filter>Source Files\2.Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="manager\SceneManager.cpp">
+      <Filter>Source Files\2.Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="manager\TextureManager.cpp">
+      <Filter>Source Files\2.Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="manager\ShaderManager.cpp">
+      <Filter>Source Files\2.Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="sample\shader\ToonShader.cpp">
+      <Filter>Source Files\Sample\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="sample\shader\LightingDiffuseShader.cpp">
+      <Filter>Source Files\Sample\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="SampleUI.cpp">
+      <Filter>Source Files\Sample</Filter>
+    </ClCompile>
+    <ClCompile Include="sample\cube\ActionCube.cpp">
+      <Filter>Source Files\Sample\Cube</Filter>
+    </ClCompile>
+    <ClCompile Include="sample\cube\ColorCube.cpp">
+      <Filter>Source Files\Sample\Cube</Filter>
+    </ClCompile>
+    <ClCompile Include="sample\cube\Cubeman.cpp">
+      <Filter>Source Files\Sample\Cube</Filter>
+    </ClCompile>
+    <ClCompile Include="sample\cube\CubemanParts.cpp">
+      <Filter>Source Files\Sample\Cube</Filter>
+    </ClCompile>
+    <ClCompile Include="object\action\ActionMoveTo.cpp">
+      <Filter>Source Files\3.Object\Action</Filter>
+    </ClCompile>
+    <ClCompile Include="object\action\ActionRepeat.cpp">
+      <Filter>Source Files\3.Object\Action</Filter>
+    </ClCompile>
+    <ClCompile Include="object\action\ActionSequence.cpp">
+      <Filter>Source Files\3.Object\Action</Filter>
+    </ClCompile>
+    <ClCompile Include="object\action\IAction.cpp">
+      <Filter>Source Files\3.Object\Action</Filter>
+    </ClCompile>
+    <ClCompile Include="object\action\IActionObject.cpp">
+      <Filter>Source Files\3.Object\Action</Filter>
+    </ClCompile>
+    <ClCompile Include="object\interface\IDisplayObject.cpp">
+      <Filter>Source Files\3.Object\_interface</Filter>
+    </ClCompile>
+    <ClCompile Include="object\interface\IUnitObject.cpp">
+      <Filter>Source Files\3.Object\_interface</Filter>
+    </ClCompile>
+    <ClCompile Include="object\ui\IUIObject.cpp">
+      <Filter>Source Files\3.Object\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="object\ui\UIButton.cpp">
+      <Filter>Source Files\3.Object\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="object\ui\UIImage.cpp">
+      <Filter>Source Files\3.Object\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="object\ui\UIText.cpp">
+      <Filter>Source Files\3.Object\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="sample\grid\Grid.cpp">
+      <Filter>Source Files\Sample\Grid</Filter>
+    </ClCompile>
+    <ClCompile Include="sample\grid\Hexagon.cpp">
+      <Filter>Source Files\Sample\Grid</Filter>
+    </ClCompile>
+    <ClCompile Include="sample\grid\Pyramid.cpp">
+      <Filter>Source Files\Sample\Grid</Filter>
+    </ClCompile>
+    <ClCompile Include="sample\grid\Walls.cpp">
+      <Filter>Source Files\Sample\Grid</Filter>
+    </ClCompile>
+    <ClCompile Include="object\interface\IObject.cpp">
+      <Filter>Source Files\3.Object\_interface</Filter>
+    </ClCompile>
+    <ClCompile Include="sample\shader\ColorShader.cpp">
+      <Filter>Source Files\Sample\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="sample\shader\TextureMapping.cpp">
+      <Filter>Source Files\Sample\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="sample\shader\NormalMapping.cpp">
+      <Filter>Source Files\Sample\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="sample\shader\Lighting.cpp">
+      <Filter>Source Files\Sample\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui.cpp" />
+    <ClCompile Include="imgui_demo.cpp" />
+    <ClCompile Include="imgui_draw.cpp" />
+    <ClCompile Include="imgui_impl_dx9.cpp" />
+    <ClCompile Include="ImGuiManager.cpp" />
+    <ClCompile Include="imgui_impl_win32.cpp" />
+    <ClCompile Include="SceneMapTool.cpp" />
+    <ClCompile Include="ImGuizmo.cpp" />
+    <ClCompile Include="ImSequencer.cpp" />
+    <ClCompile Include="ImGuizmoManager.cpp" />
+    <ClCompile Include="ResourceManager.cpp" />
+    <ClCompile Include="ResourceStructure.cpp" />
+    <ClCompile Include="Church.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="DX3DTest.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="small.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="DX3DTest.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Effects\Lighting.fx">
+      <Filter>Source Files\Sample\Shader\Effects</Filter>
+    </FxCompile>
+    <FxCompile Include="Effects\LightingDiffuse.fx">
+      <Filter>Source Files\Sample\Shader\Effects</Filter>
+    </FxCompile>
+    <FxCompile Include="Effects\NormalMapping.fx">
+      <Filter>Source Files\Sample\Shader\Effects</Filter>
+    </FxCompile>
+    <FxCompile Include="Effects\TextureMapping.fx">
+      <Filter>Source Files\Sample\Shader\Effects</Filter>
+    </FxCompile>
+    <FxCompile Include="Effects\ToonShader.fx">
+      <Filter>Source Files\Sample\Shader\Effects</Filter>
+    </FxCompile>
+    <FxCompile Include="Effects\ColorShader.fx">
+      <Filter>Source Files\Sample\Shader\Effects</Filter>
+    </FxCompile>
+    <FxCompile Include="Effects\EnvMapping.fx">
+      <Filter>Source Files\Sample\Shader\Effects</Filter>
+    </FxCompile>
+  </ItemGroup>
+</Project>
