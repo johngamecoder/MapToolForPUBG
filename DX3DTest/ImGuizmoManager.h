@@ -20,6 +20,7 @@ struct ObjInfo
 {
     int                 ID;
     ObjList             list;
+    string              m_ObjName;
     D3DXVECTOR3         m_Position;
     D3DXVECTOR3         m_Rotation;
     D3DXVECTOR3         m_Scale;
@@ -69,13 +70,19 @@ public:
     //float objectMatrix[16];
     float cameraProjection[16];
     float cameraView[16];
-
+    float objectMatrix[16];
 
 public:
     void Init();
     void Update();
     void Render();
 
+    void SetCurrentObject(ObjInfo* obj)
+    {
+        m_pCurrentObject = obj;
+        //resetting the position to origin
+        MatChangeDX2Float(objectMatrix, &m_pCurrentObject->m_matTransform);
+    }
 
     void HierarchyImGui();
     void LoadObjectImGui();

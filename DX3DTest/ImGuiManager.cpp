@@ -88,9 +88,9 @@ void ImGuiManager::Render()
 {
     // Rendering
     ImGui::EndFrame();
-    DX::GetDevice()->SetRenderState(D3DRS_ZENABLE, false);
-    DX::GetDevice()->SetRenderState(D3DRS_ALPHABLENDENABLE, false);
-    DX::GetDevice()->SetRenderState(D3DRS_SCISSORTESTENABLE, false);
+    //DX::GetDevice()->SetRenderState(D3DRS_ZENABLE, false);
+    //DX::GetDevice()->SetRenderState(D3DRS_ALPHABLENDENABLE, false);
+    //DX::GetDevice()->SetRenderState(D3DRS_SCISSORTESTENABLE, false);
     //D3DCOLOR clear_col_dx = D3DCOLOR_RGBA((int)(clear_color.x*255.0f), (int)(clear_color.y*255.0f), (int)(clear_color.z*255.0f), (int)(clear_color.w*255.0f));
     //DX::GetDevice()->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, clear_col_dx, 1.0f, 0);
     //if (DX::GetDevice()->BeginScene() >= 0)

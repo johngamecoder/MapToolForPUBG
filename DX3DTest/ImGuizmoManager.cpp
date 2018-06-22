@@ -1,12 +1,10 @@
 #include "stdafx.h"
+#include <stdio.h>
 #include "ImGuizmo.h"
 #include "ImGuizmoManager.h"
 #include "Church.h"
-float objectMatrix[16] =
-{ 1.f, 0.f, 0.f, 0.f,
-0.f, 1.f, 0.f, 0.f,
-0.f, 0.f, 1.f, 0.f,
-0.f, 0.f, 0.f, 1.f };
+
+//이것을 header 쪽으로 옴기고 싶은데 어떻게 해야 할까요? ㅠ
 const char* ComboObjectList[] = { "Church","Tree","Rock","Ware House" };
 
 
@@ -15,7 +13,15 @@ ImGuizmoManager::ImGuizmoManager()
     comboSelect = 0;
     m_pCamera = NULL;
     m_pCurrentObject = NULL;
-    
+
+
+    //identity matrix
+    for (int i = 0; i < 4; i++)
+        for (int j = 0; j < 4; j++)
+            if (i == j)
+                objectMatrix[(i * 4) + j] = 1.0f;
+            else
+                objectMatrix[(i * 4) + j] = 0.0f;
 }
 
 ImGuizmoManager::~ImGuizmoManager()
@@ -47,9 +53,11 @@ void ImGuizmoManager::Init()
 
 void ImGuizmoManager::Update()
 {
+    
     HierarchyImGui();
     LoadObjectImGui();
     InspectorImGui();
+    //여기에 transform 바꾸는거 빼놓자
 }
 
 void ImGuizmoManager::Render()
@@ -84,11 +92,21 @@ void ImGuizmoManager::HierarchyImGui()
     ImGui::Begin("Hierarchy");
     {
         ImGui::Separator();
-        
-        ImGui::Text("1");
-        ImGui::Text("2");
-        ImGui::Text("3");
-        //이곳에 load한 product들이 들어갈 것이다.
+        //이곳에 load한 product들이 들어갈 것이다
+        static bool selectedbool = false;
+        for (auto p : m_mapObject)
+        {
+            char buf[32];
+            sprintf_s(buf, p.second->m_ObjName.c_str());
+
+            if (ImGui::Selectable(buf, selectedbool))
+            {
+                SetCurrentObject(p.second);
+                //m_pCurrentObject = ;
+                //MatChangeDX2Float(objectMatrix, &m_pCurrentObject->m_matTransform);
+                break;
+            }
+        }
     }ImGui::End();
 }
 void ImGuizmoManager::LoadObjectImGui()
@@ -113,26 +131,30 @@ void ImGuizmoManager::LoadObjectImGui()
 }
 void ImGuizmoManager::InspectorImGui()
 {
-    if (!m_pCurrentObject) //if current object is not picked then 
-        return;
-    ImGuiIO& io = ImGui::GetIO();
-
-    
-    
-    if (!m_pCamera->isPerspective)
+    ImGui::Begin("Inspector");
     {
-        m_pCamera->m_viewHeight = m_pCamera->m_viewWidth * io.DisplaySize.y / io.DisplaySize.x;
-    }
+        if (!m_pCurrentObject) //if current object is not picked then 
+        {
+            ImGui::End();
+            return;
+        }
+        ImGuiIO& io = ImGui::GetIO();
 
-    MatChangeDX2Float(cameraView, m_pCamera->GetViewMatrix());
-    MatChangeDX2Float(cameraProjection, m_pCamera->GetProjMatrix());
+    
+    
+        if (!m_pCamera->isPerspective)
+        {
+            m_pCamera->m_viewHeight = m_pCamera->m_viewWidth * io.DisplaySize.y / io.DisplaySize.x;
+        }
+
+        MatChangeDX2Float(cameraView, m_pCamera->GetViewMatrix());
+        MatChangeDX2Float(cameraProjection, m_pCamera->GetProjMatrix());
     
 
 
-    ImGuizmo::BeginFrame();//찾았다! 이거다이거! 
+        ImGuizmo::BeginFrame();//찾았다! 이거다이거! 
 
-    ImGui::Begin("Editor");
-    {
+
         ImGui::Text("%.1f FPS", ImGui::GetIO().Framerate);
         ImGui::Separator();
         {//변환
@@ -252,9 +274,10 @@ void ImGuizmoManager::ObjectLoader(int index)
     switch (index)
     {
     case ObjList::CHURCH:
-        m_pCurrentObject = new ObjInfo(++churchCount, ObjList::CHURCH);
+        SetCurrentObject(new ObjInfo(++churchCount, ObjList::CHURCH));
         m_pCurrentObject->objPtr = m_vecObjectContainer[ObjList::CHURCH];
-        m_mapObject.emplace("Church" + to_string(churchCount), m_pCurrentObject);
+        m_pCurrentObject->m_ObjName = "Church" + to_string(churchCount);
+        m_mapObject.emplace(m_pCurrentObject->m_ObjName, m_pCurrentObject);
         break;
     case ObjList::TREE:
         
@@ -277,8 +300,7 @@ void ImGuizmoManager::ObjectLoader(int index)
         ImGui::End();
         return;
     }
-    //resetting the position to origin
-    MatChangeDX2Float(objectMatrix, &m_pCurrentObject->m_matTransform);
+    
 }
 void ImGuizmoManager::SaveObjInfo2File()
 {
@@ -291,6 +313,7 @@ void ImGuizmoManager::SaveObjInfo2File()
             myFile << "{\n";
             myFile << to_string(temp->ID) + "\n";
             myFile << to_string(temp->list) + "\n";
+            myFile << temp->m_ObjName + "\n";
             myFile << to_string(temp->m_Position.x) + to_string(temp->m_Position.y) + to_string(temp->m_Position.z) + "\n";
             myFile << to_string(temp->m_Rotation.x) + to_string(temp->m_Rotation.y) + to_string(temp->m_Rotation.z) + "\n";
             myFile << to_string(temp->m_Scale.x) + to_string(temp->m_Scale.y) + to_string(temp->m_Scale.z) + "\n";
