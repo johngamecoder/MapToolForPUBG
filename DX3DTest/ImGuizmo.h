@@ -161,6 +161,7 @@ namespace ImGuizmo
 		ROTATE,
 		SCALE,
 		BOUNDS,
+        HANDLE
 	};
 
 	enum MODE

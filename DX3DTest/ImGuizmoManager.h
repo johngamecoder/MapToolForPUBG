@@ -2,13 +2,7 @@
 //#include <fstream>
 class IDisplayObject;
 class Camera;
-
-static const float identityMatrix[16] =
-{ 1.f, 0.f, 0.f, 0.f,
-0.f, 1.f, 0.f, 0.f,
-0.f, 0.f, 1.f, 0.f,
-0.f, 0.f, 0.f, 1.f };
-
+//string ComboObjList[] = { "Church","Tree","Rock","Ware House" };
 enum ObjList {
     CHURCH,
     TREE,
@@ -47,7 +41,7 @@ class ImGuizmoManager
 {
 public:
     Camera* m_pCamera;
-    
+    LPDIRECT3DTEXTURE9 pButtonTexture;
 
     ImGuizmoManager();
     ~ImGuizmoManager();
@@ -67,7 +61,6 @@ public:
     // Camera projection
     bool isPerspective;
     float viewWidth;
-    //float objectMatrix[16];
     float cameraProjection[16];
     float cameraView[16];
     float objectMatrix[16];

@@ -10,6 +10,7 @@ const char* ComboObjectList[] = { "Church","Tree","Rock","Ware House" };
 
 ImGuizmoManager::ImGuizmoManager()
 {
+    pButtonTexture = NULL;
     comboSelect = 0;
     m_pCamera = NULL;
     m_pCurrentObject = NULL;
@@ -22,6 +23,7 @@ ImGuizmoManager::ImGuizmoManager()
                 objectMatrix[(i * 4) + j] = 1.0f;
             else
                 objectMatrix[(i * 4) + j] = 0.0f;
+    pButtonTexture = TextureManager::Get()->GetTexture(_T("Resource/hand.png"));
 }
 
 ImGuizmoManager::~ImGuizmoManager()
@@ -36,7 +38,7 @@ ImGuizmoManager::~ImGuizmoManager()
     for (auto p : m_mapObject)
         SAFE_DELETE(p.second);
     m_mapObject.clear();
-    
+    SAFE_RELEASE(pButtonTexture);
 }
 
 
@@ -75,46 +77,72 @@ void ImGuizmoManager::Render()
 
 void ImGuizmoManager::HierarchyImGui()
 {
-    //ImGui::Begin(" ");
-    //{
-    //    if (ImGui::ArrowButton("Hand", ImGuiDir_::ImGuiDir_Left))
-    //        Camera::Get()->m_bQKey = !Camera::Get()->m_bQKey;
-    //    ImGui::SameLine();
-    //    if (ImGui::ArrowButton("Translation", ImGuiDir_::ImGuiDir_Up))
-    //        Camera::Get()->m_bWKey = !Camera::Get()->m_bWKey;
-    //    ImGui::SameLine();
-    //    ImGui::ArrowButton("Rotation", ImGuiDir_::ImGuiDir_Right);
-    //    ImGui::SameLine();
-    //    ImGui::ArrowButton("Scale", ImGuiDir_::ImGuiDir_Down);
-    //    ImGui::SameLine();
-    //}ImGui::End();
+    ImGui::Begin(" ");
+    {
+        int frame_padding = -1;
+        ImGui::ImageButton((void*)pButtonTexture, ImVec2(32, 22), ImVec2(0, 0), ImVec2(0.2f, 1), frame_padding, ImColor(0, 0, 0, 255));
+        ImGui::SameLine();
+        ImGui::ImageButton((void*)pButtonTexture, ImVec2(32, 22), ImVec2(0.2f, 0), ImVec2(0.4f, 1), frame_padding, ImColor(0, 0, 0, 255));
+        ImGui::SameLine();
+        ImGui::ImageButton((void*)pButtonTexture, ImVec2(32, 22), ImVec2(0.4f, 0), ImVec2(0.6f, 1), frame_padding, ImColor(0, 0, 0, 255));
+        ImGui::SameLine();
+        ImGui::ImageButton((void*)pButtonTexture, ImVec2(32, 22), ImVec2(0.6f, 0), ImVec2(0.8f, 1), frame_padding, ImColor(0, 0, 0, 255));
+
+    }ImGui::End();
     
     ImGui::Begin("Hierarchy");
     {
         ImGui::Separator();
         //이곳에 load한 product들이 들어갈 것이다
-        static bool selectedbool = false;
+        static int selected = -1;
+        int n = 0;
         for (auto p : m_mapObject)
         {
             char buf[32];
             sprintf_s(buf, p.second->m_ObjName.c_str());
-
-            if (ImGui::Selectable(buf, selectedbool))
+            if (ImGui::Selectable(buf, selected == n))
             {
-                SetCurrentObject(p.second);
-                //m_pCurrentObject = ;
-                //MatChangeDX2Float(objectMatrix, &m_pCurrentObject->m_matTransform);
-                break;
+                selected = n;
+                SetCurrentObject(p.second); 
             }
+            n++;
         }
+        
+        
+        //test
+        
+        
+
+
+        //ImGuiIO& io = ImGui::GetIO();
+        //ImTextureID my_tex_id = io.Fonts->TexID;
+        //float my_tex_w = (float)io.Fonts->TexWidth;
+        //float my_tex_h = (float)io.Fonts->TexHeight;
+        //static int pressed_count = 0;
+        //for (int i = 0; i < 8; i++)
+        //{
+        //    ImGui::PushID(i);
+        //    int frame_padding = -1 + i;     // -1 = uses default padding
+        //    if (ImGui::ImageButton(my_tex_id, ImVec2(32, 32), ImVec2(0, 0), ImVec2(32.0f / my_tex_w, 32 / my_tex_h), frame_padding, ImColor(0, 0, 0, 255)))
+        //        pressed_count += 1;
+        //    ImGui::PopID();
+        //    ImGui::SameLine();
+        //}
+
+
     }ImGui::End();
 }
 void ImGuizmoManager::LoadObjectImGui()
 {
     ImGui::Begin("Object Loader");
     {
-        ImGui::Separator();
-
+        //ImGui::Separator();
+        //char buff[ObjList::COUNT][32];
+        //for (int i = 0; i < ObjList::COUNT; i++)
+        //{
+        //    sprintf_s(buff[i], ComboObjList[i].c_str());
+        //}
+        //
         ImGui::Combo("", &comboSelect, ComboObjectList, ObjList::COUNT/*이건 갯수 넣는 부분 */);
         ImGui::SameLine();
         if (ImGui::Button("Load"))
@@ -133,15 +161,14 @@ void ImGuizmoManager::InspectorImGui()
 {
     ImGui::Begin("Inspector");
     {
+        ImGuiIO& io = ImGui::GetIO();
+        ImGui::Text("%f FPS", ImGui::GetIO().Framerate);
         if (!m_pCurrentObject) //if current object is not picked then 
         {
             ImGui::End();
             return;
         }
-        ImGuiIO& io = ImGui::GetIO();
 
-    
-    
         if (!m_pCamera->isPerspective)
         {
             m_pCamera->m_viewHeight = m_pCamera->m_viewWidth * io.DisplaySize.y / io.DisplaySize.x;
@@ -155,7 +182,7 @@ void ImGuizmoManager::InspectorImGui()
         ImGuizmo::BeginFrame();//찾았다! 이거다이거! 
 
 
-        ImGui::Text("%.1f FPS", ImGui::GetIO().Framerate);
+        
         ImGui::Separator();
         {//변환
             ImGui::Text("Transform");
@@ -199,7 +226,7 @@ void ImGuizmoManager::ContainObject()
 
 void ImGuizmoManager::EditTransform(const float * cameraView, float * cameraProjection, float * matrix)
 {
-    static ImGuizmo::OPERATION mCurrentGizmoOperation(ImGuizmo::TRANSLATE);
+    static ImGuizmo::OPERATION mCurrentGizmoOperation(ImGuizmo::HANDLE);
     static ImGuizmo::MODE mCurrentGizmoMode(ImGuizmo::WORLD);
     //static bool useSnap = false;
     //static float snap[3] = { 1.f, 1.f, 1.f };
@@ -208,6 +235,8 @@ void ImGuizmoManager::EditTransform(const float * cameraView, float * cameraProj
     //static bool boundSizing = false;
     //static bool boundSizingSnap = false;
 
+    if (ImGui::IsKeyPressed(81))  // q Key
+        mCurrentGizmoOperation = ImGuizmo::HANDLE;
     if (ImGui::IsKeyPressed(87)) // w key
         mCurrentGizmoOperation = ImGuizmo::TRANSLATE;
     if (ImGui::IsKeyPressed(69))// e key
@@ -237,36 +266,10 @@ void ImGuizmoManager::EditTransform(const float * cameraView, float * cameraProj
         if (ImGui::RadioButton("World", mCurrentGizmoMode == ImGuizmo::WORLD))
             mCurrentGizmoMode = ImGuizmo::WORLD;
     }
-    //if (ImGui::IsKeyPressed(83))
-    //    useSnap = !useSnap;
-    //ImGui::Checkbox("", &useSnap);
-    //ImGui::SameLine();
 
-    //switch (mCurrentGizmoOperation)
-    //{
-    //case ImGuizmo::TRANSLATE:
-    //    ImGui::InputFloat3("Snap", &snap[0]);
-    //    break;
-    //case ImGuizmo::ROTATE:
-    //    ImGui::InputFloat("Angle Snap", &snap[0]);
-    //    break;
-    //case ImGuizmo::SCALE:
-    //    ImGui::InputFloat("Scale Snap", &snap[0]);
-    //    break;
-    //}
-    //ImGui::Checkbox("Bound Sizing", &boundSizing);
-    //if (boundSizing)
-    //{
-    //    ImGui::PushID(3);
-    //    ImGui::Checkbox("", &boundSizingSnap);
-    //    ImGui::SameLine();
-    //    ImGui::InputFloat3("Snap", boundsSnap);
-    //    ImGui::PopID();
-    //}
 
     ImGuiIO& io = ImGui::GetIO();
     ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
-    //ImGuizmo::Manipulate(cameraView, cameraProjection, mCurrentGizmoOperation, mCurrentGizmoMode, matrix, NULL, useSnap ? &snap[0] : NULL, boundSizing ? bounds : NULL, boundSizingSnap ? boundsSnap : NULL);
     ImGuizmo::Manipulate(cameraView, cameraProjection, mCurrentGizmoOperation, mCurrentGizmoMode, matrix, NULL,  NULL, NULL, NULL);
 }
 void ImGuizmoManager::ObjectLoader(int index)
