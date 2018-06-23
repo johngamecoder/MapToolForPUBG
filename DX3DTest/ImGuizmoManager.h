@@ -1,8 +1,10 @@
 #pragma once
+#include "ImGuizmo.h"
 //#include <fstream>
 class IDisplayObject;
 class Camera;
 //string ComboObjList[] = { "Church","Tree","Rock","Ware House" };
+
 enum ObjList {
     CHURCH,
     TREE,
@@ -10,6 +12,8 @@ enum ObjList {
     WAREHOUSE,
     COUNT
 };
+//여기에 add 할때, 아래에 ***count 변수 생성도 해주고 init에서 0으로 최기화
+//+ Init() 초기화 할때에 switch 문에 넣어주기 (이부분은 숫자 맞추게 하기 위해서 넣은 코드)
 struct ObjInfo 
 {
     int                 ID;
@@ -40,25 +44,29 @@ struct ObjInfo
 class ImGuizmoManager 
 {
 public:
+    string m_currentSceneName;
     Camera* m_pCamera;
-    LPDIRECT3DTEXTURE9 pButtonTexture;
 
-    ImGuizmoManager();
-    ~ImGuizmoManager();
-
-    vector<IDisplayObject*> m_vecObjectContainer;
-
-    map<string, ObjInfo*> m_mapObject;
+    vector<IDisplayObject*> m_vecObjectContainer;   //contains Displayable Objects
+    map<string, ObjInfo*> m_mapObject;              
+    //vector<> m_vecSavedScene;
     ObjInfo* m_pCurrentObject;
+    
+    LPDIRECT3DTEXTURE9 m_pButtonTexture_Handle;
+    LPDIRECT3DTEXTURE9 m_pButtonTexture_Translation;
+    LPDIRECT3DTEXTURE9 m_pButtonTexture_Rotation;
+    LPDIRECT3DTEXTURE9 m_pButtonTexture_Scale;
+
+    ImGuizmo::OPERATION mCurrentGizmoOperation;
+    ImGuizmo::MODE mCurrentGizmoMode;
 
     int comboSelect;
+    int churchCount;
+    int treeCount;
+    int rockCount;
+    int wareHouseCount;
 
-    int churchCount=0;
-    int treeCount=0;
-    int rockCount=0;
-    int wareHouseCount=0;
-
-    // Camera projection
+    // Camera view & projection
     bool isPerspective;
     float viewWidth;
     float cameraProjection[16];
@@ -66,6 +74,9 @@ public:
     float objectMatrix[16];
 
 public:
+    ImGuizmoManager();
+    ~ImGuizmoManager();
+
     void Init();
     void Update();
     void Render();
@@ -77,14 +88,17 @@ public:
         MatChangeDX2Float(objectMatrix, &m_pCurrentObject->m_matTransform);
     }
 
+    void MenuBarImGui();
     void HierarchyImGui();
     void LoadObjectImGui();
     void InspectorImGui();
 
+    void NewScene();
+    void OpenScene(string& fileName );
+    void SaveScene(string& fileName );
     void ContainObject();
     void EditTransform(const float *cameraView, float *cameraProjection, float* matrix);
     void ObjectLoader(int index);
-    void SaveObjInfo2File();
 
     void MatChangeDX2Float(OUT float * m16, IN D3DXMATRIXA16 * mat);
     void MatChangeFloat2DX(OUT D3DXMATRIXA16 * mat, IN float * m16);

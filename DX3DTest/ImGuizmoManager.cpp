@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include <stdio.h>
-#include "ImGuizmo.h"
+#include <sstream>
+
 #include "ImGuizmoManager.h"
 #include "Church.h"
 
@@ -10,22 +11,15 @@ const char* ComboObjectList[] = { "Church","Tree","Rock","Ware House" };
 
 ImGuizmoManager::ImGuizmoManager()
 {
-    pButtonTexture = NULL;
-    comboSelect = 0;
     m_pCamera = NULL;
-    m_pCurrentObject = NULL;
 
+    m_pButtonTexture_Handle = NULL; m_pButtonTexture_Handle = TextureManager::Get()->GetTexture(_T("Resource/handle.png"));
+    m_pButtonTexture_Translation = NULL; m_pButtonTexture_Translation = TextureManager::Get()->GetTexture(_T("Resource/translation.png"));
+    m_pButtonTexture_Rotation = NULL;m_pButtonTexture_Rotation = TextureManager::Get()->GetTexture(_T("Resource/rotation.png"));
+    m_pButtonTexture_Scale = NULL; m_pButtonTexture_Scale = TextureManager::Get()->GetTexture(_T("Resource/scale.png"));
 
-    //identity matrix
-    for (int i = 0; i < 4; i++)
-        for (int j = 0; j < 4; j++)
-            if (i == j)
-                objectMatrix[(i * 4) + j] = 1.0f;
-            else
-                objectMatrix[(i * 4) + j] = 0.0f;
-    pButtonTexture = TextureManager::Get()->GetTexture(_T("Resource/hand.png"));
+    ContainObject();
 }
-
 ImGuizmoManager::~ImGuizmoManager()
 {
     //SAFE_DELETE(m_pCamera); 이건 여기서 중단되는것이 아니다.
@@ -38,27 +32,55 @@ ImGuizmoManager::~ImGuizmoManager()
     for (auto p : m_mapObject)
         SAFE_DELETE(p.second);
     m_mapObject.clear();
-    SAFE_RELEASE(pButtonTexture);
+
+    SAFE_RELEASE(m_pButtonTexture_Handle);
+    SAFE_RELEASE(m_pButtonTexture_Translation);
+    SAFE_RELEASE(m_pButtonTexture_Rotation);
+    SAFE_RELEASE(m_pButtonTexture_Scale);
 }
 
 
 void ImGuizmoManager::Init()
 {
-    //g_pResourceManager->GetEffectMesh("h", "h");
+    m_currentSceneName = "";
+    m_mapObject.clear();
+    churchCount = 0;
+    treeCount = 0;
+    rockCount = 0;
+    wareHouseCount = 0;
+
+
+
+    mCurrentGizmoOperation = ImGuizmo::HANDLE;
+    mCurrentGizmoMode = ImGuizmo::WORLD;
+
+    comboSelect = -1;
+    
+    m_pCurrentObject = NULL;
+
     m_pCamera = Camera::Get();
     // Camera projection
     isPerspective  = true;
     viewWidth     = 10.f; // for orthographic
-
-    ContainObject();
+    
+    //identity matrix
+    for (int i = 0; i < 4; i++)
+        for (int j = 0; j < 4; j++)
+            if (i == j)
+                objectMatrix[(i * 4) + j] = 1.0f;
+            else
+                objectMatrix[(i * 4) + j] = 0.0f;
+    
 }
 
 void ImGuizmoManager::Update()
 {
-    
+
+    MenuBarImGui();
     HierarchyImGui();
     LoadObjectImGui();
     InspectorImGui();
+    
     //여기에 transform 바꾸는거 빼놓자
 }
 
@@ -75,18 +97,153 @@ void ImGuizmoManager::Render()
 
 
 
+void ImGuizmoManager::MenuBarImGui()
+{
+    ImGui::BeginMainMenuBar();
+    if (ImGui::BeginMenu("File"))
+    {
+        //ImGui::MenuItem("(dummy menu)", NULL, false, false);
+        if (ImGui::MenuItem("New Scene")) Init();
+        //ImGui::OpenPopup("Delete?");
+        //if(ImGui::BeginPopupModal("Delete?", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+        //{
+        //    ImGui::Text("All those beautiful files will be deleted.\nThis operation cannot be undone!\n\n");
+        //    ImGui::Separator();
+
+        //    //static int dummy_i = 0;
+        //    //ImGui::Combo("Combo", &dummy_i, "Delete\0Delete harder\0");
+
+        //    static bool dont_ask_me_next_time = false;
+        //    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
+        //    ImGui::Checkbox("Don't ask me next time", &dont_ask_me_next_time);
+        //    ImGui::PopStyleVar();
+
+        //    if (ImGui::Button("OK", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); }
+        //    ImGui::SetItemDefaultFocus();
+        //    ImGui::SameLine();
+        //    if (ImGui::Button("Cancel", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); }
+        //    ImGui::EndPopup();
+        //}
+
+        if (ImGui::MenuItem("Open Scene", "Ctrl+O")) 
+        {
+            string fileName = "save.txt";
+            OpenScene(fileName);
+        }
+        ImGui::Separator();
+        if (ImGui::BeginMenu("Open Recent"))
+        {
+            ImGui::MenuItem("fish_hat.c");
+            ImGui::MenuItem("fish_hat.inl");
+            ImGui::MenuItem("fish_hat.h");
+            if (ImGui::BeginMenu("More.."))
+            {
+                ImGui::MenuItem("Hello");
+                ImGui::MenuItem("Sailor");
+                if (ImGui::BeginMenu("Recurse.."))
+                {
+                    //ShowExampleMenuFile();
+                    ImGui::EndMenu();
+                }
+                ImGui::EndMenu();
+            }
+            ImGui::EndMenu();
+        }
+        if (ImGui::MenuItem("Save", "Ctrl+S")) 
+        {
+            string fileName ="save.txt";
+            SaveScene(fileName);
+        }
+        if (ImGui::MenuItem("Save As..")) 
+        {
+
+        }
+        ImGui::Separator();
+        if (ImGui::BeginMenu("Options"))
+        {
+            static bool enabled = true;
+            ImGui::MenuItem("Enabled", "", &enabled);
+            ImGui::BeginChild("child", ImVec2(0, 60), true);
+            for (int i = 0; i < 10; i++)
+                ImGui::Text("Scrolling Text %d", i);
+            ImGui::EndChild();
+            static float f = 0.5f;
+            static int n = 0;
+            static bool b = true;
+            ImGui::SliderFloat("Value", &f, 0.0f, 1.0f);
+            ImGui::InputFloat("Input", &f, 0.1f);
+            ImGui::Combo("Combo", &n, "Yes\0No\0Maybe\0\0");
+            ImGui::Checkbox("Check", &b);
+            ImGui::EndMenu();
+        }
+        if (ImGui::BeginMenu("Colors"))
+        {
+            float sz = ImGui::GetTextLineHeight();
+            for (int i = 0; i < ImGuiCol_COUNT; i++)
+            {
+                const char* name = ImGui::GetStyleColorName((ImGuiCol)i);
+                ImVec2 p = ImGui::GetCursorScreenPos();
+                ImGui::GetWindowDrawList()->AddRectFilled(p, ImVec2(p.x + sz, p.y + sz), ImGui::GetColorU32((ImGuiCol)i));
+                ImGui::Dummy(ImVec2(sz, sz));
+                ImGui::SameLine();
+                ImGui::MenuItem(name);
+            }
+            ImGui::EndMenu();
+        }
+        if (ImGui::BeginMenu("Disabled", false)) // Disabled
+        {
+            IM_ASSERT(0);
+        }
+        if (ImGui::MenuItem("Checked", NULL, true)) {}
+        if (ImGui::MenuItem("Quit", "Alt+F4")) {}
+        ImGui::EndMenu();
+    }
+    if (ImGui::BeginMenu("Edit"))
+    {
+        if (ImGui::MenuItem("Undo", "CTRL+Z")) {}
+        if (ImGui::MenuItem("Redo", "CTRL+Y", false, false)) {}  // Disabled item
+        ImGui::Separator();
+        if (ImGui::MenuItem("Cut", "CTRL+X")) {}
+        if (ImGui::MenuItem("Copy", "CTRL+C")) {}
+        if (ImGui::MenuItem("Paste", "CTRL+V")) {}
+        ImGui::EndMenu();
+    }
+    ImGui::EndMainMenuBar();
+}
+
 void ImGuizmoManager::HierarchyImGui()
 {
     ImGui::Begin(" ");
     {
-        int frame_padding = -1;
-        ImGui::ImageButton((void*)pButtonTexture, ImVec2(32, 22), ImVec2(0, 0), ImVec2(0.2f, 1), frame_padding, ImColor(0, 0, 0, 255));
-        ImGui::SameLine();
-        ImGui::ImageButton((void*)pButtonTexture, ImVec2(32, 22), ImVec2(0.2f, 0), ImVec2(0.4f, 1), frame_padding, ImColor(0, 0, 0, 255));
-        ImGui::SameLine();
-        ImGui::ImageButton((void*)pButtonTexture, ImVec2(32, 22), ImVec2(0.4f, 0), ImVec2(0.6f, 1), frame_padding, ImColor(0, 0, 0, 255));
-        ImGui::SameLine();
-        ImGui::ImageButton((void*)pButtonTexture, ImVec2(32, 22), ImVec2(0.6f, 0), ImVec2(0.8f, 1), frame_padding, ImColor(0, 0, 0, 255));
+        int frame_padding_notSelected = 1;
+        int frame_padding_Selected = 3;
+        switch (mCurrentGizmoOperation)
+        {
+        case ImGuizmo::HANDLE:
+            if (ImGui::ImageButton((void*)m_pButtonTexture_Handle, ImVec2(32, 22), ImVec2(0, 0), ImVec2(1, 1),    frame_padding_Selected, ImColor(0, 0, 0, 255)))    { mCurrentGizmoOperation = ImGuizmo::HANDLE;    }   ImGui::SameLine();
+            if (ImGui::ImageButton((void*)m_pButtonTexture_Translation, ImVec2(32, 22), ImVec2(0, 0), ImVec2(1, 1), frame_padding_notSelected, ImColor(0, 0, 0, 255))) { mCurrentGizmoOperation = ImGuizmo::TRANSLATE; }   ImGui::SameLine();
+            if (ImGui::ImageButton((void*)m_pButtonTexture_Rotation, ImVec2(32, 22), ImVec2(0, 0), ImVec2(1, 1), frame_padding_notSelected, ImColor(0, 0, 0, 255))) { mCurrentGizmoOperation = ImGuizmo::ROTATE;    }   ImGui::SameLine();
+            if (ImGui::ImageButton((void*)m_pButtonTexture_Scale, ImVec2(32, 22), ImVec2(0, 0), ImVec2(1, 1), frame_padding_notSelected, ImColor(0, 0, 0, 255))) { mCurrentGizmoOperation = ImGuizmo::SCALE;     }   ImGui::SameLine();
+            break;                                                                                                                                                                                                
+        case ImGuizmo::TRANSLATE:                                                                                                                                                                                 
+            if (ImGui::ImageButton((void*)m_pButtonTexture_Handle, ImVec2(32, 22), ImVec2(0, 0), ImVec2(1, 1),    frame_padding_notSelected, ImColor(0, 0, 0, 255))) { mCurrentGizmoOperation = ImGuizmo::HANDLE;    }   ImGui::SameLine();
+            if (ImGui::ImageButton((void*)m_pButtonTexture_Translation, ImVec2(32, 22), ImVec2(0, 0), ImVec2(1, 1), frame_padding_Selected, ImColor(0, 0, 0, 255))) { mCurrentGizmoOperation = ImGuizmo::TRANSLATE; }   ImGui::SameLine();
+            if (ImGui::ImageButton((void*)m_pButtonTexture_Rotation, ImVec2(32, 22), ImVec2(0, 0), ImVec2(1, 1), frame_padding_notSelected, ImColor(0, 0, 0, 255))) { mCurrentGizmoOperation = ImGuizmo::ROTATE; }   ImGui::SameLine();
+            if (ImGui::ImageButton((void*)m_pButtonTexture_Scale, ImVec2(32, 22), ImVec2(0, 0), ImVec2(1, 1), frame_padding_notSelected, ImColor(0, 0, 0, 255))) { mCurrentGizmoOperation = ImGuizmo::SCALE; }   ImGui::SameLine();
+            break;                                                                                                                                                                                                 
+        case ImGuizmo::ROTATE:                                                                                                                                                                                 
+            if (ImGui::ImageButton((void*)m_pButtonTexture_Handle, ImVec2(32, 22), ImVec2(0, 0), ImVec2(1, 1), frame_padding_notSelected, ImColor(0, 0, 0, 255))) { mCurrentGizmoOperation = ImGuizmo::HANDLE; }   ImGui::SameLine();
+            if (ImGui::ImageButton((void*)m_pButtonTexture_Translation, ImVec2(32, 22), ImVec2(0, 0), ImVec2(1, 1), frame_padding_notSelected, ImColor(0, 0, 0, 255))) { mCurrentGizmoOperation = ImGuizmo::TRANSLATE; }   ImGui::SameLine();
+            if (ImGui::ImageButton((void*)m_pButtonTexture_Rotation, ImVec2(32, 22), ImVec2(0, 0), ImVec2(1, 1), frame_padding_Selected, ImColor(0, 0, 0, 255))) { mCurrentGizmoOperation = ImGuizmo::ROTATE; }   ImGui::SameLine();
+            if (ImGui::ImageButton((void*)m_pButtonTexture_Scale, ImVec2(32, 22), ImVec2(0, 0), ImVec2(1, 1), frame_padding_notSelected, ImColor(0, 0, 0, 255))) { mCurrentGizmoOperation = ImGuizmo::SCALE; }   ImGui::SameLine();
+            break;                                                                                                                                                                                               
+        case ImGuizmo::SCALE:                                                                                                                                                                               
+            if (ImGui::ImageButton((void*)m_pButtonTexture_Handle, ImVec2(32, 22), ImVec2(0, 0), ImVec2(1, 1), frame_padding_notSelected, ImColor(0, 0, 0, 255))) { mCurrentGizmoOperation = ImGuizmo::HANDLE; }   ImGui::SameLine();
+            if (ImGui::ImageButton((void*)m_pButtonTexture_Translation, ImVec2(32, 22), ImVec2(0, 0), ImVec2(1, 1), frame_padding_notSelected, ImColor(0, 0, 0, 255))) { mCurrentGizmoOperation = ImGuizmo::TRANSLATE; }   ImGui::SameLine();
+            if (ImGui::ImageButton((void*)m_pButtonTexture_Rotation, ImVec2(32, 22), ImVec2(0, 0), ImVec2(1, 1), frame_padding_notSelected, ImColor(0, 0, 0, 255))) { mCurrentGizmoOperation = ImGuizmo::ROTATE; }   ImGui::SameLine();
+            if (ImGui::ImageButton((void*)m_pButtonTexture_Scale, ImVec2(32, 22), ImVec2(0, 0), ImVec2(1, 1), frame_padding_Selected, ImColor(0, 0, 0, 255))) { mCurrentGizmoOperation = ImGuizmo::SCALE; }   ImGui::SameLine();
+            break;
+        }
 
     }ImGui::End();
     
@@ -107,28 +264,6 @@ void ImGuizmoManager::HierarchyImGui()
             }
             n++;
         }
-        
-        
-        //test
-        
-        
-
-
-        //ImGuiIO& io = ImGui::GetIO();
-        //ImTextureID my_tex_id = io.Fonts->TexID;
-        //float my_tex_w = (float)io.Fonts->TexWidth;
-        //float my_tex_h = (float)io.Fonts->TexHeight;
-        //static int pressed_count = 0;
-        //for (int i = 0; i < 8; i++)
-        //{
-        //    ImGui::PushID(i);
-        //    int frame_padding = -1 + i;     // -1 = uses default padding
-        //    if (ImGui::ImageButton(my_tex_id, ImVec2(32, 32), ImVec2(0, 0), ImVec2(32.0f / my_tex_w, 32 / my_tex_h), frame_padding, ImColor(0, 0, 0, 255)))
-        //        pressed_count += 1;
-        //    ImGui::PopID();
-        //    ImGui::SameLine();
-        //}
-
 
     }ImGui::End();
 }
@@ -149,11 +284,11 @@ void ImGuizmoManager::LoadObjectImGui()
         {
             ObjectLoader(comboSelect);
         }
-        ImGui::Separator();
-        if (ImGui::Button("Save to txt file"))
-        {
-            SaveObjInfo2File();
-        }
+        //ImGui::Separator();
+        //if (ImGui::Button("Save to txt file"))
+        //{
+        //    
+        //}
 
     }ImGui::End();
 }
@@ -162,7 +297,7 @@ void ImGuizmoManager::InspectorImGui()
     ImGui::Begin("Inspector");
     {
         ImGuiIO& io = ImGui::GetIO();
-        ImGui::Text("%f FPS", ImGui::GetIO().Framerate);
+        ImGui::Text("%.1f FPS", ImGui::GetIO().Framerate);
         if (!m_pCurrentObject) //if current object is not picked then 
         {
             ImGui::End();
@@ -212,6 +347,109 @@ void ImGuizmoManager::InspectorImGui()
     }ImGui::End();
 }
 
+
+
+void ImGuizmoManager::NewScene()
+{
+    for (auto p : m_mapObject)
+        SAFE_DELETE(p.second);
+
+    Init();
+}
+void ImGuizmoManager::OpenScene(string& fileName)
+{
+    Init(); // clearing the scene
+
+    std::ifstream myFile(fileName);
+    if (myFile.is_open())
+    {
+        string line;
+        getline(myFile, line);
+        m_currentSceneName = line;  //opening current scene 
+
+        while (!myFile.eof())
+        {
+            std::stringstream ss;
+            std::stringstream ssMat;
+            getline(myFile, line); //take out {
+            if (line != "{") break;
+            ObjInfo* temp = new ObjInfo();
+            getline(myFile, line);                      temp->ID = stoi(line);
+            getline(myFile, line);                      temp->list = ObjList(stoi(line));
+            getline(myFile, line);                      temp->m_ObjName += line;
+            getline(myFile, line);      ss << line;     ss >> line;     temp->m_Position.x = stof(line, 0);     ss >> line;     temp->m_Position.y = stof(line, 0);      ss >> line;    temp->m_Position.z = stof(line, 0);
+            getline(myFile, line);      ss << line;     ss >> line;     temp->m_Rotation.x = stof(line, 0);     ss >> line;     temp->m_Rotation.y = stof(line, 0);      ss >> line;    temp->m_Rotation.z = stof(line, 0);
+            getline(myFile, line);      ss << line;     ss >> line;     temp->m_Scale.x = stof(line, 0);        ss >> line;     temp->m_Scale.y = stof(line, 0);         ss >> line;    temp->m_Scale.z = stof(line, 0);
+            
+            getline(myFile, line);      ssMat << line;
+            ssMat >> line; temp->m_matTransform._11 = stof(line, 0);  ssMat >> line; temp->m_matTransform._12 = stof(line, 0);  ssMat >> line; temp->m_matTransform._13 = stof(line, 0);  ssMat >> line; temp->m_matTransform._14 = stof(line, 0);
+            ssMat >> line; temp->m_matTransform._21 = stof(line, 0);  ssMat >> line; temp->m_matTransform._22 = stof(line, 0);  ssMat >> line; temp->m_matTransform._23 = stof(line, 0);  ssMat >> line; temp->m_matTransform._24 = stof(line, 0);
+            ssMat >> line; temp->m_matTransform._31 = stof(line, 0);  ssMat >> line; temp->m_matTransform._32 = stof(line, 0);  ssMat >> line; temp->m_matTransform._33 = stof(line, 0);  ssMat >> line; temp->m_matTransform._34 = stof(line, 0);
+            ssMat >> line; temp->m_matTransform._41 = stof(line, 0);  ssMat >> line; temp->m_matTransform._42 = stof(line, 0);  ssMat >> line; temp->m_matTransform._43 = stof(line, 0);  ssMat >> line; temp->m_matTransform._44 = stof(line, 0);
+            
+            temp->objPtr = m_vecObjectContainer[temp->list];
+            getline(myFile, line);  //take out }
+            
+            m_mapObject.emplace(temp->m_ObjName, temp);
+        }
+        myFile.close();
+    }
+    else
+    {
+        assert(false && "안됨.ㅜㅜ");
+    }
+
+    for (auto p : m_mapObject)
+    {
+        switch (p.second->list)
+        {
+        case ObjList::CHURCH:
+            churchCount = p.second->ID;
+            break;
+        case ObjList::TREE:
+            treeCount = p.second->ID;
+            break;
+        case ObjList::ROCK:
+            rockCount = p.second->ID;
+            break;
+        case ObjList::WAREHOUSE:
+            wareHouseCount = p.second->ID;
+            break;
+        }
+    }
+}
+
+void ImGuizmoManager::SaveScene(string& fileName)
+{
+    std::ofstream myFile(fileName);
+    if (myFile.is_open())
+    {
+        myFile << fileName << "\n";
+        for (auto p : m_mapObject)
+        {
+            ObjInfo* temp = p.second;
+            myFile << "{"<<"\n";
+            myFile << to_string(temp->ID) + "\n";
+            myFile << to_string(temp->list) + "\n";
+            myFile << temp->m_ObjName + "\n";
+            myFile << to_string(temp->m_Position.x) + " " + to_string(temp->m_Position.y) + " " + to_string(temp->m_Position.z) + "\n";
+            myFile << to_string(temp->m_Rotation.x) + " " + to_string(temp->m_Rotation.y) + " " + to_string(temp->m_Rotation.z) + "\n";
+            myFile << to_string(temp->m_Scale.x) + " " + to_string(temp->m_Scale.y) + " " + to_string(temp->m_Scale.z) + "\n";
+            myFile << to_string(temp->m_matTransform._11) + " " + to_string(temp->m_matTransform._12) + " " + to_string(temp->m_matTransform._13) + " " + to_string(temp->m_matTransform._14) + " "
+                + to_string(temp->m_matTransform._21) + " "+ to_string(temp->m_matTransform._22) + " "+ to_string(temp->m_matTransform._23) + " "+ to_string(temp->m_matTransform._24) + " "
+                + to_string(temp->m_matTransform._31) + " "+ to_string(temp->m_matTransform._32) + " "+ to_string(temp->m_matTransform._33) + " "+ to_string(temp->m_matTransform._34) + " "
+                + to_string(temp->m_matTransform._41) + " "+ to_string(temp->m_matTransform._42) + " "+ to_string(temp->m_matTransform._43) + " "+ to_string(temp->m_matTransform._44) + "\n";
+            myFile << "}"<<"\n";
+        }
+        myFile.close();
+    }
+    else
+    {
+        assert(false && "안됨..");
+    }
+
+}
+
 void ImGuizmoManager::ContainObject()
 {
     //m_vecObjectContainer.resize(ObjList::COUNT);
@@ -223,11 +461,9 @@ void ImGuizmoManager::ContainObject()
     //m_vecObjectContainer[ObjList::WAREHOUSE] = new WAREHOUSE();
 
 }
-
 void ImGuizmoManager::EditTransform(const float * cameraView, float * cameraProjection, float * matrix)
 {
-    static ImGuizmo::OPERATION mCurrentGizmoOperation(ImGuizmo::HANDLE);
-    static ImGuizmo::MODE mCurrentGizmoMode(ImGuizmo::WORLD);
+    
     //static bool useSnap = false;
     //static float snap[3] = { 1.f, 1.f, 1.f };
     //static float bounds[] = { -0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f };
@@ -305,31 +541,7 @@ void ImGuizmoManager::ObjectLoader(int index)
     }
     
 }
-void ImGuizmoManager::SaveObjInfo2File()
-{
-    std::ofstream myFile("save.txt");
-    if (myFile.is_open())
-    {
-        for (auto p : m_mapObject)
-        {
-            ObjInfo* temp = p.second;
-            myFile << "{\n";
-            myFile << to_string(temp->ID) + "\n";
-            myFile << to_string(temp->list) + "\n";
-            myFile << temp->m_ObjName + "\n";
-            myFile << to_string(temp->m_Position.x) + to_string(temp->m_Position.y) + to_string(temp->m_Position.z) + "\n";
-            myFile << to_string(temp->m_Rotation.x) + to_string(temp->m_Rotation.y) + to_string(temp->m_Rotation.z) + "\n";
-            myFile << to_string(temp->m_Scale.x) + to_string(temp->m_Scale.y) + to_string(temp->m_Scale.z) + "\n";
-            myFile << to_string(temp->m_matTransform._11) + to_string(temp->m_matTransform._12) + to_string(temp->m_matTransform._13) + to_string(temp->m_matTransform._14)
-                + to_string(temp->m_matTransform._21) + to_string(temp->m_matTransform._22) + to_string(temp->m_matTransform._23) + to_string(temp->m_matTransform._24)
-                + to_string(temp->m_matTransform._31) + to_string(temp->m_matTransform._32) + to_string(temp->m_matTransform._33) + to_string(temp->m_matTransform._34)
-                + to_string(temp->m_matTransform._41) + to_string(temp->m_matTransform._42) + to_string(temp->m_matTransform._43) + to_string(temp->m_matTransform._44) + "\n";
-            myFile << "}\n";
-        }
-        
-        myFile.close();
-    }
-}
+
 void ImGuizmoManager::MatChangeDX2Float(OUT float * m16, IN D3DXMATRIXA16 * mat)
 {
     m16[0] = mat->_11;m16[1] = mat->_12;m16[2] = mat->_13;m16[3] = mat->_14;
