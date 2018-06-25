@@ -3,7 +3,8 @@
 //#include <fstream>
 class IDisplayObject;
 class Camera;
-//string ComboObjList[] = { "Church","Tree","Rock","Ware House" };
+class BoxCollider;
+//string ComboObjList[] = { "Bandage","Church","Tree","Rock","Ware House" };
 
 enum ObjList {
     BANDAGE,
@@ -29,6 +30,7 @@ struct ObjInfo
     D3DXVECTOR3         m_Scale;
     D3DXMATRIXA16       m_matTransform;
     IDisplayObject*     objPtr;
+    vector<BoxCollider*> m_vecBoxCollider;
     
     ObjInfo()
         :  m_Position(0.0f, 0.0f, 0.0f), 
@@ -51,6 +53,8 @@ class ImGuizmoManager
 public:
     string m_currentSceneName;
     Camera* m_pCamera;
+
+    IDisplayObject* m_pBoxCollider;
 
     vector<IDisplayObject*> m_vecObjectContainer;   //contains Displayable Objects
     map<string, ObjInfo*> m_mapObject;              

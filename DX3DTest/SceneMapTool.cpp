@@ -19,8 +19,8 @@ SceneMapTool::~SceneMapTool()
 
 void SceneMapTool::Init()
 {
-    //m_pImGuizmoManager = new ImGuizmoManager(); m_pImGuizmoManager->Init();
-    m_pBoundSizing = new BoundSizing();
+    m_pImGuizmoManager = new ImGuizmoManager(); m_pImGuizmoManager->Init();
+    //m_pBoundSizing = new BoundSizing(); m_pBoundSizing->Init();
     IDisplayObject* pObj = NULL;
     pObj = new Grid(); pObj->Init(); AddSimpleObj(pObj);
 

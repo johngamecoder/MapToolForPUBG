@@ -5,6 +5,7 @@
 #include "ImGuizmoManager.h"
 #include "Church.h"
 #include "Bandage.h"
+#include "BoxCollider.h"
 
 //이것을 header 쪽으로 옴기고 싶은데 어떻게 해야 할까요? ㅠ
 const char* ComboObjectList[] = { "Bandage","Church","Tree","Rock","Ware House" };
@@ -13,13 +14,16 @@ const char* ComboObjectList[] = { "Bandage","Church","Tree","Rock","Ware House" 
 ImGuizmoManager::ImGuizmoManager()
 {
     m_pCamera = NULL;
-
+    
+    //for rendering image buttons
     m_pButtonTexture_Handle = NULL; m_pButtonTexture_Handle = TextureManager::Get()->GetTexture(_T("Resource/handle.png"));
     m_pButtonTexture_Translation = NULL; m_pButtonTexture_Translation = TextureManager::Get()->GetTexture(_T("Resource/translation.png"));
     m_pButtonTexture_Rotation = NULL;m_pButtonTexture_Rotation = TextureManager::Get()->GetTexture(_T("Resource/rotation.png"));
     m_pButtonTexture_Scale = NULL; m_pButtonTexture_Scale = TextureManager::Get()->GetTexture(_T("Resource/scale.png"));
 
-    ContainObject();
+    ContainObject(); //loading objects from file using resourcemanager
+
+    m_pBoxCollider = NULL;
 }
 ImGuizmoManager::~ImGuizmoManager()
 {
@@ -38,6 +42,8 @@ ImGuizmoManager::~ImGuizmoManager()
     SAFE_RELEASE(m_pButtonTexture_Translation);
     SAFE_RELEASE(m_pButtonTexture_Rotation);
     SAFE_RELEASE(m_pButtonTexture_Scale);
+
+    SAFE_RELEASE(m_pBoxCollider);
 }
 
 
@@ -73,6 +79,7 @@ void ImGuizmoManager::Init()
             else
                 objectMatrix[(i * 4) + j] = 0.0f;
     
+    m_pBoxCollider = new BoxCollider(); m_pBoxCollider->Init();
 }
 
 void ImGuizmoManager::Update()
@@ -84,6 +91,7 @@ void ImGuizmoManager::Update()
     InspectorImGui();
     
     //여기에 transform 바꾸는거 빼놓자
+    SAFE_UPDATE(m_pBoxCollider);
 }
 
 void ImGuizmoManager::Render()
@@ -96,6 +104,7 @@ void ImGuizmoManager::Render()
         SAFE_RENDER(instance->objPtr);
     }
     
+    SAFE_RENDER(m_pBoxCollider);
 }
 
 
@@ -274,24 +283,24 @@ void ImGuizmoManager::LoadObjectImGui()
 {
     ImGui::Begin("Object Loader");
     {
-        //ImGui::Separator();
-        //char buff[ObjList::COUNT][32];
-        //for (int i = 0; i < ObjList::COUNT; i++)
-        //{
-        //    sprintf_s(buff[i], ComboObjList[i].c_str());
-        //}
-        //
+
         ImGui::Combo("", &comboSelect, ComboObjectList, ObjList::COUNT/*이건 갯수 넣는 부분 */);
         ImGui::SameLine();
         if (ImGui::Button("Load"))
         {
             ObjectLoader(comboSelect);
         }
-        //ImGui::Separator();
-        //if (ImGui::Button("Save to txt file"))
-        //{
-        //    
-        //}
+
+        ImGui::Separator();
+        //int temp;
+        // Simplified one-liner Combo() API, using values packed in a single constant string
+        //static int item_current_2 = 0;
+        //ImGui::Combo("combo 2 (one-liner)", &item_current_2, "aaaa\0bbbb\0cccc\0dddd\0eeee\0\0");
+
+        //ImGui::Combo("",&temp)
+
+
+
 
     }ImGui::End();
 }
@@ -315,7 +324,7 @@ void ImGuizmoManager::InspectorImGui()
         MatChangeDX2Float(cameraView, m_pCamera->GetViewMatrix());
         MatChangeDX2Float(cameraProjection, m_pCamera->GetProjMatrix());
     
-
+        //ImGuizmo::DrawCube(cameraView, cameraProjection, objectMatrix);
 
         ImGuizmo::BeginFrame();//찾았다! 이거다이거! 
 
@@ -326,6 +335,7 @@ void ImGuizmoManager::InspectorImGui()
             ImGui::Text("Transform");
             EditTransform(cameraView, cameraProjection, objectMatrix);
             MatChangeFloat2DX(&m_pCurrentObject->m_matTransform, objectMatrix);
+            //m_pBoxCollider->SetWorldMatrix(m_pCurrentObject->m_matTransform);
         }
         ImGui::Separator();
         {//카메라
@@ -473,9 +483,9 @@ void ImGuizmoManager::EditTransform(const float * cameraView, float * cameraProj
     
     //static bool useSnap = false;
     //static float snap[3] = { 1.f, 1.f, 1.f };
-    //static float bounds[] = { -0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f };
+    static float bounds[] = { -0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f };
     //static float boundsSnap[] = { 0.1f, 0.1f, 0.1f };
-    //static bool boundSizing = false;
+    static bool boundSizing = false;
     //static bool boundSizingSnap = false;
 
     if (ImGui::IsKeyPressed(81))  // q Key
@@ -486,6 +496,8 @@ void ImGuizmoManager::EditTransform(const float * cameraView, float * cameraProj
         mCurrentGizmoOperation = ImGuizmo::ROTATE;
     if (ImGui::IsKeyPressed(82)) // r Key
         mCurrentGizmoOperation = ImGuizmo::SCALE;
+    if (ImGui::IsKeyPressed(84))
+        mCurrentGizmoOperation = ImGuizmo::BOUNDS;
 
     if (ImGui::RadioButton("Translate", mCurrentGizmoOperation == ImGuizmo::TRANSLATE))
         mCurrentGizmoOperation = ImGuizmo::TRANSLATE;
@@ -513,10 +525,12 @@ void ImGuizmoManager::EditTransform(const float * cameraView, float * cameraProj
             mCurrentGizmoMode = ImGuizmo::WORLD;
     }
 
+    ImGui::Checkbox("Bound Sizing", &boundSizing);
 
     ImGuiIO& io = ImGui::GetIO();
     ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
-    ImGuizmo::Manipulate(cameraView, cameraProjection, mCurrentGizmoOperation, mCurrentGizmoMode, matrix, NULL,  NULL, NULL, NULL);
+    ImGuizmo::Manipulate(cameraView, cameraProjection, mCurrentGizmoOperation, mCurrentGizmoMode, matrix, NULL,  NULL, boundSizing ? bounds : NULL, NULL);
+    
 }
 void ImGuizmoManager::ObjectLoader(int index)
 {
