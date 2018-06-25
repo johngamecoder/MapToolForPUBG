@@ -162,7 +162,10 @@
     <ClInclude Include="Application.h" />
     <ClInclude Include="AStar.h" />
     <ClInclude Include="AStarNode.h" />
+    <ClInclude Include="Bandage.h" />
+    <ClInclude Include="BoundSizing.h" />
     <ClInclude Include="Church.h" />
+    <ClInclude Include="Collider.h" />
     <ClInclude Include="imconfig.h" />
     <ClInclude Include="imgui.h" />
     <ClInclude Include="ImGuiManager.h" />
@@ -254,7 +257,10 @@
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="AStar.cpp" />
     <ClCompile Include="AStarNode.cpp" />
+    <ClCompile Include="Bandage.cpp" />
+    <ClCompile Include="BoundSizing.cpp" />
     <ClCompile Include="Church.cpp" />
+    <ClCompile Include="Collider.cpp" />
     <ClCompile Include="imgui.cpp" />
     <ClCompile Include="ImGuiManager.cpp" />
     <ClCompile Include="ImGuizmo.cpp" />

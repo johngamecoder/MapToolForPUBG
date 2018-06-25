@@ -14,15 +14,15 @@ void Application::Init()
 {
 	DX::Get()->Init();
 	Mouse::Get()->Init(DX::GetInfo().hWnd);
-	Camera::Get()->Init();
+	//Camera::Get()->Init();
 	SceneManager::Get()->Init();
 }
 
 void Application::Destroy()
 {
 	Mouse::Delete();
-	//Keyboard::Delete();
-	Camera::Delete();
+	Keyboard::Delete();
+	//Camera::Delete();
 	SceneManager::Delete();
 	ObjectManager::Delete();
 	g_pMapManager->Destroy();
@@ -41,9 +41,9 @@ void Application::Update()
 	//Debug::Get()->InitText();
 	Time::Get()->Update();
 	Mouse::Get()->Update();
-	//Keyboard::Get()->Update();
+	Keyboard::Get()->Update();
 	SceneManager::Get()->Update();
-	Camera::Get()->Update();
+	//Camera::Get()->Update();
 }
 
 void Application::Render()

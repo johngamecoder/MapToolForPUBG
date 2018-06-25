@@ -4,9 +4,10 @@
 
 #include "ImGuizmoManager.h"
 #include "Church.h"
+#include "Bandage.h"
 
 //이것을 header 쪽으로 옴기고 싶은데 어떻게 해야 할까요? ㅠ
-const char* ComboObjectList[] = { "Church","Tree","Rock","Ware House" };
+const char* ComboObjectList[] = { "Bandage","Church","Tree","Rock","Ware House" };
 
 
 ImGuizmoManager::ImGuizmoManager()
@@ -44,6 +45,7 @@ void ImGuizmoManager::Init()
 {
     m_currentSceneName = "";
     m_mapObject.clear();
+    bandageCount = 0;
     churchCount = 0;
     treeCount = 0;
     rockCount = 0;
@@ -75,7 +77,7 @@ void ImGuizmoManager::Init()
 
 void ImGuizmoManager::Update()
 {
-
+    MouseHandleMove();
     MenuBarImGui();
     HierarchyImGui();
     LoadObjectImGui();
@@ -86,6 +88,7 @@ void ImGuizmoManager::Update()
 
 void ImGuizmoManager::Render()
 {
+    //rendering the objects ex) bandage, church
     for (auto p : m_mapObject)
     {
         auto instance = p.second;
@@ -403,6 +406,9 @@ void ImGuizmoManager::OpenScene(string& fileName)
     {
         switch (p.second->list)
         {
+        case ObjList::BANDAGE:
+            bandageCount = p.second->ID;
+            break;
         case ObjList::CHURCH:
             churchCount = p.second->ID;
             break;
@@ -455,7 +461,8 @@ void ImGuizmoManager::ContainObject()
     //m_vecObjectContainer.resize(ObjList::COUNT);
     m_vecObjectContainer.resize(1);
 
-    m_vecObjectContainer[ObjList::CHURCH] = new Church(); m_vecObjectContainer[ObjList::CHURCH]->Init();
+    m_vecObjectContainer[ObjList::BANDAGE] = new Bandage(); m_vecObjectContainer[ObjList::BANDAGE]->Init();
+    //m_vecObjectContainer[ObjList::CHURCH] = new Church(); m_vecObjectContainer[ObjList::CHURCH]->Init();
     //m_vecObjectContainer[ObjList::TREE] = new TREE();
     //m_vecObjectContainer[ObjList::ROCK] = new ROCK();
     //m_vecObjectContainer[ObjList::WAREHOUSE] = new WAREHOUSE();
@@ -479,6 +486,7 @@ void ImGuizmoManager::EditTransform(const float * cameraView, float * cameraProj
         mCurrentGizmoOperation = ImGuizmo::ROTATE;
     if (ImGui::IsKeyPressed(82)) // r Key
         mCurrentGizmoOperation = ImGuizmo::SCALE;
+
     if (ImGui::RadioButton("Translate", mCurrentGizmoOperation == ImGuizmo::TRANSLATE))
         mCurrentGizmoOperation = ImGuizmo::TRANSLATE;
     ImGui::SameLine();
@@ -487,7 +495,9 @@ void ImGuizmoManager::EditTransform(const float * cameraView, float * cameraProj
     ImGui::SameLine();
     if (ImGui::RadioButton("Scale", mCurrentGizmoOperation == ImGuizmo::SCALE))
         mCurrentGizmoOperation = ImGuizmo::SCALE;
+
     float matrixTranslation[3], matrixRotation[3], matrixScale[3];
+
     ImGuizmo::DecomposeMatrixToComponents(matrix, matrixTranslation, matrixRotation, matrixScale);//메트릭스에서 각 요소들 구하는 부분
     ImGui::InputFloat3("Tr", matrixTranslation, 3);
     ImGui::InputFloat3("Rt", matrixRotation, 3);
@@ -512,6 +522,12 @@ void ImGuizmoManager::ObjectLoader(int index)
 {
     switch (index)
     {
+    case ObjList::BANDAGE:
+        SetCurrentObject(new ObjInfo(++bandageCount, ObjList::BANDAGE));
+        m_pCurrentObject->objPtr = m_vecObjectContainer[ObjList::BANDAGE];
+        m_pCurrentObject->m_ObjName = "Bandage" + to_string(bandageCount);
+        m_mapObject.emplace(m_pCurrentObject->m_ObjName, m_pCurrentObject);
+        break;
     case ObjList::CHURCH:
         SetCurrentObject(new ObjInfo(++churchCount, ObjList::CHURCH));
         m_pCurrentObject->objPtr = m_vecObjectContainer[ObjList::CHURCH];
@@ -540,6 +556,15 @@ void ImGuizmoManager::ObjectLoader(int index)
         return;
     }
     
+}
+
+void ImGuizmoManager::MouseHandleMove()
+{
+    //this functions are controlled at Camera.cpp
+    if (mCurrentGizmoOperation != ImGuizmo::HANDLE)
+        m_pCamera->isHandle = false;
+    else
+        m_pCamera->isHandle = true;
 }
 
 void ImGuizmoManager::MatChangeDX2Float(OUT float * m16, IN D3DXMATRIXA16 * mat)

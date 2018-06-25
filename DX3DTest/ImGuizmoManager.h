@@ -6,6 +6,7 @@ class Camera;
 //string ComboObjList[] = { "Church","Tree","Rock","Ware House" };
 
 enum ObjList {
+    BANDAGE,
     CHURCH,
     TREE,
     ROCK,
@@ -13,6 +14,10 @@ enum ObjList {
     COUNT
 };
 //여기에 add 할때, 아래에 ***count 변수 생성도 해주고 init에서 0으로 최기화
+//ComboObjectList[] 너어주기 
+//ContainObject 추가해 주기
+//ObjectLoader(int index) switch 문 추가해주기
+//Open Scene 바꾸어 주기 
 //+ Init() 초기화 할때에 switch 문에 넣어주기 (이부분은 숫자 맞추게 하기 위해서 넣은 코드)
 struct ObjInfo 
 {
@@ -61,6 +66,7 @@ public:
     ImGuizmo::MODE mCurrentGizmoMode;
 
     int comboSelect;
+    int bandageCount;
     int churchCount;
     int treeCount;
     int rockCount;
@@ -100,6 +106,7 @@ public:
     void EditTransform(const float *cameraView, float *cameraProjection, float* matrix);
     void ObjectLoader(int index);
 
+    void MouseHandleMove();
     void MatChangeDX2Float(OUT float * m16, IN D3DXMATRIXA16 * mat);
     void MatChangeFloat2DX(OUT D3DXMATRIXA16 * mat, IN float * m16);
 };

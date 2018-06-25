@@ -307,6 +307,9 @@
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="ResourceStructure.h" />
     <ClInclude Include="Church.h" />
+    <ClInclude Include="Bandage.h" />
+    <ClInclude Include="BoundSizing.h" />
+    <ClInclude Include="Collider.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DX3DTest.cpp">
@@ -514,6 +517,9 @@
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="ResourceStructure.cpp" />
     <ClCompile Include="Church.cpp" />
+    <ClCompile Include="Bandage.cpp" />
+    <ClCompile Include="BoundSizing.cpp" />
+    <ClCompile Include="Collider.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DX3DTest.rc">
