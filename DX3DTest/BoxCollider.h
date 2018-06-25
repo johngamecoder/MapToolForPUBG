@@ -12,9 +12,14 @@ private:
     D3DVERTEXBUFFER_DESC	m_VBDesc;	//buffer description
     D3DINDEXBUFFER_DESC		m_IBDesc;
 
-
-    D3DXVECTOR3 m_min;
-    D3DXVECTOR3 m_max;
+public:
+    int                 m_index;
+    D3DXVECTOR3         m_min;
+    D3DXVECTOR3         m_max;
+    D3DXVECTOR3         m_center;
+    float               m_extend;
+    D3DXMATRIXA16       m_matParent;
+    D3DXMATRIXA16       m_matTransform;
 
     //bool m_isRender;
     //D3DXVECTOR3 m_center;   //pos 
@@ -23,7 +28,7 @@ private:
     //D3DCOLOR m_color = D3DCOLOR_ARGB(1, 0, 1, 0);
 public:
 
-    BoxCollider();
+    BoxCollider(D3DXMATRIXA16& matParent);
     ~BoxCollider();
 
     // Inherited via IDisplayObject

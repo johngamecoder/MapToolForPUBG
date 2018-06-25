@@ -54,7 +54,7 @@ public:
     string m_currentSceneName;
     Camera* m_pCamera;
 
-    IDisplayObject* m_pBoxCollider;
+    //IDisplayObject* m_pBoxCollider;
 
     vector<IDisplayObject*> m_vecObjectContainer;   //contains Displayable Objects
     map<string, ObjInfo*> m_mapObject;              
@@ -69,12 +69,16 @@ public:
     ImGuizmo::OPERATION mCurrentGizmoOperation;
     ImGuizmo::MODE mCurrentGizmoMode;
 
+    int hierarchySelectedObjIndex;  //Hierarchy obj tab
+    int hierarchySelectedColliderIndex;  //Hierarchy obj tab
     int comboSelect;
     int bandageCount;
     int churchCount;
     int treeCount;
     int rockCount;
     int wareHouseCount;
+
+    bool isRenderCollider;
 
     // Camera view & projection
     bool isPerspective;
@@ -109,6 +113,8 @@ public:
     void ContainObject();
     void EditTransform(const float *cameraView, float *cameraProjection, float* matrix);
     void ObjectLoader(int index);
+    void AddBoxCollider();
+    void DeleteObject();
 
     void MouseHandleMove();
     void MatChangeDX2Float(OUT float * m16, IN D3DXMATRIXA16 * mat);

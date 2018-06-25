@@ -4,8 +4,11 @@
 #define CUBE_VERTEX_SIZE 8
 
 
-BoxCollider::BoxCollider()
+
+BoxCollider::BoxCollider(D3DXMATRIXA16 & matParent)
 {
+    //D3DXMatrixIdentity(&m_matTransform);
+    m_matParent = matParent;
 }
 
 BoxCollider::~BoxCollider()
@@ -16,17 +19,18 @@ BoxCollider::~BoxCollider()
 
 void BoxCollider::Init()
 {
+    m_matTransform = m_matParent;
     m_min = D3DXVECTOR3(-0.5f, -0.5f, -0.5f);
     m_max = D3DXVECTOR3(0.5f, 0.5f, 0.5f);
     D3DXVECTOR3 g_aCubeVertex[8] = {
-        D3DXVECTOR3(m_min.x, m_min.y, m_min.z),
-        D3DXVECTOR3(m_min.x, m_max.y, m_min.z),
-        D3DXVECTOR3(m_max.x, m_max.y, m_min.z),
-        D3DXVECTOR3(m_max.x, m_min.y, m_min.z),
-        D3DXVECTOR3(m_min.x, m_min.y, m_max.z),
-        D3DXVECTOR3(m_min.x, m_max.y, m_max.z),
-        D3DXVECTOR3(m_max.x, m_max.y, m_max.z),
-        D3DXVECTOR3(m_max.x, m_min.y, m_max.z)
+        D3DXVECTOR3(m_min.x, m_min.y, m_min.z),//0
+        D3DXVECTOR3(m_min.x, m_max.y, m_min.z),//1
+        D3DXVECTOR3(m_max.x, m_max.y, m_min.z),//2
+        D3DXVECTOR3(m_max.x, m_min.y, m_min.z),//3
+        D3DXVECTOR3(m_min.x, m_min.y, m_max.z),//4
+        D3DXVECTOR3(m_min.x, m_max.y, m_max.z),//5
+        D3DXVECTOR3(m_max.x, m_max.y, m_max.z),//6
+        D3DXVECTOR3(m_max.x, m_min.y, m_max.z)//7
     };
 
     vector<D3DXVECTOR3> vecPos;//8개의 cube정점
@@ -45,17 +49,14 @@ void BoxCollider::Init()
 
 void BoxCollider::Update()
 {
-    //if (Keyboard::Get()->KeyUp(VK_SPACE))
-    //{
-    //    D3DXMatrixTranslation(&m_matWorld, ++test, 0, 0);
-    //}
+    //m_matTransform = m_matParent*m_matWorld;
 }
 
 void BoxCollider::Render()
 {
     const auto pD = DX::GetDevice();
     pD->SetRenderState(D3DRS_LIGHTING, false);
-    pD->SetTransform(D3DTS_WORLD, &m_matWorld);
+    pD->SetTransform(D3DTS_WORLD, &m_matTransform);
     pD->SetFVF(VERTEX_PC::FVF);
     //g_pDevice->DrawPrimitiveUP(D3DPT_TRIANGLELIST,
     //	m_vecVertex.size() / 3,
@@ -63,18 +64,21 @@ void BoxCollider::Render()
     //g_pDevice->DrawIndexedPrimitiveUP(D3DPT_TRIANGLELIST, 0, m_vecVertex.size(), m_vecIndex.size() / 3,&m_vecIndex[0],D3DFMT_INDEX16,&m_vecVertex[0],sizeof(VERTEX_PC));
     pD->SetStreamSource(0, m_pVB, 0, sizeof(VERTEX_PC));
     pD->SetIndices(m_pIB);
-    pD->DrawIndexedPrimitive(D3DPT_LINELIST, 0, 0, m_VBDesc.Size, 0, m_IBDesc.Size / 3);
+    pD->DrawIndexedPrimitive(D3DPT_LINELIST, 0, 0, m_VBDesc.Size, 0, m_IBDesc.Size / 2);
 }
 
 void BoxCollider::SetVertex(vector<VERTEX_PC>& vecVertexOut, vector<WORD>& vecIndexOut, vector<D3DXVECTOR3> vecPos)
 {
-    WORD g_aCubeIndex[36] = {
-        0, 1, 2, 0, 2, 3,	// 후
-        7, 6, 5, 7, 5, 4,	// 전
-        4, 5, 1, 4, 1, 0,	// 좌
-        3, 2, 6, 3, 6, 7,	// 우
-        1, 5, 6, 1, 6, 2,	// 상
-        4, 0, 3, 4, 3, 7	// 하
+    WORD g_aCubeIndex[24] = {
+        //0, 1, 2, 0, 2, 3,	// 후
+        //7, 6, 5, 7, 5, 4,	// 전
+        //4, 5, 1, 4, 1, 0,	// 좌
+        //3, 2, 6, 3, 6, 7,	// 우
+        //1, 5, 6, 1, 6, 2,	// 상
+        //4, 0, 3, 4, 3, 7	// 하
+        0,1,1,2,2,3,3,0,
+        0,4,1,5,2,6,3,7,
+        4,7,7,6,6,5,5,4,
     };
     D3DCOLOR green = D3DCOLOR_XRGB(0, 255, 0);
 

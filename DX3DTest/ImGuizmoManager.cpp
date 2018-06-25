@@ -14,7 +14,7 @@ const char* ComboObjectList[] = { "Bandage","Church","Tree","Rock","Ware House" 
 ImGuizmoManager::ImGuizmoManager()
 {
     m_pCamera = NULL;
-    
+    isRenderCollider = true;
     //for rendering image buttons
     m_pButtonTexture_Handle = NULL; m_pButtonTexture_Handle = TextureManager::Get()->GetTexture(_T("Resource/handle.png"));
     m_pButtonTexture_Translation = NULL; m_pButtonTexture_Translation = TextureManager::Get()->GetTexture(_T("Resource/translation.png"));
@@ -23,7 +23,7 @@ ImGuizmoManager::ImGuizmoManager()
 
     ContainObject(); //loading objects from file using resourcemanager
 
-    m_pBoxCollider = NULL;
+    //m_pBoxCollider = NULL;
 }
 ImGuizmoManager::~ImGuizmoManager()
 {
@@ -35,7 +35,14 @@ ImGuizmoManager::~ImGuizmoManager()
     }
 
     for (auto p : m_mapObject)
+    {
+        for (int i = 0; i < p.second->m_vecBoxCollider.size(); i++)
+        {
+            SAFE_RELEASE(p.second->m_vecBoxCollider[i]);
+        }
         SAFE_DELETE(p.second);
+    }
+        
     m_mapObject.clear();
 
     SAFE_RELEASE(m_pButtonTexture_Handle);
@@ -43,12 +50,14 @@ ImGuizmoManager::~ImGuizmoManager()
     SAFE_RELEASE(m_pButtonTexture_Rotation);
     SAFE_RELEASE(m_pButtonTexture_Scale);
 
-    SAFE_RELEASE(m_pBoxCollider);
+    //SAFE_RELEASE(m_pBoxCollider);
 }
 
 
 void ImGuizmoManager::Init()
 {
+    hierarchySelectedObjIndex = -1;
+    hierarchySelectedColliderIndex = -1;
     m_currentSceneName = "";
     m_mapObject.clear();
     bandageCount = 0;
@@ -79,19 +88,29 @@ void ImGuizmoManager::Init()
             else
                 objectMatrix[(i * 4) + j] = 0.0f;
     
-    m_pBoxCollider = new BoxCollider(); m_pBoxCollider->Init();
+    //m_pBoxCollider = new BoxCollider(); m_pBoxCollider->Init();
 }
 
 void ImGuizmoManager::Update()
 {
     MouseHandleMove();
+
     MenuBarImGui();
     HierarchyImGui();
     LoadObjectImGui();
     InspectorImGui();
     
+    //if (m_pCurrentObject)
+    //{
+    //    for (int i = 0; i < m_pCurrentObject->m_vecBoxCollider.size(); i++)
+    //    {
+    //        SAFE_UPDATE(m_pCurrentObject->m_vecBoxCollider[i]);
+    //    }
+    //}
+    
+
     //여기에 transform 바꾸는거 빼놓자
-    SAFE_UPDATE(m_pBoxCollider);
+    //SAFE_UPDATE(m_pBoxCollider);
 }
 
 void ImGuizmoManager::Render()
@@ -102,9 +121,13 @@ void ImGuizmoManager::Render()
         auto instance = p.second;
         instance->objPtr->SetWorldMatrix(instance->m_matTransform);
         SAFE_RENDER(instance->objPtr);
+        for (int i = 0; i < instance->m_vecBoxCollider.size(); i++)
+        {
+            SAFE_RENDER(instance->m_vecBoxCollider[i]);
+        }
     }
     
-    SAFE_RENDER(m_pBoxCollider);
+    //SAFE_RENDER(m_pBoxCollider);
 }
 
 
@@ -258,26 +281,45 @@ void ImGuizmoManager::HierarchyImGui()
         }
 
     }ImGui::End();
-    
+   
     ImGui::Begin("Hierarchy");
     {
         ImGui::Separator();
         //이곳에 load한 product들이 들어갈 것이다
+        static int Selected = -1;
         static int selected = -1;
         int n = 0;
         for (auto p : m_mapObject)
         {
             char buf[32];
             sprintf_s(buf, p.second->m_ObjName.c_str());
-            if (ImGui::Selectable(buf, selected == n))
+            if (ImGui::Selectable(buf, Selected == n))
             {
-                selected = n;
-                SetCurrentObject(p.second); 
+                Selected = n;
+                hierarchySelectedObjIndex = n;
+                SetCurrentObject(p.second);
+                hierarchySelectedColliderIndex = -1;
+                selected = -1;
+            }            
+            if (hierarchySelectedObjIndex == n)
+            {
+                for (int i = 0; i < p.second->m_vecBoxCollider.size(); i++)
+                {
+                    char buf2[50];
+                    sprintf_s(buf2, "   Box Collider %d", i);
+                    if (ImGui::Selectable(buf2, selected == i))
+                    {
+                        selected = i;
+                        hierarchySelectedColliderIndex = i;
+                        MatChangeDX2Float(objectMatrix, &m_pCurrentObject->m_vecBoxCollider[i]->m_matTransform);
+                    }
+                }
             }
             n++;
         }
 
     }ImGui::End();
+
 }
 void ImGuizmoManager::LoadObjectImGui()
 {
@@ -292,10 +334,36 @@ void ImGuizmoManager::LoadObjectImGui()
         }
 
         ImGui::Separator();
-        //int temp;
-        // Simplified one-liner Combo() API, using values packed in a single constant string
-        //static int item_current_2 = 0;
-        //ImGui::Combo("combo 2 (one-liner)", &item_current_2, "aaaa\0bbbb\0cccc\0dddd\0eeee\0\0");
+
+        if (hierarchySelectedObjIndex != -1)
+        {
+            char buf[50];
+            string ment = "You have selected : ";
+            ment += m_pCurrentObject->m_ObjName.c_str();
+            sprintf_s(buf, ment.c_str());
+            ImGui::Text(buf);
+            if (ImGui::Button("Add Box Collider"))
+            {
+                AddBoxCollider();
+            }
+            if (ImGui::Button("Delete Object"))
+            {
+
+            }
+        }
+
+        //// Simplified one-liner Combo() API, using values packed in a single constant string
+        //static int temp = 0;
+        //char buf[100];
+        //string str;
+        //string str2 = "\0";
+        //for (auto p : m_mapObject)
+        //{
+        //    str += p.second->m_ObjName.c_str();
+        //    str += str2.c_str();
+        //}
+        //sprintf_s(buf, str.c_str());
+        //ImGui::Combo("combo", &temp, buf);
 
         //ImGui::Combo("",&temp)
 
@@ -334,7 +402,12 @@ void ImGuizmoManager::InspectorImGui()
         {//변환
             ImGui::Text("Transform");
             EditTransform(cameraView, cameraProjection, objectMatrix);
-            MatChangeFloat2DX(&m_pCurrentObject->m_matTransform, objectMatrix);
+            if (hierarchySelectedColliderIndex != -1)
+            {
+                MatChangeFloat2DX(&m_pCurrentObject->m_vecBoxCollider[hierarchySelectedColliderIndex]->m_matTransform, objectMatrix);
+            }
+            else
+                MatChangeFloat2DX(&m_pCurrentObject->m_matTransform, objectMatrix);
             //m_pBoxCollider->SetWorldMatrix(m_pCurrentObject->m_matTransform);
         }
         ImGui::Separator();
@@ -365,7 +438,15 @@ void ImGuizmoManager::InspectorImGui()
 void ImGuizmoManager::NewScene()
 {
     for (auto p : m_mapObject)
+    {
+        for (int i = 0; i < p.second->m_vecBoxCollider.size(); i++)
+        {
+            SAFE_RELEASE(p.second->m_vecBoxCollider[i]);
+        }
+        
         SAFE_DELETE(p.second);
+    }
+        
 
     Init();
 }
@@ -570,6 +651,18 @@ void ImGuizmoManager::ObjectLoader(int index)
         return;
     }
     
+}
+void ImGuizmoManager::AddBoxCollider()
+{
+    BoxCollider* obj = new BoxCollider(m_pCurrentObject->m_matTransform);
+    obj->Init();
+    m_pCurrentObject->m_vecBoxCollider.push_back(obj);
+
+
+}
+
+void ImGuizmoManager::DeleteObject()
+{
 }
 
 void ImGuizmoManager::MouseHandleMove()
