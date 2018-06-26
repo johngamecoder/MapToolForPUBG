@@ -57,7 +57,8 @@ public:
 
     vector<IDisplayObject*> m_vecObjectContainer;   //contains Displayable Objects
     map<ObjList, int> m_mapCount;                   //contains number of Objects
-    map<string, ObjInfo*> m_mapObject;
+    //map<string, ObjInfo*> m_mapObject;
+    deque<pair<string, ObjInfo*>> m_mapObject;
     //vector<> m_vecSavedScene;
     ObjInfo* m_pCurrentObject;
     

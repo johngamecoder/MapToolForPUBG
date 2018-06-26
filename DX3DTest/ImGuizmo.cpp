@@ -1876,26 +1876,35 @@ namespace ImGuizmo
 
       // --
       int type = NONE;
+      LPTSTR win32_cursors = IDC_ARROW;
       if (gContext.mbEnable)
       {
           if (!gContext.mbUsingBounds)
           {
               switch (operation)
               {
+              case HANDLE:
+                  win32_cursors = IDC_HAND;
+                  break;
               case ROTATE:
                   HandleRotation(matrix, deltaMatrix, type, snap);
+                  win32_cursors = IDC_UPARROW;
                   break;
               case TRANSLATE:
                   HandleTranslation(matrix, deltaMatrix, type, snap);
+                  win32_cursors = IDC_SIZEALL;
                   break;
               case SCALE:
                   HandleScale(matrix, deltaMatrix, type, snap);
+                  win32_cursors = IDC_SIZENWSE;
                   break;
               case BOUNDS:
+                  //win32_cursors = IDC_CROSS;
                   break;
               }
           }
       }
+      ::SetCursor(::LoadCursor(NULL, win32_cursors));
 
       if (localBounds && !gContext.mbUsing)
           HandleAndDrawLocalBounds(localBounds, (matrix_t*)matrix, boundsSnap, operation);

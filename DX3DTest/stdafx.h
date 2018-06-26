@@ -28,6 +28,8 @@
 #include <atlstr.h>
 #include <unordered_map>
 #include <unordered_set>
+#include <deque>
+#include <utility>
 
 using namespace std;
 #include "imgui.h"

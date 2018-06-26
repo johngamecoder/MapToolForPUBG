@@ -3,15 +3,12 @@
 #define CUBE_INDEX_SIZE 36
 #define CUBE_VERTEX_SIZE 8
 
-
-
-BoxCollider::BoxCollider(string name, const D3DXMATRIXA16& parentTransform)
+BoxCollider::BoxCollider(string name)
     : m_Parentname(name)
     , m_vExtent(0.0f, 0.0f, 0.0f)
     , m_color(D3DCOLOR_XRGB(0, 255, 0))
-    , m_mParentTransform(parentTransform)
 {
-    m_mTransform = m_mParentTransform;
+    //D3DXMatrixIdentity(&m_matWorld);
 }
 
 BoxCollider::~BoxCollider()
@@ -26,21 +23,32 @@ void BoxCollider::Init(const D3DXVECTOR3& min, const D3DXVECTOR3& max)
     m_vExtent = max - m_vCenter;
 }
 
-void BoxCollider::Update(const D3DXMATRIXA16& transform/*, const D3DXMATRIXA16& parentTransform*/)
+void BoxCollider::Update()
 {
-    D3DXMATRIX InverseMatrixOfCurrent, TM;
-    D3DXMatrixInverse(&InverseMatrixOfCurrent, nullptr, &m_mTransform);
-    TM = InverseMatrixOfCurrent * transform;
-    D3DXVec3TransformCoord(&m_vCenter, &m_vCenter, &TM);
+
+    //D3DXMATRIX InverseMatrixOfCurrent, TM;
+    //D3DXMatrixInverse(&InverseMatrixOfCurrent, nullptr, &m_mTransform);
+    //TM = InverseMatrixOfCurrent * m_mParentTransform;
+    //D3DXVec3TransformCoord(&m_vCenter, &m_vCenter, &TM);
 
     //m_mTransform =transform;
-    m_mTransform = transform * m_mParentTransform;
+    m_matWorld = m_mTransform * m_mParentTransform;
+    
 }
 
 void BoxCollider::Render()
 {
     SetVertex(-m_vExtent, m_vExtent);
-
+    ImGui::Text("%f %f %f", m_vExtent.x, m_vExtent.y, m_vExtent.z);
+    ImGui::Text("%f %f %f", m_vCenter.x, m_vCenter.y, m_vCenter.z);
+    //ImGui::Text("%f %f %f", m_vertices[0].p.x, m_vertices[0].p.y, m_vertices[0].p.z);
+    //ImGui::Text("%f %f %f", m_vertices[1].p.x, m_vertices[1].p.y, m_vertices[1].p.z);
+    //ImGui::Text("%f %f %f", m_vertices[2].p.x, m_vertices[2].p.y, m_vertices[2].p.z);
+    //ImGui::Text("%f %f %f", m_vertices[3].p.x, m_vertices[3].p.y, m_vertices[3].p.z);
+    //ImGui::Text("%f %f %f", m_vertices[4].p.x, m_vertices[4].p.y, m_vertices[4].p.z);
+    //ImGui::Text("%f %f %f", m_vertices[5].p.x, m_vertices[5].p.y, m_vertices[5].p.z);
+    //ImGui::Text("%f %f %f", m_vertices[6].p.x, m_vertices[6].p.y, m_vertices[6].p.z);
+    //ImGui::Text("%f %f %f", m_vertices[7].p.x, m_vertices[7].p.y, m_vertices[7].p.z);
     vector<WORD> indices =
     {
         0, 1, 1, 2, 2, 3, 3, 0,
@@ -50,7 +58,7 @@ void BoxCollider::Render()
 
     const auto pD = DX::GetDevice();
     pD->SetRenderState(D3DRS_LIGHTING, false);
-    pD->SetTransform(D3DTS_WORLD, &m_mTransform);
+    pD->SetTransform(D3DTS_WORLD, &m_matWorld);
     pD->SetTexture(0, nullptr);
     pD->SetFVF(VERTEX_PC::FVF);
     pD->DrawIndexedPrimitiveUP(D3DPT_LINELIST, 0, m_vertices.size(),
@@ -77,6 +85,12 @@ void BoxCollider::SetVertex(const D3DXVECTOR3 & min, const D3DXVECTOR3 & max)
     m_vertices[5] = VERTEX_PC(D3DXVECTOR3(min.x, max.y, max.z), m_color);
     m_vertices[6] = VERTEX_PC(D3DXVECTOR3(max.x, max.y, max.z), m_color);
     m_vertices[7] = VERTEX_PC(D3DXVECTOR3(max.x, min.y, max.z), m_color);
+}
+
+void BoxCollider::SetMatrix(const D3DXMATRIXA16 & transform, const D3DXMATRIXA16 & parentTransform)
+{
+    m_mTransform = transform;
+    m_mParentTransform = parentTransform;
 }
 
 //void BoxCollider::SetVertex(vector<VERTEX_PC>& vecVertexOut, vector<WORD>& vecIndexOut, vector<D3DXVECTOR3> vecPos)

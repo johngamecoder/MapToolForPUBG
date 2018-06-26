@@ -24,6 +24,7 @@ public:
     // row 2 : x, y and z of axis 2
     // row 3 : x, y and z of translation
     D3DXMATRIXA16 m_mTransform;
+    D3DXMATRIXA16 m_matWorld;
 
     //bool m_isRender;
     //D3DXVECTOR3 m_center;   //pos 
@@ -32,16 +33,16 @@ public:
     //D3DCOLOR m_color = D3DCOLOR_ARGB(1, 0, 1, 0);
 public:
 
-    BoxCollider(string name, const D3DXMATRIXA16& parentTransform);
+    BoxCollider(string name);
     ~BoxCollider();
 
     // Inherited via IDisplayObject
     void Init(const D3DXVECTOR3& min, const D3DXVECTOR3& max) ;
-    void Update(const D3DXMATRIXA16& transform/*, const D3DXMATRIXA16& parentTransform*/) ;
+    void Update();
     void Render() ;
 
     void SetVertex(const D3DXVECTOR3& min, const D3DXVECTOR3& max);
-
+    void SetMatrix(const D3DXMATRIXA16& transform, const D3DXMATRIXA16& parentTransform);
     //void SetBuffer(LPDIRECT3DVERTEXBUFFER9 & pVb, LPDIRECT3DINDEXBUFFER9 & pIb, vector<VERTEX_PC>& vecVertex, vector<WORD>& vecIndex);
     
 };

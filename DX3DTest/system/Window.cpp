@@ -68,7 +68,7 @@ void Window::InitWindow()
 	wndClass.lpszMenuName = NULL;
 	wndClass.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
 	wndClass.cbSize = sizeof(WNDCLASSEX);
-
+    
 	WORD wHr = RegisterClassEx(&wndClass);
 	assert(wHr != 0);
 	
