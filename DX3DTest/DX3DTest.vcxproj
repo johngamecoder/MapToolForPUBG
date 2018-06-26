@@ -163,7 +163,6 @@
     <ClInclude Include="AStar.h" />
     <ClInclude Include="AStarNode.h" />
     <ClInclude Include="Bandage.h" />
-    <ClInclude Include="BoundSizing.h" />
     <ClInclude Include="BoxCollider.h" />
     <ClInclude Include="Church.h" />
     <ClInclude Include="imconfig.h" />
@@ -238,6 +237,7 @@
     <ClInclude Include="System\Mouse.h" />
     <ClInclude Include="system\Time.h" />
     <ClInclude Include="system\Window.h" />
+    <ClInclude Include="TagResource.h" />
     <ClInclude Include="TextureBlending.h" />
     <ClInclude Include="VertexBlending.h" />
     <ClInclude Include="Heap.h" />
@@ -258,7 +258,6 @@
     <ClCompile Include="AStar.cpp" />
     <ClCompile Include="AStarNode.cpp" />
     <ClCompile Include="Bandage.cpp" />
-    <ClCompile Include="BoundSizing.cpp" />
     <ClCompile Include="BoxCollider.cpp" />
     <ClCompile Include="Church.cpp" />
     <ClCompile Include="imgui.cpp" />

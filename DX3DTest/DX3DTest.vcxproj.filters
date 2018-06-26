@@ -308,8 +308,8 @@
     <ClInclude Include="ResourceStructure.h" />
     <ClInclude Include="Church.h" />
     <ClInclude Include="Bandage.h" />
-    <ClInclude Include="BoundSizing.h" />
     <ClInclude Include="BoxCollider.h" />
+    <ClInclude Include="TagResource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DX3DTest.cpp">
@@ -518,7 +518,6 @@
     <ClCompile Include="ResourceStructure.cpp" />
     <ClCompile Include="Church.cpp" />
     <ClCompile Include="Bandage.cpp" />
-    <ClCompile Include="BoundSizing.cpp" />
     <ClCompile Include="BoxCollider.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -66,6 +66,7 @@ public:
     LPDIRECT3DTEXTURE9 m_pButtonTexture_Translation;
     LPDIRECT3DTEXTURE9 m_pButtonTexture_Rotation;
     LPDIRECT3DTEXTURE9 m_pButtonTexture_Scale;
+    LPDIRECT3DTEXTURE9 m_pButtonTexture_Bounds;
 
     ImGuizmo::OPERATION mCurrentGizmoOperation;
     ImGuizmo::MODE mCurrentGizmoMode;
@@ -73,13 +74,9 @@ public:
     int hierarchySelectedObjIndex;  //Hierarchy obj tab
     int hierarchySelectedColliderIndex;  //Hierarchy obj tab
     int comboSelect;
-    //int bandageCount;
-    //int churchCount;
-    //int treeCount;
-    //int rockCount;
-    //int wareHouseCount;
 
-    bool isRenderCollider;
+    bool boundSizing;
+
 
     // Camera view & projection
     bool isPerspective;

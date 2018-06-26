@@ -2,11 +2,9 @@
 //#include "c:\Users\วัย๙ภภ\source\repos\MapToolForPUBG\DX3DTest\object\interface\IScene.h"
 
 class ImGuizmoManager;
-class BoundSizing;
 class SceneMapTool :public IScene
 {
     ImGuizmoManager*    m_pImGuizmoManager;
-    BoundSizing*        m_pBoundSizing;
     
 public:
     SceneMapTool();

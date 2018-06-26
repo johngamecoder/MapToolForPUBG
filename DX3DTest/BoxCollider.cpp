@@ -6,7 +6,7 @@
 BoxCollider::BoxCollider(string name)
     : m_Parentname(name)
     , m_vExtent(0.0f, 0.0f, 0.0f)
-    , m_color(D3DCOLOR_XRGB(0, 255, 0))
+    , m_color()
 {
     //D3DXMatrixIdentity(&m_matWorld);
 }
@@ -19,36 +19,33 @@ BoxCollider::~BoxCollider()
 
 void BoxCollider::Init(const D3DXVECTOR3& min, const D3DXVECTOR3& max)
 {
+    m_vMax = max;
     m_vCenter = (min + max) * 0.5f;
     m_vExtent = max - m_vCenter;
+    SetVertex(-m_vExtent, m_vExtent);
 }
 
 void BoxCollider::Update()
 {
-
-    //D3DXMATRIX InverseMatrixOfCurrent, TM;
-    //D3DXMatrixInverse(&InverseMatrixOfCurrent, nullptr, &m_mTransform);
-    //TM = InverseMatrixOfCurrent * m_mParentTransform;
-    //D3DXVec3TransformCoord(&m_vCenter, &m_vCenter, &TM);
-
-    //m_mTransform =transform;
     m_matWorld = m_mTransform * m_mParentTransform;
-    
+
+    m_vCenter = D3DXVECTOR3(0, 0, 0);
+    D3DXVec3TransformCoord(&m_vCenter, &m_vCenter, &m_matWorld);
+    //ImGui::Text("%f %f %f", m_vExtent.x, m_vExtent.y, m_vExtent.z);
+    ImGui::Text("%f %f %f", m_vCenter.x, m_vCenter.y, m_vCenter.z);
 }
 
+//ImGui::Text("%f %f %f", m_vertices[0].p.x, m_vertices[0].p.y, m_vertices[0].p.z);
+//ImGui::Text("%f %f %f", m_vertices[1].p.x, m_vertices[1].p.y, m_vertices[1].p.z);
+//ImGui::Text("%f %f %f", m_vertices[2].p.x, m_vertices[2].p.y, m_vertices[2].p.z);
+//ImGui::Text("%f %f %f", m_vertices[3].p.x, m_vertices[3].p.y, m_vertices[3].p.z);
+//ImGui::Text("%f %f %f", m_vertices[4].p.x, m_vertices[4].p.y, m_vertices[4].p.z);
+//ImGui::Text("%f %f %f", m_vertices[5].p.x, m_vertices[5].p.y, m_vertices[5].p.z);
+//ImGui::Text("%f %f %f", m_vertices[6].p.x, m_vertices[6].p.y, m_vertices[6].p.z);
+//ImGui::Text("%f %f %f", m_vertices[7].p.x, m_vertices[7].p.y, m_vertices[7].p.z);
 void BoxCollider::Render()
 {
-    SetVertex(-m_vExtent, m_vExtent);
-    ImGui::Text("%f %f %f", m_vExtent.x, m_vExtent.y, m_vExtent.z);
-    ImGui::Text("%f %f %f", m_vCenter.x, m_vCenter.y, m_vCenter.z);
-    //ImGui::Text("%f %f %f", m_vertices[0].p.x, m_vertices[0].p.y, m_vertices[0].p.z);
-    //ImGui::Text("%f %f %f", m_vertices[1].p.x, m_vertices[1].p.y, m_vertices[1].p.z);
-    //ImGui::Text("%f %f %f", m_vertices[2].p.x, m_vertices[2].p.y, m_vertices[2].p.z);
-    //ImGui::Text("%f %f %f", m_vertices[3].p.x, m_vertices[3].p.y, m_vertices[3].p.z);
-    //ImGui::Text("%f %f %f", m_vertices[4].p.x, m_vertices[4].p.y, m_vertices[4].p.z);
-    //ImGui::Text("%f %f %f", m_vertices[5].p.x, m_vertices[5].p.y, m_vertices[5].p.z);
-    //ImGui::Text("%f %f %f", m_vertices[6].p.x, m_vertices[6].p.y, m_vertices[6].p.z);
-    //ImGui::Text("%f %f %f", m_vertices[7].p.x, m_vertices[7].p.y, m_vertices[7].p.z);
+
     vector<WORD> indices =
     {
         0, 1, 1, 2, 2, 3, 3, 0,
@@ -65,26 +62,19 @@ void BoxCollider::Render()
         indices.size() / 2, indices.data(), D3DFMT_INDEX16, m_vertices.data(),
         sizeof VERTEX_PC);
     pD->SetRenderState(D3DRS_LIGHTING, true);
-    //g_pDevice->DrawPrimitiveUP(D3DPT_TRIANGLELIST,
-    //	m_vecVertex.size() / 3,
-    //	&m_vecVertex[0], sizeof(VERTEX_PC));
-    //g_pDevice->DrawIndexedPrimitiveUP(D3DPT_TRIANGLELIST, 0, m_vecVertex.size(), m_vecIndex.size() / 3,&m_vecIndex[0],D3DFMT_INDEX16,&m_vecVertex[0],sizeof(VERTEX_PC));
-   /* pD->SetStreamSource(0, m_pVB, 0, sizeof(VERTEX_PC));
-    pD->SetIndices(m_pIB);
-    pD->DrawIndexedPrimitive(D3DPT_LINELIST, 0, 0, m_VBDesc.Size, 0, m_IBDesc.Size / 2);*/
 }
 
 void BoxCollider::SetVertex(const D3DXVECTOR3 & min, const D3DXVECTOR3 & max)
 {
     m_vertices.resize(8);
-    m_vertices[0] = VERTEX_PC(D3DXVECTOR3(min.x, min.y, min.z), m_color);
-    m_vertices[1] = VERTEX_PC(D3DXVECTOR3(min.x, max.y, min.z), m_color);
-    m_vertices[2] = VERTEX_PC(D3DXVECTOR3(max.x, max.y, min.z), m_color);
-    m_vertices[3] = VERTEX_PC(D3DXVECTOR3(max.x, min.y, min.z), m_color);
-    m_vertices[4] = VERTEX_PC(D3DXVECTOR3(min.x, min.y, max.z), m_color);
-    m_vertices[5] = VERTEX_PC(D3DXVECTOR3(min.x, max.y, max.z), m_color);
-    m_vertices[6] = VERTEX_PC(D3DXVECTOR3(max.x, max.y, max.z), m_color);
-    m_vertices[7] = VERTEX_PC(D3DXVECTOR3(max.x, min.y, max.z), m_color);
+    m_vertices[0] = VERTEX_PC(D3DXVECTOR3(min.x, min.y, min.z), D3DCOLOR_XRGB(0, 255, 0));
+    m_vertices[1] = VERTEX_PC(D3DXVECTOR3(min.x, max.y, min.z), D3DCOLOR_XRGB(0, 255, 0));
+    m_vertices[2] = VERTEX_PC(D3DXVECTOR3(max.x, max.y, min.z), D3DCOLOR_XRGB(0, 255, 0));
+    m_vertices[3] = VERTEX_PC(D3DXVECTOR3(max.x, min.y, min.z), D3DCOLOR_XRGB(0, 255, 0));
+    m_vertices[4] = VERTEX_PC(D3DXVECTOR3(min.x, min.y, max.z), D3DCOLOR_XRGB(0, 255, 0));
+    m_vertices[5] = VERTEX_PC(D3DXVECTOR3(min.x, max.y, max.z), D3DCOLOR_XRGB(0, 255, 0));
+    m_vertices[6] = VERTEX_PC(D3DXVECTOR3(max.x, max.y, max.z), D3DCOLOR_XRGB(0, 255, 0));
+    m_vertices[7] = VERTEX_PC(D3DXVECTOR3(max.x, min.y, max.z), D3DCOLOR_XRGB(0, 255, 0));
 }
 
 void BoxCollider::SetMatrix(const D3DXMATRIXA16 & transform, const D3DXMATRIXA16 & parentTransform)

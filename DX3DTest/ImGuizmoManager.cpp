@@ -14,13 +14,13 @@ const char* ComboObjectList[] = { "Bandage","Church"/*,"Tree","Rock","Ware House
 ImGuizmoManager::ImGuizmoManager()
 {
     m_pCamera = NULL;
-    isRenderCollider = true;
+    //isRenderCollider = true;
     //for rendering image buttons
     m_pButtonTexture_Handle = NULL; m_pButtonTexture_Handle = TextureManager::Get()->GetTexture(_T("Resource/handle.png"));
     m_pButtonTexture_Translation = NULL; m_pButtonTexture_Translation = TextureManager::Get()->GetTexture(_T("Resource/translation.png"));
     m_pButtonTexture_Rotation = NULL;m_pButtonTexture_Rotation = TextureManager::Get()->GetTexture(_T("Resource/rotation.png"));
     m_pButtonTexture_Scale = NULL; m_pButtonTexture_Scale = TextureManager::Get()->GetTexture(_T("Resource/scale.png"));
-
+    m_pButtonTexture_Bounds = NULL; m_pButtonTexture_Bounds = TextureManager::Get()->GetTexture(_T("Resource/bounds.png"));
     ContainObject(); //loading objects from file using resourcemanager
 
     //m_pBoxCollider = NULL;
@@ -49,6 +49,7 @@ ImGuizmoManager::~ImGuizmoManager()
     SAFE_RELEASE(m_pButtonTexture_Translation);
     SAFE_RELEASE(m_pButtonTexture_Rotation);
     SAFE_RELEASE(m_pButtonTexture_Scale);
+    SAFE_RELEASE(m_pButtonTexture_Bounds);
 
     //SAFE_RELEASE(m_pBoxCollider);
 }
@@ -61,13 +62,8 @@ void ImGuizmoManager::Init()
     m_currentSceneName = "";
     m_mapObject.clear();
     m_mapCount.clear();
-    //bandageCount = 0;
-    //churchCount = 0;
-    //treeCount = 0;
-    //rockCount = 0;
-    //wareHouseCount = 0;
 
-
+    boundSizing = false;
 
     mCurrentGizmoOperation = ImGuizmo::HANDLE;
     mCurrentGizmoMode = ImGuizmo::WORLD;
@@ -106,8 +102,10 @@ void ImGuizmoManager::Update()
     {
         for (int i = 0; i < m_pCurrentObject->m_vecBoxCollider.size(); i++)
         {
+            //m_pCurrentObject->m_vecBoxCollider[i]->Update();
             SAFE_UPDATE(m_pCurrentObject->m_vecBoxCollider[i]);
             //m_pCurrentObject->m_vecBoxCollider[i]->Update();
+
         }
     }
     
@@ -263,24 +261,40 @@ void ImGuizmoManager::HierarchyImGui()
             if (ImGui::ImageButton((void*)m_pButtonTexture_Translation, ImVec2(32, 22), ImVec2(0, 0), ImVec2(1, 1), frame_padding_notSelected, ImColor(0, 0, 0, 255))) { mCurrentGizmoOperation = ImGuizmo::TRANSLATE; }   ImGui::SameLine();
             if (ImGui::ImageButton((void*)m_pButtonTexture_Rotation, ImVec2(32, 22), ImVec2(0, 0), ImVec2(1, 1), frame_padding_notSelected, ImColor(0, 0, 0, 255))) { mCurrentGizmoOperation = ImGuizmo::ROTATE;    }   ImGui::SameLine();
             if (ImGui::ImageButton((void*)m_pButtonTexture_Scale, ImVec2(32, 22), ImVec2(0, 0), ImVec2(1, 1), frame_padding_notSelected, ImColor(0, 0, 0, 255))) { mCurrentGizmoOperation = ImGuizmo::SCALE;     }   ImGui::SameLine();
+            if (ImGui::ImageButton((void*)m_pButtonTexture_Bounds, ImVec2(32, 22), ImVec2(0, 0), ImVec2(1, 1), frame_padding_notSelected, ImColor(0, 0, 0, 255))) { mCurrentGizmoOperation = ImGuizmo::BOUNDS; }   ImGui::SameLine();
+            boundSizing = false;
             break;                                                                                                                                                                                                
         case ImGuizmo::TRANSLATE:                                                                                                                                                                                 
             if (ImGui::ImageButton((void*)m_pButtonTexture_Handle, ImVec2(32, 22), ImVec2(0, 0), ImVec2(1, 1),    frame_padding_notSelected, ImColor(0, 0, 0, 255))) { mCurrentGizmoOperation = ImGuizmo::HANDLE;    }   ImGui::SameLine();
             if (ImGui::ImageButton((void*)m_pButtonTexture_Translation, ImVec2(32, 22), ImVec2(0, 0), ImVec2(1, 1), frame_padding_Selected, ImColor(0, 0, 0, 255))) { mCurrentGizmoOperation = ImGuizmo::TRANSLATE; }   ImGui::SameLine();
             if (ImGui::ImageButton((void*)m_pButtonTexture_Rotation, ImVec2(32, 22), ImVec2(0, 0), ImVec2(1, 1), frame_padding_notSelected, ImColor(0, 0, 0, 255))) { mCurrentGizmoOperation = ImGuizmo::ROTATE; }   ImGui::SameLine();
             if (ImGui::ImageButton((void*)m_pButtonTexture_Scale, ImVec2(32, 22), ImVec2(0, 0), ImVec2(1, 1), frame_padding_notSelected, ImColor(0, 0, 0, 255))) { mCurrentGizmoOperation = ImGuizmo::SCALE; }   ImGui::SameLine();
+            if (ImGui::ImageButton((void*)m_pButtonTexture_Bounds, ImVec2(32, 22), ImVec2(0, 0), ImVec2(1, 1), frame_padding_notSelected, ImColor(0, 0, 0, 255))) { mCurrentGizmoOperation = ImGuizmo::BOUNDS; }   ImGui::SameLine();
+            boundSizing = false;
             break;                                                                                                                                                                                                 
         case ImGuizmo::ROTATE:                                                                                                                                                                                 
             if (ImGui::ImageButton((void*)m_pButtonTexture_Handle, ImVec2(32, 22), ImVec2(0, 0), ImVec2(1, 1), frame_padding_notSelected, ImColor(0, 0, 0, 255))) { mCurrentGizmoOperation = ImGuizmo::HANDLE; }   ImGui::SameLine();
             if (ImGui::ImageButton((void*)m_pButtonTexture_Translation, ImVec2(32, 22), ImVec2(0, 0), ImVec2(1, 1), frame_padding_notSelected, ImColor(0, 0, 0, 255))) { mCurrentGizmoOperation = ImGuizmo::TRANSLATE; }   ImGui::SameLine();
             if (ImGui::ImageButton((void*)m_pButtonTexture_Rotation, ImVec2(32, 22), ImVec2(0, 0), ImVec2(1, 1), frame_padding_Selected, ImColor(0, 0, 0, 255))) { mCurrentGizmoOperation = ImGuizmo::ROTATE; }   ImGui::SameLine();
             if (ImGui::ImageButton((void*)m_pButtonTexture_Scale, ImVec2(32, 22), ImVec2(0, 0), ImVec2(1, 1), frame_padding_notSelected, ImColor(0, 0, 0, 255))) { mCurrentGizmoOperation = ImGuizmo::SCALE; }   ImGui::SameLine();
+            if (ImGui::ImageButton((void*)m_pButtonTexture_Bounds, ImVec2(32, 22), ImVec2(0, 0), ImVec2(1, 1), frame_padding_notSelected, ImColor(0, 0, 0, 255))) { mCurrentGizmoOperation = ImGuizmo::BOUNDS; }   ImGui::SameLine();
+            boundSizing = false;
             break;                                                                                                                                                                                               
         case ImGuizmo::SCALE:                                                                                                                                                                               
             if (ImGui::ImageButton((void*)m_pButtonTexture_Handle, ImVec2(32, 22), ImVec2(0, 0), ImVec2(1, 1), frame_padding_notSelected, ImColor(0, 0, 0, 255))) { mCurrentGizmoOperation = ImGuizmo::HANDLE; }   ImGui::SameLine();
             if (ImGui::ImageButton((void*)m_pButtonTexture_Translation, ImVec2(32, 22), ImVec2(0, 0), ImVec2(1, 1), frame_padding_notSelected, ImColor(0, 0, 0, 255))) { mCurrentGizmoOperation = ImGuizmo::TRANSLATE; }   ImGui::SameLine();
             if (ImGui::ImageButton((void*)m_pButtonTexture_Rotation, ImVec2(32, 22), ImVec2(0, 0), ImVec2(1, 1), frame_padding_notSelected, ImColor(0, 0, 0, 255))) { mCurrentGizmoOperation = ImGuizmo::ROTATE; }   ImGui::SameLine();
             if (ImGui::ImageButton((void*)m_pButtonTexture_Scale, ImVec2(32, 22), ImVec2(0, 0), ImVec2(1, 1), frame_padding_Selected, ImColor(0, 0, 0, 255))) { mCurrentGizmoOperation = ImGuizmo::SCALE; }   ImGui::SameLine();
+            if (ImGui::ImageButton((void*)m_pButtonTexture_Bounds, ImVec2(32, 22), ImVec2(0, 0), ImVec2(1, 1), frame_padding_notSelected, ImColor(0, 0, 0, 255))) { mCurrentGizmoOperation = ImGuizmo::BOUNDS; }   ImGui::SameLine();
+            boundSizing = false;
+            break;
+        case ImGuizmo::BOUNDS:
+            if (ImGui::ImageButton((void*)m_pButtonTexture_Handle, ImVec2(32, 22), ImVec2(0, 0), ImVec2(1, 1), frame_padding_notSelected, ImColor(0, 0, 0, 255))) { mCurrentGizmoOperation = ImGuizmo::HANDLE; }   ImGui::SameLine();
+            if (ImGui::ImageButton((void*)m_pButtonTexture_Translation, ImVec2(32, 22), ImVec2(0, 0), ImVec2(1, 1), frame_padding_notSelected, ImColor(0, 0, 0, 255))) { mCurrentGizmoOperation = ImGuizmo::TRANSLATE; }   ImGui::SameLine();
+            if (ImGui::ImageButton((void*)m_pButtonTexture_Rotation, ImVec2(32, 22), ImVec2(0, 0), ImVec2(1, 1), frame_padding_notSelected, ImColor(0, 0, 0, 255))) { mCurrentGizmoOperation = ImGuizmo::ROTATE; }   ImGui::SameLine();
+            if (ImGui::ImageButton((void*)m_pButtonTexture_Scale, ImVec2(32, 22), ImVec2(0, 0), ImVec2(1, 1), frame_padding_notSelected, ImColor(0, 0, 0, 255))) { mCurrentGizmoOperation = ImGuizmo::SCALE; }   ImGui::SameLine();
+            if (ImGui::ImageButton((void*)m_pButtonTexture_Bounds, ImVec2(32, 22), ImVec2(0, 0), ImVec2(1, 1), frame_padding_Selected, ImColor(0, 0, 0, 255))) { mCurrentGizmoOperation = ImGuizmo::BOUNDS; }   ImGui::SameLine();
+            boundSizing = true;
             break;
         }
 
@@ -657,19 +671,35 @@ void ImGuizmoManager::EditTransform(const float * cameraView, float * cameraProj
     //static float snap[3] = { 1.f, 1.f, 1.f };
     static float bounds[] = { -0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f };
     //static float boundsSnap[] = { 0.1f, 0.1f, 0.1f };
-    static bool boundSizing = false;
+    
     //static bool boundSizingSnap = false;
-
+    
     if (ImGui::IsKeyPressed(81))  // q Key
+    {
         mCurrentGizmoOperation = ImGuizmo::HANDLE;
+        boundSizing = false;
+    }
     if (ImGui::IsKeyPressed(87)) // w key
+    {
         mCurrentGizmoOperation = ImGuizmo::TRANSLATE;
+        boundSizing = false;
+    }
     if (ImGui::IsKeyPressed(69))// e key
+    {
         mCurrentGizmoOperation = ImGuizmo::ROTATE;
+        boundSizing = false;
+    }    
     if (ImGui::IsKeyPressed(82)) // r Key
+    {
         mCurrentGizmoOperation = ImGuizmo::SCALE;
-    if (ImGui::IsKeyPressed(84))
+        boundSizing = false;
+    }
+    if (ImGui::IsKeyPressed(84)) // t Key
+    {
         mCurrentGizmoOperation = ImGuizmo::BOUNDS;
+        boundSizing = true;
+    }
+        
 
     if (ImGui::RadioButton("Translate", mCurrentGizmoOperation == ImGuizmo::TRANSLATE))
         mCurrentGizmoOperation = ImGuizmo::TRANSLATE;
