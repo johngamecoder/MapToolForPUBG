@@ -8,7 +8,7 @@
 #include "BoxCollider.h"
 
 //이것을 header 쪽으로 옴기고 싶은데 어떻게 해야 할까요? ㅠ
-const char* ComboObjectList[] = { "Bandage","Church","Tree","Rock","Ware House" };
+const char* ComboObjectList[] = { "Bandage","Church"/*,"Tree","Rock","Ware House"*/ };
 
 
 ImGuizmoManager::ImGuizmoManager()
@@ -38,7 +38,7 @@ ImGuizmoManager::~ImGuizmoManager()
     {
         for (int i = 0; i < p.second->m_vecBoxCollider.size(); i++)
         {
-            SAFE_RELEASE(p.second->m_vecBoxCollider[i]);
+            SAFE_DELETE(p.second->m_vecBoxCollider[i]);
         }
         SAFE_DELETE(p.second);
     }
@@ -60,11 +60,12 @@ void ImGuizmoManager::Init()
     hierarchySelectedColliderIndex = -1;
     m_currentSceneName = "";
     m_mapObject.clear();
-    bandageCount = 0;
-    churchCount = 0;
-    treeCount = 0;
-    rockCount = 0;
-    wareHouseCount = 0;
+    m_mapCount.clear();
+    //bandageCount = 0;
+    //churchCount = 0;
+    //treeCount = 0;
+    //rockCount = 0;
+    //wareHouseCount = 0;
 
 
 
@@ -104,7 +105,7 @@ void ImGuizmoManager::Update()
     //{
     //    for (int i = 0; i < m_pCurrentObject->m_vecBoxCollider.size(); i++)
     //    {
-    //        SAFE_UPDATE(m_pCurrentObject->m_vecBoxCollider[i]);
+    //        m_pCurrentObject->m_vecBoxCollider[i]->Update(m_pCurrentObject->m_matTransform);
     //    }
     //}
     
@@ -311,7 +312,7 @@ void ImGuizmoManager::HierarchyImGui()
                     {
                         selected = i;
                         hierarchySelectedColliderIndex = i;
-                        MatChangeDX2Float(objectMatrix, &m_pCurrentObject->m_vecBoxCollider[i]->m_matTransform);
+                        MatChangeDX2Float(objectMatrix, &m_pCurrentObject->m_vecBoxCollider[i]->m_mParentTransform);
                     }
                 }
             }
@@ -404,7 +405,9 @@ void ImGuizmoManager::InspectorImGui()
             EditTransform(cameraView, cameraProjection, objectMatrix);
             if (hierarchySelectedColliderIndex != -1)
             {
-                MatChangeFloat2DX(&m_pCurrentObject->m_vecBoxCollider[hierarchySelectedColliderIndex]->m_matTransform, objectMatrix);
+                D3DXMATRIXA16 transform;
+                MatChangeFloat2DX(&transform, objectMatrix);
+                m_pCurrentObject->m_vecBoxCollider[hierarchySelectedColliderIndex]->Update(transform/*,m_pCurrentObject->m_matTransform*/);
             }
             else
                 MatChangeFloat2DX(&m_pCurrentObject->m_matTransform, objectMatrix);
@@ -441,12 +444,10 @@ void ImGuizmoManager::NewScene()
     {
         for (int i = 0; i < p.second->m_vecBoxCollider.size(); i++)
         {
-            SAFE_RELEASE(p.second->m_vecBoxCollider[i]);
+            SAFE_DELETE(p.second->m_vecBoxCollider[i]);
         }
-        
         SAFE_DELETE(p.second);
-    }
-        
+    }       
 
     Init();
 }
@@ -481,8 +482,44 @@ void ImGuizmoManager::OpenScene(string& fileName)
             ssMat >> line; temp->m_matTransform._31 = stof(line, 0);  ssMat >> line; temp->m_matTransform._32 = stof(line, 0);  ssMat >> line; temp->m_matTransform._33 = stof(line, 0);  ssMat >> line; temp->m_matTransform._34 = stof(line, 0);
             ssMat >> line; temp->m_matTransform._41 = stof(line, 0);  ssMat >> line; temp->m_matTransform._42 = stof(line, 0);  ssMat >> line; temp->m_matTransform._43 = stof(line, 0);  ssMat >> line; temp->m_matTransform._44 = stof(line, 0);
             
+            getline(myFile, line);
+            if (line == "[")
+            {
+                getline(myFile, line);
+                int colliderNum = atoi(line.c_str());
+                for (int i = 0; i < colliderNum; i++)
+                {
+                    getline(myFile, line);  //take out "("
+                    getline(myFile, line);  //get parent name;
+                    BoxCollider* bc = new BoxCollider(line, temp->m_matTransform);
+                    bc->Init(D3DXVECTOR3(-0.5f, -0.5f, -0.5f), D3DXVECTOR3(0.5f, 0.5f, 0.5f));
+                    
+                    getline(myFile, line);      ss << line;     ss >> line;    bc->m_vCenter.x = stof(line, 0);     ss >> line;     bc->m_vCenter.y = stof(line, 0);      ss >> line;    bc->m_vCenter.z = stof(line, 0);
+                    getline(myFile, line);      ss << line;     ss >> line;    bc->m_vExtent.x = stof(line, 0);     ss >> line;     bc->m_vExtent.y = stof(line, 0);      ss >> line;    bc->m_vExtent.z = stof(line, 0);
+
+                    getline(myFile, line);      ssMat << line;
+                    ssMat >> line; bc->m_mTransform._11 = stof(line, 0);  ssMat >> line; bc->m_mTransform._12 = stof(line, 0);  ssMat >> line; bc->m_mTransform._13 = stof(line, 0);  ssMat >> line; bc->m_mTransform._14 = stof(line, 0);
+                    ssMat >> line; bc->m_mTransform._21 = stof(line, 0);  ssMat >> line; bc->m_mTransform._22 = stof(line, 0);  ssMat >> line; bc->m_mTransform._23 = stof(line, 0);  ssMat >> line; bc->m_mTransform._24 = stof(line, 0);
+                    ssMat >> line; bc->m_mTransform._31 = stof(line, 0);  ssMat >> line; bc->m_mTransform._32 = stof(line, 0);  ssMat >> line; bc->m_mTransform._33 = stof(line, 0);  ssMat >> line; bc->m_mTransform._34 = stof(line, 0);
+                    ssMat >> line; bc->m_mTransform._41 = stof(line, 0);  ssMat >> line; bc->m_mTransform._42 = stof(line, 0);  ssMat >> line; bc->m_mTransform._43 = stof(line, 0);  ssMat >> line; bc->m_mTransform._44 = stof(line, 0);
+
+                    temp->m_vecBoxCollider.push_back(bc);
+                    getline(myFile, line);//take out ")";
+
+                }
+                getline(myFile, line); //take out "]"
+                getline(myFile, line);  //take out "}"
+            }
+            else
+            {
+                getline(myFile, line);  //take out "}"
+            }
+
+
+
+
             temp->objPtr = m_vecObjectContainer[temp->list];
-            getline(myFile, line);  //take out }
+
             
             m_mapObject.emplace(temp->m_ObjName, temp);
         }
@@ -495,24 +532,33 @@ void ImGuizmoManager::OpenScene(string& fileName)
 
     for (auto p : m_mapObject)
     {
-        switch (p.second->list)
+        if (m_mapCount.find(p.second->list) == m_mapCount.end() )
         {
-        case ObjList::BANDAGE:
-            bandageCount = p.second->ID;
-            break;
-        case ObjList::CHURCH:
-            churchCount = p.second->ID;
-            break;
-        case ObjList::TREE:
-            treeCount = p.second->ID;
-            break;
-        case ObjList::ROCK:
-            rockCount = p.second->ID;
-            break;
-        case ObjList::WAREHOUSE:
-            wareHouseCount = p.second->ID;
-            break;
+            m_mapCount.emplace(p.second->list, 0);
         }
+        m_mapCount[p.second->list]++;
+        //pImageInfo = m_mapImageInfo[filePath];
+        //auto p = m_mapCoun
+        //m_mapCount.emplace(p.second->list, p.second->ID);
+        //m_mapCount[p.second->list] = p.second->ID;
+        //switch (p.second->list)
+        //{
+        //case ObjList::BANDAGE:
+        //    bandageCount = p.second->ID;
+        //    break;
+        //case ObjList::CHURCH:
+        //    churchCount = p.second->ID;
+        //    break;
+        //case ObjList::TREE:
+        //    treeCount = p.second->ID;
+        //    break;
+        //case ObjList::ROCK:
+        //    rockCount = p.second->ID;
+        //    break;
+        //case ObjList::WAREHOUSE:
+        //    wareHouseCount = p.second->ID;
+        //    break;
+        //}
     }
 }
 
@@ -522,6 +568,8 @@ void ImGuizmoManager::SaveScene(string& fileName)
     if (myFile.is_open())
     {
         myFile << fileName << "\n";
+        myFile <<"Num of Object :"<<m_mapObject.size()<< "\n";
+        
         for (auto p : m_mapObject)
         {
             ObjInfo* temp = p.second;
@@ -536,6 +584,27 @@ void ImGuizmoManager::SaveScene(string& fileName)
                 + to_string(temp->m_matTransform._21) + " "+ to_string(temp->m_matTransform._22) + " "+ to_string(temp->m_matTransform._23) + " "+ to_string(temp->m_matTransform._24) + " "
                 + to_string(temp->m_matTransform._31) + " "+ to_string(temp->m_matTransform._32) + " "+ to_string(temp->m_matTransform._33) + " "+ to_string(temp->m_matTransform._34) + " "
                 + to_string(temp->m_matTransform._41) + " "+ to_string(temp->m_matTransform._42) + " "+ to_string(temp->m_matTransform._43) + " "+ to_string(temp->m_matTransform._44) + "\n";
+            int colliderNum = temp->m_vecBoxCollider.size();
+            if(colliderNum > 0)
+            {
+                myFile << "[" << "\n";
+                myFile << colliderNum << "\n";
+                for (int i = 0; i < colliderNum; i++)
+                {
+                    myFile << "(" << "\n";
+                    myFile << temp->m_vecBoxCollider[i]->m_Parentname << "\n";
+                    myFile << to_string(temp->m_vecBoxCollider[i]->m_vCenter.x) + " " + to_string(temp->m_vecBoxCollider[i]->m_vCenter.y) + " " + to_string(temp->m_vecBoxCollider[i]->m_vCenter.z) + "\n";
+                    myFile << to_string(temp->m_vecBoxCollider[i]->m_vExtent.x) + " " + to_string(temp->m_vecBoxCollider[i]->m_vExtent.y) + " " + to_string(temp->m_vecBoxCollider[i]->m_vExtent.z) + "\n";
+                    myFile << to_string(temp->m_vecBoxCollider[i]->m_mTransform._11) + " " + to_string(temp->m_vecBoxCollider[i]->m_mTransform._12) + " " + to_string(temp->m_vecBoxCollider[i]->m_mTransform._13) + " " + to_string(temp->m_vecBoxCollider[i]->m_mTransform._14) + " "
+                            + to_string(temp->m_vecBoxCollider[i]->m_mTransform._21) + " " + to_string(temp->m_vecBoxCollider[i]->m_mTransform._22) + " " + to_string(temp->m_vecBoxCollider[i]->m_mTransform._23) + " " + to_string(temp->m_vecBoxCollider[i]->m_mTransform._24) + " "
+                            + to_string(temp->m_vecBoxCollider[i]->m_mTransform._31) + " " + to_string(temp->m_vecBoxCollider[i]->m_mTransform._32) + " " + to_string(temp->m_vecBoxCollider[i]->m_mTransform._33) + " " + to_string(temp->m_vecBoxCollider[i]->m_mTransform._34) + " "
+                            + to_string(temp->m_vecBoxCollider[i]->m_mTransform._41) + " " + to_string(temp->m_vecBoxCollider[i]->m_mTransform._42) + " " + to_string(temp->m_vecBoxCollider[i]->m_mTransform._43) + " " + to_string(temp->m_vecBoxCollider[i]->m_mTransform._44) + "\n";
+
+                    myFile << ")" << "\n";
+                }
+                myFile << "]" << "\n";
+            }
+            
             myFile << "}"<<"\n";
         }
         myFile.close();
@@ -549,14 +618,27 @@ void ImGuizmoManager::SaveScene(string& fileName)
 
 void ImGuizmoManager::ContainObject()
 {
-    //m_vecObjectContainer.resize(ObjList::COUNT);
-    m_vecObjectContainer.resize(1);
+    m_vecObjectContainer.resize(ObjList::COUNT);
+    //m_vecObjectContainer.resize(2);
 
-    m_vecObjectContainer[ObjList::BANDAGE] = new Bandage(); m_vecObjectContainer[ObjList::BANDAGE]->Init();
-    //m_vecObjectContainer[ObjList::CHURCH] = new Church(); m_vecObjectContainer[ObjList::CHURCH]->Init();
+    m_vecObjectContainer[0] = new Bandage(); 
+    m_vecObjectContainer[1] = new Church(); 
+    
+    for (int i = 0; i < m_vecObjectContainer.size(); i++)
+    {
+        m_vecObjectContainer[i]->Init(); 
+        m_vecObjectContainer[i]->name = ComboObjectList[i];
+        m_mapCount.emplace((ObjList)i, 0);
+    }
     //m_vecObjectContainer[ObjList::TREE] = new TREE();
     //m_vecObjectContainer[ObjList::ROCK] = new ROCK();
     //m_vecObjectContainer[ObjList::WAREHOUSE] = new WAREHOUSE();
+
+
+    //m_mapCount.emplace((ObjList)1, 0);
+    //m_mapCount.emplace(ObjList::TREE, 0);
+    //m_mapCount.emplace(ObjList::ROCK, 0);
+    //m_mapCount.emplace(ObjList::WAREHOUSE, 0);
 
 }
 void ImGuizmoManager::EditTransform(const float * cameraView, float * cameraProjection, float * matrix)
@@ -595,6 +677,9 @@ void ImGuizmoManager::EditTransform(const float * cameraView, float * cameraProj
     ImGui::InputFloat3("Tr", matrixTranslation, 3);
     ImGui::InputFloat3("Rt", matrixRotation, 3);
     ImGui::InputFloat3("Sc", matrixScale, 3);
+    m_pCurrentObject->m_Position = D3DXVECTOR3(matrixTranslation[0], matrixTranslation[1], matrixTranslation[2]);
+    m_pCurrentObject->m_Rotation = D3DXVECTOR3(matrixRotation[0], matrixRotation[1], matrixRotation[2]);
+    m_pCurrentObject->m_Scale = D3DXVECTOR3(matrixScale[0], matrixScale[1], matrixScale[2]);
     ImGuizmo::RecomposeMatrixFromComponents(matrixTranslation, matrixRotation, matrixScale, matrix);
 
     if (mCurrentGizmoOperation != ImGuizmo::SCALE)
@@ -615,50 +700,55 @@ void ImGuizmoManager::EditTransform(const float * cameraView, float * cameraProj
 }
 void ImGuizmoManager::ObjectLoader(int index)
 {
-    switch (index)
-    {
-    case ObjList::BANDAGE:
-        SetCurrentObject(new ObjInfo(++bandageCount, ObjList::BANDAGE));
-        m_pCurrentObject->objPtr = m_vecObjectContainer[ObjList::BANDAGE];
-        m_pCurrentObject->m_ObjName = "Bandage" + to_string(bandageCount);
-        m_mapObject.emplace(m_pCurrentObject->m_ObjName, m_pCurrentObject);
-        break;
-    case ObjList::CHURCH:
-        SetCurrentObject(new ObjInfo(++churchCount, ObjList::CHURCH));
-        m_pCurrentObject->objPtr = m_vecObjectContainer[ObjList::CHURCH];
-        m_pCurrentObject->m_ObjName = "Church" + to_string(churchCount);
-        m_mapObject.emplace(m_pCurrentObject->m_ObjName, m_pCurrentObject);
-        break;
-    case ObjList::TREE:
-        
-        //m_pCurrentObject = new ObjInfo(++treeCount, ObjList::TREE);
-        //m_pCurrentObject->objPtr = m_vecObjectContainer[ObjList::TREE];
-        //m_mapObject.emplace("Tree" + to_string(treeCount), m_pCurrentObject);
-        //break;
-    case ObjList::ROCK:
-        //m_pCurrentObject = new ObjInfo(++rockCount, ObjList::ROCK);
-        //m_pCurrentObject->objPtr = m_vecObjectContainer[ObjList::ROCK];
-        //m_mapObject.emplace("Rock" + to_string(rockCount), m_pCurrentObject);
-        //break;
-    case ObjList::WAREHOUSE:
-        //m_pCurrentObject = new ObjInfo(++wareHouseCount, ObjList::WAREHOUSE);
-        //m_pCurrentObject->objPtr = m_vecObjectContainer[ObjList::WAREHOUSE];
-        //m_mapObject.emplace("WareHouse" + to_string(wareHouseCount), m_pCurrentObject);
-        //break;
-        ImGui::Begin("not yet");
-        ImGui::Text("load할 것이 없어서 ");
-        ImGui::End();
-        return;
-    }
+    ObjInfo* temp = new ObjInfo(++m_mapCount[(ObjList)index], (ObjList)index);
+    temp->objPtr = m_vecObjectContainer[(ObjList)index];
+    temp->m_ObjName = m_vecObjectContainer[(ObjList)index]->name + to_string(m_mapCount[(ObjList)index]);
+    m_mapObject.emplace(temp->m_ObjName, temp);
+    SetCurrentObject(temp);
+
+    //switch (index)
+    //{
+    //case ObjList::BANDAGE:
+    //    SetCurrentObject(new ObjInfo(++bandageCount, ObjList::BANDAGE));
+    //    m_pCurrentObject->objPtr = m_vecObjectContainer[ObjList::BANDAGE];
+    //    m_pCurrentObject->m_ObjName = "Bandage" + to_string(bandageCount);
+    //    m_mapObject.emplace(m_pCurrentObject->m_ObjName, m_pCurrentObject);
+    //    break;
+    //case ObjList::CHURCH:
+    //    SetCurrentObject(new ObjInfo(++churchCount, ObjList::CHURCH));
+    //    m_pCurrentObject->objPtr = m_vecObjectContainer[ObjList::CHURCH];
+    //    m_pCurrentObject->m_ObjName = "Church" + to_string(churchCount);
+    //    m_mapObject.emplace(m_pCurrentObject->m_ObjName, m_pCurrentObject);
+    //    break;
+    //case ObjList::TREE:
+    //    
+    //    //m_pCurrentObject = new ObjInfo(++treeCount, ObjList::TREE);
+    //    //m_pCurrentObject->objPtr = m_vecObjectContainer[ObjList::TREE];
+    //    //m_mapObject.emplace("Tree" + to_string(treeCount), m_pCurrentObject);
+    //    //break;
+    //case ObjList::ROCK:
+    //    //m_pCurrentObject = new ObjInfo(++rockCount, ObjList::ROCK);
+    //    //m_pCurrentObject->objPtr = m_vecObjectContainer[ObjList::ROCK];
+    //    //m_mapObject.emplace("Rock" + to_string(rockCount), m_pCurrentObject);
+    //    //break;
+    //case ObjList::WAREHOUSE:
+    //    //m_pCurrentObject = new ObjInfo(++wareHouseCount, ObjList::WAREHOUSE);
+    //    //m_pCurrentObject->objPtr = m_vecObjectContainer[ObjList::WAREHOUSE];
+    //    //m_mapObject.emplace("WareHouse" + to_string(wareHouseCount), m_pCurrentObject);
+    //    //break;
+    //    ImGui::Begin("not yet");
+    //    ImGui::Text("load할 것이 없어서 ");
+    //    ImGui::End();
+    //    return;
+    //}
     
 }
 void ImGuizmoManager::AddBoxCollider()
 {
-    BoxCollider* obj = new BoxCollider(m_pCurrentObject->m_matTransform);
-    obj->Init();
+
+    BoxCollider* obj = new BoxCollider(m_pCurrentObject->m_ObjName,m_pCurrentObject->m_matTransform);
+    obj->Init(D3DXVECTOR3(-0.5f, -0.5f, -0.5f), D3DXVECTOR3(0.5f, 0.5f, 0.5f));
     m_pCurrentObject->m_vecBoxCollider.push_back(obj);
-
-
 }
 
 void ImGuizmoManager::DeleteObject()

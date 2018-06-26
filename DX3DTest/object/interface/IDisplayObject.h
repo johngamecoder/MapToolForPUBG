@@ -9,6 +9,8 @@ protected:
     D3DXMATRIXA16			m_matWorld;
 	IDisplayObject*			m_pParent;
 	vector<IDisplayObject*> m_vecChild;
+public:
+    string name;
 
 public:
 

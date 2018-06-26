@@ -4,22 +4,21 @@
 class IDisplayObject;
 class Camera;
 class BoxCollider;
-//string ComboObjList[] = { "Bandage","Church","Tree","Rock","Ware House" };
 
 enum ObjList {
     BANDAGE,
     CHURCH,
-    TREE,
-    ROCK,
-    WAREHOUSE,
+    //TREE,
+    //ROCK,
+    //WAREHOUSE,
     COUNT
 };
-//여기에 add 할때, 아래에 ***count 변수 생성도 해주고 init에서 0으로 최기화
+///여기에 add 할때, 아래에 ***count 변수 생성도 해주고 init에서 0으로 최기화
 //ComboObjectList[] 너어주기 
 //ContainObject 추가해 주기
-//ObjectLoader(int index) switch 문 추가해주기
-//Open Scene 바꾸어 주기 
-//+ Init() 초기화 할때에 switch 문에 넣어주기 (이부분은 숫자 맞추게 하기 위해서 넣은 코드)
+///ObjectLoader(int index) switch 문 추가해주기
+///Open Scene 바꾸어 주기 
+///+ Init() 초기화 할때에 switch 문에 넣어주기 (이부분은 숫자 맞추게 하기 위해서 넣은 코드)
 struct ObjInfo 
 {
     int                 ID;
@@ -57,7 +56,8 @@ public:
     //IDisplayObject* m_pBoxCollider;
 
     vector<IDisplayObject*> m_vecObjectContainer;   //contains Displayable Objects
-    map<string, ObjInfo*> m_mapObject;              
+    map<ObjList, int> m_mapCount;                   //contains number of Objects
+    map<string, ObjInfo*> m_mapObject;
     //vector<> m_vecSavedScene;
     ObjInfo* m_pCurrentObject;
     
@@ -72,11 +72,11 @@ public:
     int hierarchySelectedObjIndex;  //Hierarchy obj tab
     int hierarchySelectedColliderIndex;  //Hierarchy obj tab
     int comboSelect;
-    int bandageCount;
-    int churchCount;
-    int treeCount;
-    int rockCount;
-    int wareHouseCount;
+    //int bandageCount;
+    //int churchCount;
+    //int treeCount;
+    //int rockCount;
+    //int wareHouseCount;
 
     bool isRenderCollider;
 
