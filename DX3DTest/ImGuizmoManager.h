@@ -1,10 +1,11 @@
 #pragma once
 #include "ImGuizmo.h"
-//#include <fstream>
+#include "BoxCollider.h"
+
 class IDisplayObject;
 class Camera;
 class BoxCollider;
-
+ 
 enum ObjList {
     BANDAGE,
     CHURCH,
@@ -50,6 +51,8 @@ struct ObjInfo
 class ImGuizmoManager 
 {
 public:
+    const char* ComboObjectList[ObjList::COUNT];
+
     string m_currentSceneName;
     Camera* m_pCamera;
 

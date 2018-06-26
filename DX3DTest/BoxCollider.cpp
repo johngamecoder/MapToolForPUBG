@@ -5,8 +5,6 @@
 
 BoxCollider::BoxCollider(string name)
     : m_Parentname(name)
-    , m_vExtent(0.0f, 0.0f, 0.0f)
-    , m_color()
 {
     //D3DXMatrixIdentity(&m_matWorld);
 }
@@ -20,19 +18,19 @@ BoxCollider::~BoxCollider()
 void BoxCollider::Init(const D3DXVECTOR3& min, const D3DXVECTOR3& max)
 {
     m_vMax = max;
-    m_vCenter = (min + max) * 0.5f;
-    m_vExtent = max - m_vCenter;
-    SetVertex(-m_vExtent, m_vExtent);
+    D3DXVECTOR3 vCenter = (min + max) * 0.5f;
+    D3DXVECTOR3 vExtent = max - vCenter;
+    SetVertex(-vExtent, vExtent);
 }
 
 void BoxCollider::Update()
 {
     m_matWorld = m_mTransform * m_mParentTransform;
 
-    m_vCenter = D3DXVECTOR3(0, 0, 0);
-    D3DXVec3TransformCoord(&m_vCenter, &m_vCenter, &m_matWorld);
-    //ImGui::Text("%f %f %f", m_vExtent.x, m_vExtent.y, m_vExtent.z);
-    ImGui::Text("%f %f %f", m_vCenter.x, m_vCenter.y, m_vCenter.z);
+    //m_vCenter = D3DXVECTOR3(0, 0, 0);
+    //D3DXVec3TransformCoord(&m_vCenter, &m_vCenter, &m_matWorld);
+    ////ImGui::Text("%f %f %f", m_vExtent.x, m_vExtent.y, m_vExtent.z);
+    //ImGui::Text("%f %f %f", m_vCenter.x, m_vCenter.y, m_vCenter.z);
 }
 
 //ImGui::Text("%f %f %f", m_vertices[0].p.x, m_vertices[0].p.y, m_vertices[0].p.z);

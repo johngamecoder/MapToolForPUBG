@@ -1,18 +1,15 @@
 #include "stdafx.h"
-#include <stdio.h>
-#include <sstream>
-
 #include "ImGuizmoManager.h"
-#include "Church.h"
-#include "Bandage.h"
-#include "BoxCollider.h"
 
 //이것을 header 쪽으로 옴기고 싶은데 어떻게 해야 할까요? ㅠ
-const char* ComboObjectList[] = { "Bandage","Church"/*,"Tree","Rock","Ware House"*/ };
+//const char* ComboObjectList[] = { "Bandage","Church"/*,"Tree","Rock","Ware House"*/ };
 
 
 ImGuizmoManager::ImGuizmoManager()
 {
+    ComboObjectList[0] = "Bandage";
+    ComboObjectList[1] = "Church";
+
     m_pCamera = NULL;
     //isRenderCollider = true;
     //for rendering image buttons
@@ -22,8 +19,6 @@ ImGuizmoManager::ImGuizmoManager()
     m_pButtonTexture_Scale = NULL; m_pButtonTexture_Scale = TextureManager::Get()->GetTexture(_T("Resource/scale.png"));
     m_pButtonTexture_Bounds = NULL; m_pButtonTexture_Bounds = TextureManager::Get()->GetTexture(_T("Resource/bounds.png"));
     ContainObject(); //loading objects from file using resourcemanager
-
-    //m_pBoxCollider = NULL;
 }
 ImGuizmoManager::~ImGuizmoManager()
 {
@@ -246,7 +241,6 @@ void ImGuizmoManager::MenuBarImGui()
     }
     ImGui::EndMainMenuBar();
 }
-
 void ImGuizmoManager::HierarchyImGui()
 {
     ImGui::SetNextWindowPos(ImVec2(30, 30));
@@ -482,188 +476,11 @@ void ImGuizmoManager::InspectorImGui()
 
 
 
-void ImGuizmoManager::NewScene()
-{
-    for (auto p : m_mapObject)
-    {
-        for (int i = 0; i < p.second->m_vecBoxCollider.size(); i++)
-        {
-            SAFE_DELETE(p.second->m_vecBoxCollider[i]);
-        }
-        SAFE_DELETE(p.second);
-    }       
-
-    Init();
-}
-void ImGuizmoManager::OpenScene(string& fileName)
-{
-    Init(); // clearing the scene
-
-    std::ifstream myFile(fileName);
-    if (myFile.is_open())
-    {
-        string line;
-        getline(myFile, line);
-        m_currentSceneName = line;  //opening current scene 
-
-        while (!myFile.eof())
-        {
-            std::stringstream ss;
-            std::stringstream ssMat;
-            getline(myFile, line); //take out {
-            if (line != "{") break;
-            ObjInfo* temp = new ObjInfo();
-            getline(myFile, line);                      temp->ID = stoi(line);
-            getline(myFile, line);                      temp->list = ObjList(stoi(line));
-            getline(myFile, line);                      temp->m_ObjName += line;
-            getline(myFile, line);      ss << line;     ss >> line;     temp->m_Position.x = stof(line, 0);     ss >> line;     temp->m_Position.y = stof(line, 0);      ss >> line;    temp->m_Position.z = stof(line, 0);
-            getline(myFile, line);      ss << line;     ss >> line;     temp->m_Rotation.x = stof(line, 0);     ss >> line;     temp->m_Rotation.y = stof(line, 0);      ss >> line;    temp->m_Rotation.z = stof(line, 0);
-            getline(myFile, line);      ss << line;     ss >> line;     temp->m_Scale.x = stof(line, 0);        ss >> line;     temp->m_Scale.y = stof(line, 0);         ss >> line;    temp->m_Scale.z = stof(line, 0);
-            
-            getline(myFile, line);      ssMat << line;
-            ssMat >> line; temp->m_matTransform._11 = stof(line, 0);  ssMat >> line; temp->m_matTransform._12 = stof(line, 0);  ssMat >> line; temp->m_matTransform._13 = stof(line, 0);  ssMat >> line; temp->m_matTransform._14 = stof(line, 0);
-            ssMat >> line; temp->m_matTransform._21 = stof(line, 0);  ssMat >> line; temp->m_matTransform._22 = stof(line, 0);  ssMat >> line; temp->m_matTransform._23 = stof(line, 0);  ssMat >> line; temp->m_matTransform._24 = stof(line, 0);
-            ssMat >> line; temp->m_matTransform._31 = stof(line, 0);  ssMat >> line; temp->m_matTransform._32 = stof(line, 0);  ssMat >> line; temp->m_matTransform._33 = stof(line, 0);  ssMat >> line; temp->m_matTransform._34 = stof(line, 0);
-            ssMat >> line; temp->m_matTransform._41 = stof(line, 0);  ssMat >> line; temp->m_matTransform._42 = stof(line, 0);  ssMat >> line; temp->m_matTransform._43 = stof(line, 0);  ssMat >> line; temp->m_matTransform._44 = stof(line, 0);
-            
-            getline(myFile, line);
-            if (line == "[")
-            {
-                getline(myFile, line);
-                int colliderNum = atoi(line.c_str());
-                for (int i = 0; i < colliderNum; i++)
-                {
-                    getline(myFile, line);  //take out "("
-                    getline(myFile, line);  //get parent name;
-                    BoxCollider* bc = new BoxCollider(line);
-                    bc->Init(D3DXVECTOR3(-0.5f, -0.5f, -0.5f), D3DXVECTOR3(0.5f, 0.5f, 0.5f));
-                    
-                    getline(myFile, line);      ss << line;     ss >> line;    bc->m_vCenter.x = stof(line, 0);     ss >> line;     bc->m_vCenter.y = stof(line, 0);      ss >> line;    bc->m_vCenter.z = stof(line, 0);
-                    getline(myFile, line);      ss << line;     ss >> line;    bc->m_vExtent.x = stof(line, 0);     ss >> line;     bc->m_vExtent.y = stof(line, 0);      ss >> line;    bc->m_vExtent.z = stof(line, 0);
-
-                    getline(myFile, line);      ssMat << line;
-                    ssMat >> line; bc->m_mTransform._11 = stof(line, 0);  ssMat >> line; bc->m_mTransform._12 = stof(line, 0);  ssMat >> line; bc->m_mTransform._13 = stof(line, 0);  ssMat >> line; bc->m_mTransform._14 = stof(line, 0);
-                    ssMat >> line; bc->m_mTransform._21 = stof(line, 0);  ssMat >> line; bc->m_mTransform._22 = stof(line, 0);  ssMat >> line; bc->m_mTransform._23 = stof(line, 0);  ssMat >> line; bc->m_mTransform._24 = stof(line, 0);
-                    ssMat >> line; bc->m_mTransform._31 = stof(line, 0);  ssMat >> line; bc->m_mTransform._32 = stof(line, 0);  ssMat >> line; bc->m_mTransform._33 = stof(line, 0);  ssMat >> line; bc->m_mTransform._34 = stof(line, 0);
-                    ssMat >> line; bc->m_mTransform._41 = stof(line, 0);  ssMat >> line; bc->m_mTransform._42 = stof(line, 0);  ssMat >> line; bc->m_mTransform._43 = stof(line, 0);  ssMat >> line; bc->m_mTransform._44 = stof(line, 0);
-
-                    temp->m_vecBoxCollider.push_back(bc);
-                    getline(myFile, line);//take out ")";
-
-                }
-                getline(myFile, line); //take out "]"
-                getline(myFile, line);  //take out "}"
-            }
-            else
-            {
-                getline(myFile, line);  //take out "}"
-            }
 
 
 
 
-            temp->objPtr = m_vecObjectContainer[temp->list];
 
-            
-            //m_mapObject.emplace(temp->m_ObjName, temp);
-            m_mapObject.emplace_back(make_pair(temp->m_ObjName, temp));
-        }
-        myFile.close();
-    }
-    else
-    {
-        assert(false && "안됨.ㅜㅜ");
-    }
-
-    for (auto p : m_mapObject)
-    {
-        if (m_mapCount.find(p.second->list) == m_mapCount.end() )
-        {
-            m_mapCount.emplace(p.second->list, 0);
-        }
-        m_mapCount[p.second->list]++;
-    }
-}
-
-void ImGuizmoManager::SaveScene(string& fileName)
-{
-    std::ofstream myFile(fileName);
-    if (myFile.is_open())
-    {
-        myFile << fileName << "\n";
-        myFile <<"Num of Object :"<<m_mapObject.size()<< "\n";
-        
-        for (auto p : m_mapObject)
-        {
-            ObjInfo* temp = p.second;
-            myFile << "{"<<"\n";
-            myFile << to_string(temp->ID) + "\n";
-            myFile << to_string(temp->list) + "\n";
-            myFile << temp->m_ObjName + "\n";
-            myFile << to_string(temp->m_Position.x) + " " + to_string(temp->m_Position.y) + " " + to_string(temp->m_Position.z) + "\n";
-            myFile << to_string(temp->m_Rotation.x) + " " + to_string(temp->m_Rotation.y) + " " + to_string(temp->m_Rotation.z) + "\n";
-            myFile << to_string(temp->m_Scale.x) + " " + to_string(temp->m_Scale.y) + " " + to_string(temp->m_Scale.z) + "\n";
-            myFile << to_string(temp->m_matTransform._11) + " " + to_string(temp->m_matTransform._12) + " " + to_string(temp->m_matTransform._13) + " " + to_string(temp->m_matTransform._14) + " "
-                + to_string(temp->m_matTransform._21) + " "+ to_string(temp->m_matTransform._22) + " "+ to_string(temp->m_matTransform._23) + " "+ to_string(temp->m_matTransform._24) + " "
-                + to_string(temp->m_matTransform._31) + " "+ to_string(temp->m_matTransform._32) + " "+ to_string(temp->m_matTransform._33) + " "+ to_string(temp->m_matTransform._34) + " "
-                + to_string(temp->m_matTransform._41) + " "+ to_string(temp->m_matTransform._42) + " "+ to_string(temp->m_matTransform._43) + " "+ to_string(temp->m_matTransform._44) + "\n";
-            int colliderNum = temp->m_vecBoxCollider.size();
-            if(colliderNum > 0)
-            {
-                myFile << "[" << "\n";
-                myFile << colliderNum << "\n";
-                for (int i = 0; i < colliderNum; i++)
-                {
-                    myFile << "(" << "\n";
-                    myFile << temp->m_vecBoxCollider[i]->m_Parentname << "\n";
-                    myFile << to_string(temp->m_vecBoxCollider[i]->m_vCenter.x) + " " + to_string(temp->m_vecBoxCollider[i]->m_vCenter.y) + " " + to_string(temp->m_vecBoxCollider[i]->m_vCenter.z) + "\n";
-                    myFile << to_string(temp->m_vecBoxCollider[i]->m_vExtent.x) + " " + to_string(temp->m_vecBoxCollider[i]->m_vExtent.y) + " " + to_string(temp->m_vecBoxCollider[i]->m_vExtent.z) + "\n";
-                    myFile << to_string(temp->m_vecBoxCollider[i]->m_mTransform._11) + " " + to_string(temp->m_vecBoxCollider[i]->m_mTransform._12) + " " + to_string(temp->m_vecBoxCollider[i]->m_mTransform._13) + " " + to_string(temp->m_vecBoxCollider[i]->m_mTransform._14) + " "
-                            + to_string(temp->m_vecBoxCollider[i]->m_mTransform._21) + " " + to_string(temp->m_vecBoxCollider[i]->m_mTransform._22) + " " + to_string(temp->m_vecBoxCollider[i]->m_mTransform._23) + " " + to_string(temp->m_vecBoxCollider[i]->m_mTransform._24) + " "
-                            + to_string(temp->m_vecBoxCollider[i]->m_mTransform._31) + " " + to_string(temp->m_vecBoxCollider[i]->m_mTransform._32) + " " + to_string(temp->m_vecBoxCollider[i]->m_mTransform._33) + " " + to_string(temp->m_vecBoxCollider[i]->m_mTransform._34) + " "
-                            + to_string(temp->m_vecBoxCollider[i]->m_mTransform._41) + " " + to_string(temp->m_vecBoxCollider[i]->m_mTransform._42) + " " + to_string(temp->m_vecBoxCollider[i]->m_mTransform._43) + " " + to_string(temp->m_vecBoxCollider[i]->m_mTransform._44) + "\n";
-
-                    myFile << ")" << "\n";
-                }
-                myFile << "]" << "\n";
-            }
-            
-            myFile << "}"<<"\n";
-        }
-        myFile.close();
-    }
-    else
-    {
-        assert(false && "안됨..");
-    }
-
-}
-
-void ImGuizmoManager::ContainObject()
-{
-    m_vecObjectContainer.resize(ObjList::COUNT);
-    //m_vecObjectContainer.resize(2);
-
-    m_vecObjectContainer[0] = new Bandage(); 
-    m_vecObjectContainer[1] = new Church(); 
-    
-    for (int i = 0; i < m_vecObjectContainer.size(); i++)
-    {
-        m_vecObjectContainer[i]->Init(); 
-        m_vecObjectContainer[i]->name = ComboObjectList[i];
-        m_mapCount.emplace((ObjList)i, 0);
-    }
-    //m_vecObjectContainer[ObjList::TREE] = new TREE();
-    //m_vecObjectContainer[ObjList::ROCK] = new ROCK();
-    //m_vecObjectContainer[ObjList::WAREHOUSE] = new WAREHOUSE();
-
-
-    //m_mapCount.emplace((ObjList)1, 0);
-    //m_mapCount.emplace(ObjList::TREE, 0);
-    //m_mapCount.emplace(ObjList::ROCK, 0);
-    //m_mapCount.emplace(ObjList::WAREHOUSE, 0);
-
-}
 void ImGuizmoManager::EditTransform(const float * cameraView, float * cameraProjection, float * matrix)
 {
     
@@ -737,19 +554,6 @@ void ImGuizmoManager::EditTransform(const float * cameraView, float * cameraProj
     ImGuizmo::Manipulate(cameraView, cameraProjection, mCurrentGizmoOperation, mCurrentGizmoMode, matrix, NULL,  NULL, boundSizing ? bounds : NULL, NULL);
     
 }
-void ImGuizmoManager::ObjectLoader(int index)
-{
-    ObjInfo* temp = new ObjInfo(++m_mapCount[(ObjList)index], (ObjList)index);
-    temp->objPtr = m_vecObjectContainer[(ObjList)index];
-    temp->m_ObjName = m_vecObjectContainer[(ObjList)index]->name + to_string(m_mapCount[(ObjList)index]);
-    //m_mapObject.emplace(temp->m_ObjName, temp);
-
-    //
-    m_mapObject.emplace_back(make_pair(temp->m_ObjName, temp));
-    //
-
-    SetCurrentObject(temp); 
-}
 void ImGuizmoManager::AddBoxCollider()
 {
     BoxCollider* obj = new BoxCollider(m_pCurrentObject->m_ObjName);
@@ -759,11 +563,9 @@ void ImGuizmoManager::AddBoxCollider()
     obj->SetMatrix(matIdentity, m_pCurrentObject->m_matTransform);
     m_pCurrentObject->m_vecBoxCollider.push_back(obj);
 }
-
 void ImGuizmoManager::DeleteObject()
 {
 }
-
 void ImGuizmoManager::MouseHandleMove()
 {
     //this functions are controlled at Camera.cpp
@@ -772,7 +574,6 @@ void ImGuizmoManager::MouseHandleMove()
     else
         m_pCamera->isHandle = true;
 }
-
 void ImGuizmoManager::MatChangeDX2Float(OUT float * m16, IN D3DXMATRIXA16 * mat)
 {
     m16[0] = mat->_11;m16[1] = mat->_12;m16[2] = mat->_13;m16[3] = mat->_14;

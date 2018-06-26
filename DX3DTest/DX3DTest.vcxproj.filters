@@ -310,6 +310,7 @@
     <ClInclude Include="Bandage.h" />
     <ClInclude Include="BoxCollider.h" />
     <ClInclude Include="TagResource.h" />
+    <ClInclude Include="PUBG_Object.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DX3DTest.cpp">
@@ -519,6 +520,9 @@
     <ClCompile Include="Church.cpp" />
     <ClCompile Include="Bandage.cpp" />
     <ClCompile Include="BoxCollider.cpp" />
+    <ClCompile Include="ImGuizmoManager_ObjectContainer.cpp" />
+    <ClCompile Include="ImGuizmoManager_SceneHandler.cpp" />
+    <ClCompile Include="PUBG_Object.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DX3DTest.rc">

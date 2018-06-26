@@ -201,6 +201,7 @@
     <ClInclude Include="object\ui\UIButton.h" />
     <ClInclude Include="object\ui\UIImage.h" />
     <ClInclude Include="object\ui\UIText.h" />
+    <ClInclude Include="PUBG_Object.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="ResourceStructure.h" />
     <ClInclude Include="SampleUI.h" />
@@ -264,6 +265,8 @@
     <ClCompile Include="ImGuiManager.cpp" />
     <ClCompile Include="ImGuizmo.cpp" />
     <ClCompile Include="ImGuizmoManager.cpp" />
+    <ClCompile Include="ImGuizmoManager_ObjectContainer.cpp" />
+    <ClCompile Include="ImGuizmoManager_SceneHandler.cpp" />
     <ClCompile Include="imgui_demo.cpp" />
     <ClCompile Include="imgui_draw.cpp" />
     <ClCompile Include="imgui_impl_dx9.cpp" />
@@ -293,6 +296,7 @@
     <ClCompile Include="object\ui\UIButton.cpp" />
     <ClCompile Include="object\ui\UIImage.cpp" />
     <ClCompile Include="object\ui\UIText.cpp" />
+    <ClCompile Include="PUBG_Object.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="ResourceStructure.cpp" />
     <ClCompile Include="SampleUI.cpp" />
