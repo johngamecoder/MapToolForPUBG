@@ -3,9 +3,9 @@
 #define CUBE_INDEX_SIZE 36
 #define CUBE_VERTEX_SIZE 8
 
-BoxCollider::BoxCollider(string name)
-    : m_Parentname(name)
+BoxCollider::BoxCollider(string* name)
 {
+    m_ParentName = name;
     //D3DXMatrixIdentity(&m_matWorld);
 }
 
@@ -27,10 +27,25 @@ void BoxCollider::Update()
 {
     m_matWorld = m_mTransform * m_mParentTransform;
 
-    //m_vCenter = D3DXVECTOR3(0, 0, 0);
+    //ImGui::Text("m_Position : %f %f %f", m_Position.x, m_Position.y, m_Position.z);
+    //ImGui::Text("m_Rotation : %f %f %f", m_Rotation.x, m_Rotation.y, m_Rotation.z);
+    //ImGui::Text("m_Scale : %f %f %f", m_Scale.x, m_Scale.y, m_Scale.z);
+    //
+    //ImGui::Text("world : %f %f %f %f", m_matWorld._11, m_matWorld._12, m_matWorld._13, m_matWorld._14);
+    //ImGui::Text("world : %f %f %f %f", m_matWorld._21, m_matWorld._22, m_matWorld._23, m_matWorld._24);
+    //ImGui::Text("world : %f %f %f %f", m_matWorld._31, m_matWorld._32, m_matWorld._33, m_matWorld._34);
+    //ImGui::Text("world : %f %f %f %f", m_matWorld._41, m_matWorld._42, m_matWorld._43, m_matWorld._44);
+    //D3DXVECTOR3 m_vCenter = GetCenter();
+    //ImGui::Text("m_vCenter : %f %f %f", m_vCenter.x, m_vCenter.y, m_vCenter.z);
+    
+    //D3DXVECTOR3 m_vE =GetExtent();
+    //ImGui::Text("m_vE : %f %f %f", m_vE.x, m_vE.y, m_vE.z);
+    //ImGui::Text("m_Scale : %f %f %f", m_Scale.x, m_Scale.y, m_Scale.z);
+    //D3DXVECTOR3 m_v = GetExtent();
+    //ImGui::Text("m_vMax    : %f %f %f", m_v.x, m_v.y, m_v.z);
     //D3DXVec3TransformCoord(&m_vCenter, &m_vCenter, &m_matWorld);
     ////ImGui::Text("%f %f %f", m_vExtent.x, m_vExtent.y, m_vExtent.z);
-    //ImGui::Text("%f %f %f", m_vCenter.x, m_vCenter.y, m_vCenter.z);
+    
 }
 
 //ImGui::Text("%f %f %f", m_vertices[0].p.x, m_vertices[0].p.y, m_vertices[0].p.z);

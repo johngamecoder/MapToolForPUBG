@@ -306,11 +306,11 @@
     <ClInclude Include="ImGuizmoManager.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="ResourceStructure.h" />
-    <ClInclude Include="Church.h" />
     <ClInclude Include="Bandage.h" />
     <ClInclude Include="BoxCollider.h" />
     <ClInclude Include="TagResource.h" />
     <ClInclude Include="PUBG_Object.h" />
+    <ClInclude Include="ResPathFileName.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DX3DTest.cpp">
@@ -517,12 +517,12 @@
     <ClCompile Include="ImGuizmoManager.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="ResourceStructure.cpp" />
-    <ClCompile Include="Church.cpp" />
     <ClCompile Include="Bandage.cpp" />
     <ClCompile Include="BoxCollider.cpp" />
     <ClCompile Include="ImGuizmoManager_ObjectContainer.cpp" />
     <ClCompile Include="ImGuizmoManager_SceneHandler.cpp" />
     <ClCompile Include="PUBG_Object.cpp" />
+    <ClCompile Include="ResPathFileName.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DX3DTest.rc">

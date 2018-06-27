@@ -164,7 +164,6 @@
     <ClInclude Include="AStarNode.h" />
     <ClInclude Include="Bandage.h" />
     <ClInclude Include="BoxCollider.h" />
-    <ClInclude Include="Church.h" />
     <ClInclude Include="imconfig.h" />
     <ClInclude Include="imgui.h" />
     <ClInclude Include="ImGuiManager.h" />
@@ -204,6 +203,7 @@
     <ClInclude Include="PUBG_Object.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="ResourceStructure.h" />
+    <ClInclude Include="ResPathFileName.h" />
     <ClInclude Include="SampleUI.h" />
     <ClInclude Include="sample\cube\ActionCube.h" />
     <ClInclude Include="sample\cube\ColorCube.h" />
@@ -260,7 +260,6 @@
     <ClCompile Include="AStarNode.cpp" />
     <ClCompile Include="Bandage.cpp" />
     <ClCompile Include="BoxCollider.cpp" />
-    <ClCompile Include="Church.cpp" />
     <ClCompile Include="imgui.cpp" />
     <ClCompile Include="ImGuiManager.cpp" />
     <ClCompile Include="ImGuizmo.cpp" />
@@ -299,6 +298,7 @@
     <ClCompile Include="PUBG_Object.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="ResourceStructure.cpp" />
+    <ClCompile Include="ResPathFileName.cpp" />
     <ClCompile Include="SampleUI.cpp" />
     <ClCompile Include="sample\cube\ActionCube.cpp" />
     <ClCompile Include="sample\cube\ColorCube.cpp" />

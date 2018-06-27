@@ -5,7 +5,8 @@
 class IDisplayObject;
 class Camera;
 class BoxCollider;
- 
+extern const char* ComboObjectList[];
+
 enum ObjList {
     BANDAGE,
     CHURCH,
@@ -22,7 +23,7 @@ enum ObjList {
 ///+ Init() 초기화 할때에 switch 문에 넣어주기 (이부분은 숫자 맞추게 하기 위해서 넣은 코드)
 struct ObjInfo 
 {
-    int                 ID;
+    //int                 ID;
     ObjList             list;
     string              m_ObjName;
     D3DXVECTOR3         m_Position;
@@ -39,11 +40,11 @@ struct ObjInfo
     {
         D3DXMatrixIdentity(&m_matTransform);
     }
-    ObjInfo(int id, ObjList _list)
+    ObjInfo(const ObjList _list, const string& userInputName)
         : ObjInfo()
     {
-        ID = id;
         list = _list;
+        m_ObjName = userInputName;
     }
 
 };
@@ -51,37 +52,30 @@ struct ObjInfo
 class ImGuizmoManager 
 {
 public:
-    const char* ComboObjectList[ObjList::COUNT];
+    //const char* ComboObjectList[ObjList::COUNT];
 
     string m_currentSceneName;
     Camera* m_pCamera;
 
-    //IDisplayObject* m_pBoxCollider;
-
     vector<IDisplayObject*> m_vecObjectContainer;   //contains Displayable Objects
-    map<ObjList, int> m_mapCount;                   //contains number of Objects
-    //map<string, ObjInfo*> m_mapObject;
-    deque<pair<string, ObjInfo*>> m_mapObject;
+    map<ObjList, int> m_mapObjCount;                   //contains number of Objects
+    map<string, ObjInfo*> m_mapObject;
+    //deque<pair<string, ObjInfo*>> m_mapObject;
     //vector<> m_vecSavedScene;
     ObjInfo* m_pCurrentObject;
-    
-    LPDIRECT3DTEXTURE9 m_pButtonTexture_Handle;
-    LPDIRECT3DTEXTURE9 m_pButtonTexture_Translation;
-    LPDIRECT3DTEXTURE9 m_pButtonTexture_Rotation;
-    LPDIRECT3DTEXTURE9 m_pButtonTexture_Scale;
-    LPDIRECT3DTEXTURE9 m_pButtonTexture_Bounds;
 
+    LPDIRECT3DTEXTURE9 m_pButtonTexture[5];
+    
     ImGuizmo::OPERATION mCurrentGizmoOperation;
     ImGuizmo::MODE mCurrentGizmoMode;
 
     int hierarchySelectedObjIndex;  //Hierarchy obj tab
     int hierarchySelectedColliderIndex;  //Hierarchy obj tab
-    int comboSelect;
+    int comboSelect;    //selected number of object on hierarchy
+    bool boundSizing;   //selecting to use boundsizing or not
 
-    bool boundSizing;
 
-
-    // Camera view & projection
+    // Camera view & projection & Guizmo Matrix
     bool isPerspective;
     float viewWidth;
     float cameraProjection[16];
@@ -99,6 +93,7 @@ public:
     void SetCurrentObject(ObjInfo* obj)
     {
         m_pCurrentObject = obj;
+        //m_currentOBJName = &obj->m_ObjName;
         //resetting the position to origin
         MatChangeDX2Float(objectMatrix, &m_pCurrentObject->m_matTransform);
     }
@@ -113,7 +108,7 @@ public:
     void SaveScene(string& fileName );
     void ContainObject();
     void EditTransform(const float *cameraView, float *cameraProjection, float* matrix);
-    void ObjectLoader(int index);
+    void ObjectLoader(const int index, const string& userInputName);
     void AddBoxCollider();
     void DeleteObject();
 
