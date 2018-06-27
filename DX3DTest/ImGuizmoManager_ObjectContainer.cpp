@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "ImGuizmoManager.h"
 
+#include "ResPathFileName.h"
 #include "PUBG_Object.h"
 void ImGuizmoManager::LoadObjectImGui()
 {
@@ -8,7 +9,7 @@ void ImGuizmoManager::LoadObjectImGui()
     ImGui::Begin("Object Loader");
     {
 
-        ImGui::Combo("", &comboSelect, ComboObjectList, ObjList::COUNT/*이건 갯수 넣는 부분 */);
+        ImGui::Combo("", &comboSelect, ComboObjectList, LOADCOUNT/*ObjList::COUNT*//*이건 갯수 넣는 부분 */);
         ImGui::SameLine();
         
 
@@ -140,18 +141,37 @@ void ImGuizmoManager::LoadObjectImGui()
 }
 void ImGuizmoManager::ContainObject()
 {
-    m_vecObjectContainer.resize(ObjList::COUNT);
-    //m_vecObjectContainer.resize(2);
-
-    m_vecObjectContainer[0] = new PUBG_Object("./Resource/Bandage/", "Bandage.X");
-    m_vecObjectContainer[1] = new PUBG_Object("./Resource/Church/", "Church.X");
     
-    for (int i = 0; i < m_vecObjectContainer.size(); i++)
-    {
-        m_vecObjectContainer[i]->Init();
-        m_vecObjectContainer[i]->name = ComboObjectList[i];
-        m_mapObjCount.emplace((ObjList)i, 0);
-    }
+    //---testing 용 code-------------
+    m_vecObjectContainer.resize(LOADCOUNT);
+    pair<string, string> PATHnNAME;
+
+    PATHnNAME = ResPathFileName::Get((TAG_RES_STATIC)9);
+    m_vecObjectContainer[0] = new PUBG_Object(PATHnNAME.first, PATHnNAME.second);
+    m_vecObjectContainer[0]->Init();
+    m_mapObjCount.emplace((ObjList)0, 0);
+
+    PATHnNAME = ResPathFileName::Get((TAG_RES_STATIC)16);
+    m_vecObjectContainer[1] = new PUBG_Object(PATHnNAME.first, PATHnNAME.second);
+    m_vecObjectContainer[1]->Init();
+    m_mapObjCount.emplace((ObjList)1, 0);
+
+    
+
+
+    ////------ 실제 사용할 코드! 지우지 마삼! -------------------
+    //pair<string, string> PATHnNAME;
+    //m_vecObjectContainer.resize((int)TAG_RES_STATIC::COUNT);
+
+    //for (int i = 0; i < m_vecObjectContainer.size(); i++)
+    //{
+    //    PATHnNAME = ResPathFileName::Get((TAG_RES_STATIC)i);
+    //    m_vecObjectContainer[i] = new PUBG_Object(PATHnNAME.first, PATHnNAME.second);
+    //    m_vecObjectContainer[i]->Init();
+    //    //m_vecObjectContainer[i]->name = ComboObjectList[i];
+    //    m_mapObjCount.emplace((TAG_RES_STATIC)i, 0);
+    //}
+    ////------ 실제 사용할 코드! 지우지 마삼! -------------------
 }
 
 void ImGuizmoManager::ObjectLoader(const int index,const string& userInputName)

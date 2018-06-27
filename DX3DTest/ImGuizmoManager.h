@@ -1,7 +1,8 @@
 #pragma once
 #include "ImGuizmo.h"
+#include "TagResource.h"
 #include "BoxCollider.h"
-
+#define LOADCOUNT 2
 class IDisplayObject;
 class Camera;
 class BoxCollider;
