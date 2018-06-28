@@ -9,7 +9,7 @@ private:
     string          m_FileName;
 
 public:
-    PUBG_Object(string path, string fileName);
+    PUBG_Object(string& path, string& fileName);
     ~PUBG_Object();
 
     // Inherited via IDisplayObject

@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "PUBG_Object.h"
 
-PUBG_Object::PUBG_Object(string path, string fileName)
+PUBG_Object::PUBG_Object(string& path, string& fileName)
     :m_Path(path),
      m_FileName(fileName)
 {
@@ -14,7 +14,7 @@ PUBG_Object::~PUBG_Object()
 
 void PUBG_Object::Init()
 {
-    m_pEffectMesh = g_pResourceManager->GetEffectMesh(m_Path.c_str(), m_FileName.c_str());
+    m_pEffectMesh = g_pResourceManager->GetEffectMesh(m_Path, m_FileName);
 }
 
 void PUBG_Object::Update()

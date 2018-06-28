@@ -2,29 +2,26 @@
 #include "ImGuizmoManager.h"
 
 //이것을 header 쪽으로 옴기고 싶은데 어떻게 해야 할까요? ㅠ
-const char* ComboObjectList[] = { "Bandage","Church"/*,"Tree","Rock","Ware House"*/ };
+
 
 
 ImGuizmoManager::ImGuizmoManager()
 {
-    //ComboObjectList[0] = "Bandage";
-    //ComboObjectList[1] = "Church";
-
-    m_pCamera = NULL;
-    //isRenderCollider = true;
-    //for rendering image buttons
+   m_pCamera = NULL;
+   //for rendering image buttons
    m_pButtonTexture[0] = NULL; m_pButtonTexture[0] = TextureManager::Get()->GetTexture(_T("Resource/handle.png"));
    m_pButtonTexture[1] = NULL; m_pButtonTexture[1] = TextureManager::Get()->GetTexture(_T("Resource/translation.png"));
    m_pButtonTexture[2] = NULL; m_pButtonTexture[2] = TextureManager::Get()->GetTexture(_T("Resource/rotation.png"));
    m_pButtonTexture[3] = NULL; m_pButtonTexture[3] = TextureManager::Get()->GetTexture(_T("Resource/scale.png"));
    m_pButtonTexture[4] = NULL; m_pButtonTexture[4] = TextureManager::Get()->GetTexture(_T("Resource/bounds.png"));
     
-    ContainObject(); //loading objects from file using resourcemanager
+   ConstructComboObjectList();
+   ContainObject(); //loading objects from file using resourcemanager
 }
 ImGuizmoManager::~ImGuizmoManager()
 {
     //SAFE_DELETE(m_pCamera); 이건 여기서 중단되는것이 아니다.
-    for (int i = 0; i < m_vecObjectContainer.size(); i++)
+    for (int i = 0; i < LOADCOUNT; i++)
     {
         SAFE_RELEASE(m_vecObjectContainer[i]);
     }
@@ -46,6 +43,11 @@ ImGuizmoManager::~ImGuizmoManager()
         SAFE_RELEASE(m_pButtonTexture[i]);
     }
     //SAFE_RELEASE(m_pBoxCollider);
+    for (int i = 0; i < static_cast<int>(TAG_RES_STATIC::COUNT); ++i)
+    {
+        SAFE_DELETE(ComboObjectList[i]);
+         //= new char[256];
+    }
 }
 
 
@@ -59,7 +61,7 @@ void ImGuizmoManager::Init()
 
     boundSizing = false;
 
-    mCurrentGizmoOperation = ImGuizmo::HANDLE;
+    mCurrentGizmoOperation = ImGuizmo::NOTSELECTED;
     mCurrentGizmoMode = ImGuizmo::WORLD;
 
     comboSelect = -1;
@@ -168,6 +170,14 @@ void ImGuizmoManager::HierarchyImGui()
             if (ImGui::ImageButton((void*)m_pButtonTexture[3], ImVec2(32, 22), ImVec2(0, 0), ImVec2(1, 1), frame_padding_notSelected, ImColor(0, 0, 0, 255))) { mCurrentGizmoOperation = ImGuizmo::SCALE; }   ImGui::SameLine();
             if (ImGui::ImageButton((void*)m_pButtonTexture[4], ImVec2(32, 22), ImVec2(0, 0), ImVec2(1, 1), frame_padding_Selected, ImColor(0, 0, 0, 255))) { mCurrentGizmoOperation = ImGuizmo::BOUNDS; }   ImGui::SameLine();
             boundSizing = true;
+            break;
+        case ImGuizmo::NOTSELECTED:
+            if (ImGui::ImageButton((void*)m_pButtonTexture[0], ImVec2(32, 22), ImVec2(0, 0), ImVec2(1, 1), frame_padding_notSelected, ImColor(0, 0, 0, 255))) { mCurrentGizmoOperation = ImGuizmo::HANDLE; }   ImGui::SameLine();
+            if (ImGui::ImageButton((void*)m_pButtonTexture[1], ImVec2(32, 22), ImVec2(0, 0), ImVec2(1, 1), frame_padding_notSelected, ImColor(0, 0, 0, 255))) { mCurrentGizmoOperation = ImGuizmo::TRANSLATE; }   ImGui::SameLine();
+            if (ImGui::ImageButton((void*)m_pButtonTexture[2], ImVec2(32, 22), ImVec2(0, 0), ImVec2(1, 1), frame_padding_notSelected, ImColor(0, 0, 0, 255))) { mCurrentGizmoOperation = ImGuizmo::ROTATE; }   ImGui::SameLine();
+            if (ImGui::ImageButton((void*)m_pButtonTexture[3], ImVec2(32, 22), ImVec2(0, 0), ImVec2(1, 1), frame_padding_notSelected, ImColor(0, 0, 0, 255))) { mCurrentGizmoOperation = ImGuizmo::SCALE; }   ImGui::SameLine();
+            if (ImGui::ImageButton((void*)m_pButtonTexture[4], ImVec2(32, 22), ImVec2(0, 0), ImVec2(1, 1), frame_padding_notSelected, ImColor(0, 0, 0, 255))) { mCurrentGizmoOperation = ImGuizmo::BOUNDS; }   ImGui::SameLine();
+            boundSizing = false;
             break;
         }
 
@@ -381,10 +391,7 @@ void ImGuizmoManager::AddBoxCollider()
     bc->SetMatrix(matIdentity, m_pCurrentObject->m_matTransform);
     m_pCurrentObject->m_vecBoxCollider.push_back(bc);
 }
-void ImGuizmoManager::DeleteObject()
-{
 
-}
 void ImGuizmoManager::MouseHandleMove()
 {
     //this functions are controlled at Camera.cpp

@@ -220,7 +220,7 @@ void ImGuizmoManager::SaveScene(string& fileName)
         {
             ObjInfo* temp = p.second;
             myFile << "{" << "\n";
-            myFile << "\t"<< to_string(temp->list) + "\n";
+            myFile << "\t"<< to_string(static_cast<int>(temp->list)) + "\n";
             myFile << "\t"<< temp->m_ObjName + "\n";
             myFile << "\t"<< to_string(temp->m_Position.x) + " " + to_string(temp->m_Position.y) + " " + to_string(temp->m_Position.z) + "\n";
             myFile << "\t"<< to_string(temp->m_Rotation.x) + " " + to_string(temp->m_Rotation.y) + " " + to_string(temp->m_Rotation.z) + "\n";
@@ -238,14 +238,14 @@ void ImGuizmoManager::SaveScene(string& fileName)
                 {
                     myFile << "\t" << "\t" <<"<" << "\n";
                     myFile << "\t" << "\t" << "\t" << *(temp->m_vecBoxCollider[i]->GetParentName()) << "\n";
-                    D3DXVECTOR3 vCenter = temp->m_vecBoxCollider[i]->GetCenter();
-                    D3DXVECTOR3 vExtent = temp->m_vecBoxCollider[i]->GetExtent();
-                    myFile << "\t" << "\t" << "\t" << to_string(vCenter.x) + " " + to_string(vCenter.y) + " " + to_string(vCenter.z) + "\n";
-                    myFile << "\t" << "\t" << "\t" << to_string(vExtent.x) + " " + to_string(vExtent.y) + " " + to_string(vExtent.z) + "\n";
-                    myFile << "\t" << "\t" << "\t" << to_string(temp->m_vecBoxCollider[i]->m_mTransform._11) + " " + to_string(temp->m_vecBoxCollider[i]->m_mTransform._12) + " " + to_string(temp->m_vecBoxCollider[i]->m_mTransform._13) + " " + to_string(temp->m_vecBoxCollider[i]->m_mTransform._14) + " "
-                        + to_string(temp->m_vecBoxCollider[i]->m_mTransform._21) + " " + to_string(temp->m_vecBoxCollider[i]->m_mTransform._22) + " " + to_string(temp->m_vecBoxCollider[i]->m_mTransform._23) + " " + to_string(temp->m_vecBoxCollider[i]->m_mTransform._24) + " "
-                        + to_string(temp->m_vecBoxCollider[i]->m_mTransform._31) + " " + to_string(temp->m_vecBoxCollider[i]->m_mTransform._32) + " " + to_string(temp->m_vecBoxCollider[i]->m_mTransform._33) + " " + to_string(temp->m_vecBoxCollider[i]->m_mTransform._34) + " "
-                        + to_string(temp->m_vecBoxCollider[i]->m_mTransform._41) + " " + to_string(temp->m_vecBoxCollider[i]->m_mTransform._42) + " " + to_string(temp->m_vecBoxCollider[i]->m_mTransform._43) + " " + to_string(temp->m_vecBoxCollider[i]->m_mTransform._44) + "\n";
+                    //D3DXVECTOR3 vCenter = temp->m_vecBoxCollider[i]->GetCenter();
+                    //D3DXVECTOR3 vExtent = temp->m_vecBoxCollider[i]->GetExtent();
+                    //myFile << "\t" << "\t" << "\t" << to_string(vCenter.x) + " " + to_string(vCenter.y) + " " + to_string(vCenter.z) + "\n";
+                    //myFile << "\t" << "\t" << "\t" << to_string(vExtent.x) + " " + to_string(vExtent.y) + " " + to_string(vExtent.z) + "\n";
+                    myFile << "\t" << "\t" << "\t" << to_string(temp->m_vecBoxCollider[i]->m_matWorld._11) + " " + to_string(temp->m_vecBoxCollider[i]->m_matWorld._12) + " " + to_string(temp->m_vecBoxCollider[i]->m_matWorld._13) + " " + to_string(temp->m_vecBoxCollider[i]->m_matWorld._14) + " "
+                                                    + to_string(temp->m_vecBoxCollider[i]->m_matWorld._21) + " " + to_string(temp->m_vecBoxCollider[i]->m_matWorld._22) + " " + to_string(temp->m_vecBoxCollider[i]->m_matWorld._23) + " " + to_string(temp->m_vecBoxCollider[i]->m_matWorld._24) + " "
+                                                    + to_string(temp->m_vecBoxCollider[i]->m_matWorld._31) + " " + to_string(temp->m_vecBoxCollider[i]->m_matWorld._32) + " " + to_string(temp->m_vecBoxCollider[i]->m_matWorld._33) + " " + to_string(temp->m_vecBoxCollider[i]->m_matWorld._34) + " "
+                                                    + to_string(temp->m_vecBoxCollider[i]->m_matWorld._41) + " " + to_string(temp->m_vecBoxCollider[i]->m_matWorld._42) + " " + to_string(temp->m_vecBoxCollider[i]->m_matWorld._43) + " " + to_string(temp->m_vecBoxCollider[i]->m_matWorld._44) + "\n";
 
                     myFile << "\t" << "\t" << ">" << "\n";
                 }
@@ -262,4 +262,6 @@ void ImGuizmoManager::SaveScene(string& fileName)
     }
 
 }
+
+
 

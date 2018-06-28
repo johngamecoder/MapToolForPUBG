@@ -519,10 +519,10 @@
     <ClCompile Include="ResourceStructure.cpp" />
     <ClCompile Include="Bandage.cpp" />
     <ClCompile Include="BoxCollider.cpp" />
-    <ClCompile Include="ImGuizmoManager_ObjectContainer.cpp" />
-    <ClCompile Include="ImGuizmoManager_SceneHandler.cpp" />
     <ClCompile Include="PUBG_Object.cpp" />
     <ClCompile Include="ResPathFileName.cpp" />
+    <ClCompile Include="ImGuizmoManager_ObjContainer.cpp" />
+    <ClCompile Include="ImGuizmoManager_SaveLoadFile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DX3DTest.rc">

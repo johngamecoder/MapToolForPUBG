@@ -264,8 +264,8 @@
     <ClCompile Include="ImGuiManager.cpp" />
     <ClCompile Include="ImGuizmo.cpp" />
     <ClCompile Include="ImGuizmoManager.cpp" />
-    <ClCompile Include="ImGuizmoManager_ObjectContainer.cpp" />
-    <ClCompile Include="ImGuizmoManager_SceneHandler.cpp" />
+    <ClCompile Include="ImGuizmoManager_ObjContainer.cpp" />
+    <ClCompile Include="ImGuizmoManager_SaveLoadFile.cpp" />
     <ClCompile Include="imgui_demo.cpp" />
     <ClCompile Include="imgui_draw.cpp" />
     <ClCompile Include="imgui_impl_dx9.cpp" />

@@ -2,22 +2,21 @@
 #include "ImGuizmo.h"
 #include "TagResource.h"
 #include "BoxCollider.h"
-#define LOADCOUNT 2
+#define LOADCOUNT 76
 class IDisplayObject;
 class Camera;
 class BoxCollider;
-extern const char* ComboObjectList[];
-
-enum ObjList {
-    BANDAGE,
-    CHURCH,
-    //TREE,
-    //ROCK,
-    //WAREHOUSE,
-    COUNT
-};
+extern char* ComboObjectList[static_cast<int>(TAG_RES_STATIC::COUNT)];
+//extern const char* ComboObjectList[(unsigned int)TAG_RES_STATIC::COUNT];
+//enum ObjList {
+//    BANDAGE,
+//    CHURCH,
+//    //TREE,
+//    //ROCK,
+//    //WAREHOUSE,
+//    COUNT
+//};
 ///여기에 add 할때, 아래에 ***count 변수 생성도 해주고 init에서 0으로 최기화
-//ComboObjectList[] 너어주기 
 //ContainObject 추가해 주기
 ///ObjectLoader(int index) switch 문 추가해주기
 ///Open Scene 바꾸어 주기 
@@ -25,7 +24,7 @@ enum ObjList {
 struct ObjInfo 
 {
     //int                 ID;
-    ObjList             list;
+    TAG_RES_STATIC      list;
     string              m_ObjName;
     D3DXVECTOR3         m_Position;
     D3DXVECTOR3         m_Rotation;
@@ -41,7 +40,7 @@ struct ObjInfo
     {
         D3DXMatrixIdentity(&m_matTransform);
     }
-    ObjInfo(const ObjList _list, const string& userInputName)
+    ObjInfo(const TAG_RES_STATIC _list, const string& userInputName)
         : ObjInfo()
     {
         list = _list;
@@ -53,13 +52,13 @@ struct ObjInfo
 class ImGuizmoManager 
 {
 public:
-    //const char* ComboObjectList[ObjList::COUNT];
 
     string m_currentSceneName;
     Camera* m_pCamera;
 
-    vector<IDisplayObject*> m_vecObjectContainer;   //contains Displayable Objects
-    map<ObjList, int> m_mapObjCount;                   //contains number of Objects
+    //vector<IDisplayObject*> m_vecObjectContainer;   //contains Displayable Objects
+    IDisplayObject* m_vecObjectContainer[static_cast<int>(TAG_RES_STATIC::COUNT)];
+    map<TAG_RES_STATIC, int> m_mapObjCount;                   //contains number of Objects
     map<string, ObjInfo*> m_mapObject;
     //deque<pair<string, ObjInfo*>> m_mapObject;
     //vector<> m_vecSavedScene;
@@ -107,6 +106,7 @@ public:
     void NewScene();
     void OpenScene(string& fileName );
     void SaveScene(string& fileName );
+    void ConstructComboObjectList();
     void ContainObject();
     void EditTransform(const float *cameraView, float *cameraProjection, float* matrix);
     void ObjectLoader(const int index, const string& userInputName);

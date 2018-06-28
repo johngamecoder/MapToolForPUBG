@@ -1,15 +1,18 @@
 #include "stdafx.h"
 #include "ImGuizmoManager.h"
-
 #include "ResPathFileName.h"
 #include "PUBG_Object.h"
+
+//const char* ComboObjectList[(unsigned int)TAG_RES_STATIC::COUNT];// = { "Bandage","Church"/*,"Tree","Rock","Ware House"*/ };
+char* ComboObjectList[static_cast<int>(TAG_RES_STATIC::COUNT)];
+
 void ImGuizmoManager::LoadObjectImGui()
 {
     ImGui::SetNextWindowPos(ImVec2(30, 500));
     ImGui::Begin("Object Loader");
     {
-
-        ImGui::Combo("", &comboSelect, ComboObjectList, LOADCOUNT/*ObjList::COUNT*//*이건 갯수 넣는 부분 */);
+        ImGui::Combo("", &comboSelect, ComboObjectList, static_cast<int>(TAG_RES_STATIC::COUNT));
+        //ImGui::Combo("", &comboSelect, ComboObjectList, LOADCOUNT/*ObjList::COUNT*//*이건 갯수 넣는 부분 */);
         ImGui::SameLine();
         
 
@@ -17,9 +20,13 @@ void ImGuizmoManager::LoadObjectImGui()
         static bool bLoadButton = false;
         if (ImGui::Button("Load"))
         {
+            if (!m_vecObjectContainer[comboSelect])
+            {
+                assert(false && "no file");
+            }
             string a = " (";
             string b = ")";
-            string userInputName = ComboObjectList[comboSelect] + a + to_string(m_mapObjCount[(ObjList)comboSelect] + 1) + b;
+            string userInputName = ComboObjectList[comboSelect] + a + to_string(m_mapObjCount[static_cast<TAG_RES_STATIC>(comboSelect)] + 1) + b;
             sprintf_s(buf1, userInputName.c_str());
             bLoadButton = true;
 
@@ -99,18 +106,7 @@ void ImGuizmoManager::LoadObjectImGui()
 
                         if (ImGui::Button("OK", ImVec2(120, 0)))
                         {
-                            ObjInfo* temp = m_pCurrentObject;
-                            m_mapObjCount[temp->list]--;
-                            m_pCurrentObject = NULL;
-
-                            m_mapObject.erase(temp->m_ObjName); //delete from map
-
-                            for (int i = 0; i < temp->m_vecBoxCollider.size(); i++)
-                            {
-                                SAFE_DELETE(temp->m_vecBoxCollider[i]);
-                            }
-                            temp->m_vecBoxCollider.clear();
-                            SAFE_DELETE(temp);
+                            DeleteObject();
                             bDeleteObject = false;
                         }
                         ImGui::SetItemDefaultFocus();
@@ -131,57 +127,88 @@ void ImGuizmoManager::LoadObjectImGui()
                         
                     }
                 }
-                    
-
-
             }
         }
         
     }ImGui::End();
 }
-void ImGuizmoManager::ContainObject()
+void ImGuizmoManager::ConstructComboObjectList()
 {
-    
-    //---testing 용 code-------------
-    m_vecObjectContainer.resize(LOADCOUNT);
+    for (int i = 0; i < static_cast<int>(TAG_RES_STATIC::COUNT); ++i)
+    {
+        ComboObjectList[i] = new char[64]();
+    }
+
     pair<string, string> PATHnNAME;
-
-    PATHnNAME = ResPathFileName::Get((TAG_RES_STATIC)9);
-    m_vecObjectContainer[0] = new PUBG_Object(PATHnNAME.first, PATHnNAME.second);
-    m_vecObjectContainer[0]->Init();
-    m_mapObjCount.emplace((ObjList)0, 0);
-
-    PATHnNAME = ResPathFileName::Get((TAG_RES_STATIC)16);
-    m_vecObjectContainer[1] = new PUBG_Object(PATHnNAME.first, PATHnNAME.second);
-    m_vecObjectContainer[1]->Init();
-    m_mapObjCount.emplace((ObjList)1, 0);
-
+    int num = static_cast<int>(TAG_RES_STATIC::COUNT);
+    for (int i = 0; i < num; i++)
+    {
+        PATHnNAME = ResPathFileName::Get(static_cast<TAG_RES_STATIC>(i));
+        memcpy_s(ComboObjectList[i], 64, PATHnNAME.second.c_str(), PATHnNAME.second.size());
+        //ComboObjectList[i] = PATHnNAME.second.c_str();
+    }
     
-
-
-    ////------ 실제 사용할 코드! 지우지 마삼! -------------------
+}
+void ImGuizmoManager::ContainObject()
+{  
+    ////---testing 용 code-------------
+    //m_vecObjectContainer.resize(LOADCOUNT);
     //pair<string, string> PATHnNAME;
-    //m_vecObjectContainer.resize((int)TAG_RES_STATIC::COUNT);
+    //PATHnNAME = ResPathFileName::Get(static_cast<TAG_RES_STATIC>(9));
+    //m_vecObjectContainer[0] = new PUBG_Object(PATHnNAME.first, PATHnNAME.second);
+    //m_vecObjectContainer[0]->Init();
+    //m_mapObjCount.emplace(static_cast<TAG_RES_STATIC>(9), 0);
+    //PATHnNAME = ResPathFileName::Get(static_cast<TAG_RES_STATIC>(16));
+    //m_vecObjectContainer[1] = new PUBG_Object(PATHnNAME.first, PATHnNAME.second);
+    //m_vecObjectContainer[1]->Init();
+    //m_mapObjCount.emplace(static_cast<TAG_RES_STATIC>(16), 0);
 
-    //for (int i = 0; i < m_vecObjectContainer.size(); i++)
-    //{
-    //    PATHnNAME = ResPathFileName::Get((TAG_RES_STATIC)i);
-    //    m_vecObjectContainer[i] = new PUBG_Object(PATHnNAME.first, PATHnNAME.second);
-    //    m_vecObjectContainer[i]->Init();
-    //    //m_vecObjectContainer[i]->name = ComboObjectList[i];
-    //    m_mapObjCount.emplace((TAG_RES_STATIC)i, 0);
-    //}
-    ////------ 실제 사용할 코드! 지우지 마삼! -------------------
+    //------ 실제 사용할 코드! 지우지 마삼! -------------------
+    pair<string, string> PATHnNAME;
+    for (int i = 0; i < LOADCOUNT; i++)
+    {
+        if (i == 9 || i == 16)//<<<< 이거 나중에 빼야함! (지금은 
+        {
+            PATHnNAME = ResPathFileName::Get(static_cast<TAG_RES_STATIC>(i));
+            m_vecObjectContainer[i] = new PUBG_Object(PATHnNAME.first, PATHnNAME.second);
+            if (!m_vecObjectContainer[i])
+                assert(false && "Load x failed");
+            m_vecObjectContainer[i]->Init();
+            m_mapObjCount.emplace(static_cast<TAG_RES_STATIC>(i), 0);
+        }
+        else
+        {
+            m_vecObjectContainer[i] = nullptr;
+        }
+    }
+    //------ 실제 사용할 코드! 지우지 마삼! -------------------
 }
 
 void ImGuizmoManager::ObjectLoader(const int index,const string& userInputName)
 {
-    ObjInfo* temp = new ObjInfo((ObjList)index, userInputName);
-    temp->objPtr = m_vecObjectContainer[(ObjList)index];
-    m_mapObjCount[(ObjList)index]++;
+    ObjInfo* temp = new ObjInfo(static_cast<TAG_RES_STATIC>(index), userInputName);
+    temp->objPtr = m_vecObjectContainer[index];
+    m_mapObjCount[static_cast<TAG_RES_STATIC>(index)]++;
     m_mapObject.emplace(temp->m_ObjName, temp);
     //m_mapObject.emplace_back(make_pair(temp->m_ObjName, temp));
 
 
     SetCurrentObject(temp);
+}
+void ImGuizmoManager::DeleteObject()
+{
+    ObjInfo* temp = m_pCurrentObject;
+    m_mapObjCount[temp->list]--;
+    m_pCurrentObject = NULL;
+
+    m_mapObject.erase(temp->m_ObjName); //delete from map
+
+    for (int i = 0; i < temp->m_vecBoxCollider.size(); i++)
+    {
+        SAFE_DELETE(temp->m_vecBoxCollider[i]);
+    }
+    temp->m_vecBoxCollider.clear();
+    SAFE_DELETE(temp);
+
+    mCurrentGizmoOperation = ImGuizmo::NOTSELECTED;
 }
