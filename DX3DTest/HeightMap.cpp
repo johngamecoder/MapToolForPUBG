@@ -19,18 +19,18 @@ HeightMap::~HeightMap()
 
 void HeightMap::Init()
 {
-	m_pAStar = new AStar(); m_pAStar->Init(); m_pAStar->InitNodes(this);
+	//m_pAStar = new AStar(); m_pAStar->Init(); m_pAStar->InitNodes(this);
 	SetSurface();
-	SetObstacle();
-	m_pAStar->SetObstacle(m_vecObstacleVertex);
+	//SetObstacle();
+	//m_pAStar->SetObstacle(m_vecObstacleVertex);
 	
-	BoundingBox box;
-	box.minPos = D3DXVECTOR3(0, 0, 0);
-	box.maxPos = D3DXVECTOR3(50, 20, 50);
-	ParticleSystem* pSnow = new Snow(ASSET_PATH + _T("Textures/particle/snow.png"),
-		&box, 5000);
-	pSnow->Init();
-	ObjectManager::Get()->AddParticle(pSnow);
+	//BoundingBox box;
+	//box.minPos = D3DXVECTOR3(0, 0, 0);
+	//box.maxPos = D3DXVECTOR3(50, 20, 50);
+	//ParticleSystem* pSnow = new Snow(ASSET_PATH + _T("Textures/particle/snow.png"),
+	//	&box, 5000);
+	//pSnow->Init();
+	//ObjectManager::Get()->AddParticle(pSnow);
 }
 
 

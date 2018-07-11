@@ -19,8 +19,8 @@ void Camera::Delete()
 Camera::Camera()
 {
 	m_pTarget = NULL;
-	m_distance = 100.0f;
-	m_basePosY = 2.0f;
+	m_distance = 1000.0f;
+	m_basePosY = 200.0f;
     m_basePosX = 0.0f;
 	m_eye = D3DXVECTOR3(m_basePosX, m_basePosY, -m_distance);
     m_lookAt = D3DXVECTOR3(0, 0, 0);
@@ -110,10 +110,6 @@ void Camera::Update()
 
 
 
-
-
-
-    //m_lookAt = D3DXVECTOR3(X, Y, 0);
     m_eye = m_lookAt + m_eye;
     m_SavedLookAt = m_lookAt;
 	
@@ -140,70 +136,3 @@ void Camera::Update()
     
     
 }
-
-//m_distance -= Mouse::Get()->GetDeltaPosition().z / 120.0f;
-//m_distance = max(2, m_distance);
-//m_distance = min(100, m_distance);
-//
-//bool isAltKey = false;
-//isAltKey = Keyboard::Get()->KeyPress(VK_MENU);
-//
-//if (isAltKey)
-//{
-//    if (Mouse::Get()->ButtonPress(Mouse::LBUTTON))
-//    {
-//        m_rotX += (Mouse::Get()->GetDeltaPosition().y) / 100.f;
-//        m_rotY += (Mouse::Get()->GetDeltaPosition().x) / 100.f;
-//
-//        //X축 회전 제한
-//        if (m_rotX <= -D3DX_PI * 0.4f)
-//        {
-//            m_rotX = -D3DX_PI * 0.4f;
-//        }
-//        if (m_rotX >= D3DX_PI * 0.35f)
-//        {
-//            m_rotX = D3DX_PI * 0.35f;
-//        }
-//    }
-//    m_eye = D3DXVECTOR3(m_basePosX, m_basePosY, -m_distance);
-//}
-//else
-//{
-//    if (isHandle && Mouse::Get()->ButtonPress(Mouse::LBUTTON))
-//    {
-//        m_basePosY += (Mouse::Get()->GetDeltaPosition().y) / 100.f;
-//        m_basePosX -= (Mouse::Get()->GetDeltaPosition().x) / 100.f;
-//        m_eye = D3DXVECTOR3(m_basePosX, m_basePosY, -m_distance);
-//        m_lookAt = D3DXVECTOR3(m_eye.x, m_eye.y - m_basePosY, m_eye.y + m_distance);
-//        m_SavedLookAt = m_lookAt;
-//    }
-//    else
-//    {
-//        m_eye = D3DXVECTOR3(m_basePosX, m_basePosY, -m_distance);
-//    }
-//}
-//
-//
-//
-//
-//
-//
-//
-//D3DXMATRIXA16 matR, matT, mat;
-//D3DXMatrixRotationYawPitchRoll(&matR, m_rotY, m_rotX, 0);
-////D3DXMatrixTranslation(&matT, m_tranX, m_tranY, 0);
-//D3DXMatrixIdentity(&matT);
-//mat = matR * matT;
-//
-//D3DXVec3TransformCoord(&m_eye, &m_eye, &mat);
-//if (!isAltKey)
-//D3DXVec3TransformCoord(&m_lookAt, &m_lookAt, &mat);
-//else
-//m_eye = m_SavedLookAt + m_eye;
-//
-//
-//if (m_pTarget)
-//{
-//    m_lookAt = *m_pTarget;
-//    m_eye = *m_pTarget + m_eye;
-//}
