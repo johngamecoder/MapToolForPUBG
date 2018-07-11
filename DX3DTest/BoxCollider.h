@@ -8,14 +8,13 @@ private:
     D3DXVECTOR3             m_vMax;
 
 public:
-    D3DXVECTOR3         m_Position;
-    D3DXVECTOR3         m_Rotation;
-    D3DXVECTOR3         m_Scale;
-    int                 m_index;
+    //D3DXVECTOR3         m_Position;
+    //D3DXVECTOR3         m_Rotation;
+    //D3DXVECTOR3         m_Scale;
+    //int                 m_index;
     D3DXMATRIXA16       m_mParentTransform;
-
-    D3DXMATRIXA16 m_mTransform;
-    D3DXMATRIXA16 m_matWorld;
+    D3DXMATRIXA16       m_mTransform;
+    D3DXMATRIXA16       m_matWorld;
 
 
 public:
@@ -34,15 +33,7 @@ public:
         D3DXVec3TransformCoord(&vCenter, &vCenter, &m_matWorld);
         return vCenter;
     }
-    D3DXVECTOR3& GetExtent()
-    {
-        D3DXMATRIXA16 matS;
-        D3DXMatrixScaling(&matS, m_Scale.x, m_Scale.y, m_Scale.z);
-        
-        D3DXVECTOR3 vExtent = m_vMax;
-        D3DXVec3TransformCoord(&vExtent, &vExtent, &matS);
-        return vExtent;
-    }
+
 
     string* GetParentName()
     {

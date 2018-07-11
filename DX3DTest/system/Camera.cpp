@@ -98,10 +98,10 @@ void Camera::Update()
     m_eye = D3DXVECTOR3(0, m_basePosY, -m_distance);
 
 
-    D3DXMATRIXA16 matRotX, matRotY, matRot;
-    D3DXMatrixRotationX(&matRotX, m_rotX);
-    D3DXMatrixRotationY(&matRotY, m_rotY);
-    matRot = matRotX * matRotY;
+    D3DXMATRIXA16 matRot;
+    D3DXMatrixRotationYawPitchRoll(&matRot, m_rotY, m_rotX, 0);
+
+
 
     if(!isAltKeyPressed)
         D3DXVec3TransformCoord(&m_lookAt, &m_lookAt, &matRot);

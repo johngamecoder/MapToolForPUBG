@@ -7,20 +7,28 @@ class IDisplayObject;
 class Camera;
 class BoxCollider;
 extern char* ComboObjectList[static_cast<int>(TAG_RES_STATIC::COUNT)];
-//extern const char* ComboObjectList[(unsigned int)TAG_RES_STATIC::COUNT];
-//enum ObjList {
-//    BANDAGE,
-//    CHURCH,
-//    //TREE,
-//    //ROCK,
-//    //WAREHOUSE,
-//    COUNT
-//};
-///여기에 add 할때, 아래에 ***count 변수 생성도 해주고 init에서 0으로 최기화
-//ContainObject 추가해 주기
-///ObjectLoader(int index) switch 문 추가해주기
-///Open Scene 바꾸어 주기 
-///+ Init() 초기화 할때에 switch 문에 넣어주기 (이부분은 숫자 맞추게 하기 위해서 넣은 코드)
+
+struct BoxColliderInFile
+{
+    D3DXMATRIXA16  m_transform;
+
+    BoxColliderInFile();
+};
+
+struct ObjectInFile
+{
+    TAG_RES_STATIC m_tagResStatic;
+    std::string    m_name;
+    D3DXVECTOR3    m_position;
+    D3DXVECTOR3    m_rotation;
+    D3DXVECTOR3    m_scale;
+
+    std::vector<BoxColliderInFile> m_boxColliders;
+
+    ObjectInFile();
+};
+
+
 struct ObjInfo 
 {
     //int                 ID;
@@ -104,7 +112,8 @@ public:
     void InspectorImGui();
 
     void NewScene();
-    void OpenScene(string& fileName );
+    void OpenScene(const string& fileName );
+    void OpenScene2(const string& fileName );
     void SaveScene(string& fileName );
     void ConstructComboObjectList();
     void ContainObject();
@@ -116,5 +125,9 @@ public:
     void MouseHandleMove();
     void MatChangeDX2Float(OUT float * m16, IN D3DXMATRIXA16 * mat);
     void MatChangeFloat2DX(OUT D3DXMATRIXA16 * mat, IN float * m16);
+
+    HRESULT parseObjectInFile(std::ifstream& fin, ObjectInFile* Out);
+    HRESULT parseBoxColliderInFile(
+        std::ifstream& fin, BoxColliderInFile* Out);
 };
 

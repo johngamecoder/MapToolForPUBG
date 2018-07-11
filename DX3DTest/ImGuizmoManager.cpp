@@ -1,10 +1,6 @@
 #include "stdafx.h"
 #include "ImGuizmoManager.h"
 
-//이것을 header 쪽으로 옴기고 싶은데 어떻게 해야 할까요? ㅠ
-
-
-
 ImGuizmoManager::ImGuizmoManager()
 {
    m_pCamera = NULL;
@@ -56,6 +52,15 @@ void ImGuizmoManager::Init()
     hierarchySelectedObjIndex = -1;
     hierarchySelectedColliderIndex = -1;
     m_currentSceneName = "";
+    
+    for (auto p : m_mapObject)
+    {
+        for (int i = 0; i < p.second->m_vecBoxCollider.size(); i++)
+        {
+            SAFE_DELETE(p.second->m_vecBoxCollider[i]);
+        }
+        SAFE_DELETE(p.second);
+    }
     m_mapObject.clear();
 
 
@@ -357,12 +362,12 @@ void ImGuizmoManager::EditTransform(const float * cameraView, float * cameraProj
         m_pCurrentObject->m_Rotation = D3DXVECTOR3(matrixRotation[0], matrixRotation[1], matrixRotation[2]);
         m_pCurrentObject->m_Scale = D3DXVECTOR3(matrixScale[0], matrixScale[1], matrixScale[2]);
     }
-    if (hierarchySelectedObjIndex != -1 && hierarchySelectedColliderIndex != -1)
-    {
-        m_pCurrentObject->m_vecBoxCollider[hierarchySelectedColliderIndex]->m_Position = D3DXVECTOR3(matrixTranslation[0], matrixTranslation[1], matrixTranslation[2]);
-        m_pCurrentObject->m_vecBoxCollider[hierarchySelectedColliderIndex]->m_Rotation = D3DXVECTOR3(matrixRotation[0], matrixRotation[1], matrixRotation[2]);
-        m_pCurrentObject->m_vecBoxCollider[hierarchySelectedColliderIndex]->m_Scale = D3DXVECTOR3(matrixScale[0], matrixScale[1], matrixScale[2]);
-    }
+    //if (hierarchySelectedObjIndex != -1 && hierarchySelectedColliderIndex != -1)
+    //{
+    //    m_pCurrentObject->m_vecBoxCollider[hierarchySelectedColliderIndex]->m_Position = D3DXVECTOR3(matrixTranslation[0], matrixTranslation[1], matrixTranslation[2]);
+    //    m_pCurrentObject->m_vecBoxCollider[hierarchySelectedColliderIndex]->m_Rotation = D3DXVECTOR3(matrixRotation[0], matrixRotation[1], matrixRotation[2]);
+    //    m_pCurrentObject->m_vecBoxCollider[hierarchySelectedColliderIndex]->m_Scale = D3DXVECTOR3(matrixScale[0], matrixScale[1], matrixScale[2]);
+    //}
 
     ImGuizmo::RecomposeMatrixFromComponents(matrixTranslation, matrixRotation, matrixScale, matrix);
 
@@ -413,4 +418,18 @@ void ImGuizmoManager::MatChangeFloat2DX(OUT D3DXMATRIXA16 * mat, IN float * m16)
     mat->_21 = m16[4];mat->_22 = m16[5];mat->_23 = m16[6]; mat->_24 = m16[7];
     mat->_31 = m16[8];mat->_32 = m16[9];mat->_33 = m16[10];mat->_34 = m16[11];
     mat->_41 = m16[12];mat->_42 = m16[13];mat->_43 = m16[14];mat->_44 = m16[15];
+}
+
+BoxColliderInFile::BoxColliderInFile()
+{
+    D3DXMatrixIdentity(&m_transform);
+}
+
+ObjectInFile::ObjectInFile()
+    : m_tagResStatic(TAG_RES_STATIC::Bandage)
+    , m_name("")
+    , m_position(D3DXVECTOR3(0.0f, 0.0f, 0.0f))
+    , m_rotation(D3DXVECTOR3(0.0f, 0.0f, 0.0f))
+    , m_scale(D3DXVECTOR3(1.0f, 1.0f, 1.0f))
+{
 }
