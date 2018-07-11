@@ -15,7 +15,7 @@ void ImGuizmoManager::MenuBarImGui()
 
         if (ImGui::MenuItem("Open Scene", "Ctrl+O"))
         {
-            string fileName = "save.txt";
+            //string fileName = "save.txt";
             //OpenScene(fileName);
 
             string fullPath = "./Resource/save.txt";
@@ -42,7 +42,7 @@ void ImGuizmoManager::MenuBarImGui()
         }
         if (ImGui::MenuItem("Save", "Ctrl+S"))
         {
-            string fileName = "save.txt";
+            string fileName = "./Resource/save.txt";
             SaveScene(fileName);
         }
         if (ImGui::MenuItem("Save As.."))

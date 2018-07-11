@@ -49,7 +49,7 @@ void Grid::Init()
 
 	Pyramid* pPyramid;
 	D3DXMATRIXA16 matS, matR, matWorld;
-	D3DXMatrixScaling(&matS, 0.1f, 2.0f, 0.1f);
+	D3DXMatrixScaling(&matS, 10.0f, 200.0f, 10.0f);
 
 	D3DXMatrixRotationZ(&matR, D3DX_PI / 2.0f);
 	matWorld = matS * matR;
@@ -68,6 +68,10 @@ void Grid::Init()
 	pPyramid = new Pyramid(D3DCOLOR_XRGB(0, 0, 255), matWorld);
 	pPyramid->Init();
 	m_vecPyramid.push_back(pPyramid);
+
+    D3DXMATRIXA16 s;
+    D3DXMatrixScaling(&s, 100.0f, 0.0f, 100.0f);
+    m_matWorld = s * m_matWorld;
 }
 
 void Grid::Update()

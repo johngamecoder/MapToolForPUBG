@@ -19,7 +19,7 @@ void Camera::Delete()
 Camera::Camera()
 {
 	m_pTarget = NULL;
-	m_distance = 10.0f;
+	m_distance = 100.0f;
 	m_basePosY = 2.0f;
     m_basePosX = 0.0f;
 	m_eye = D3DXVECTOR3(m_basePosX, m_basePosY, -m_distance);
@@ -88,9 +88,9 @@ void Camera::Update()
     }
 
 
-    m_distance -= Mouse::Get()->GetDeltaPosition().z / 120.0f;
-    m_distance = max(2, m_distance);
-    m_distance = min(100, m_distance);
+    m_distance -= Mouse::Get()->GetDeltaPosition().z / 6.0f;
+    //m_distance = max(2, m_distance);
+    //m_distance = min(100, m_distance);
 
 
 

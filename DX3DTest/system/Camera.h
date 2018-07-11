@@ -1,6 +1,6 @@
 #pragma once
 #define zn_defineinCameraHeader 1
-#define zf_defineinCameraHeader 5000
+#define zf_defineinCameraHeader 100000.0f
 class Camera
 {
  private:
