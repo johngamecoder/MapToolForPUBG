@@ -2,9 +2,11 @@
 //#include "c:\Users\วัย๙ภภ\source\repos\MapToolForPUBG\DX3DTest\object\interface\IScene.h"
 
 class ImGuizmoManager;
+class HeightMap;
 class SceneMapTool :public IScene
 {
     ImGuizmoManager*    m_pImGuizmoManager;
+    HeightMap* m_pHeightMap;
     
 public:
     SceneMapTool();

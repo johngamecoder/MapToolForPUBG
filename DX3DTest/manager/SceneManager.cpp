@@ -37,7 +37,7 @@ void SceneManager::Init()
 {
     //m_vecScene.push_back(new SceneGrid());
     //m_vecScene.push_back(new SceneObjMap());
-    m_vecScene.push_back(new SceneHeightmap());
+    //m_vecScene.push_back(new SceneHeightmap());
     //m_vecScene.push_back(new SceneTest());
     m_vecScene.push_back(new SceneMapTool());
     //SetCurrentScene(SCENE_GRID);

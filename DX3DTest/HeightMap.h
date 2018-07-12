@@ -7,7 +7,7 @@ protected:
 	MTLTEX*		m_pMtlTex;
 	
 	vector<D3DXVECTOR3>	m_vecSurfaceVertex;
-	vector<D3DXVECTOR3>	m_vecObstacleVertex;
+	//vector<D3DXVECTOR3>	m_vecObstacleVertex;
 
 public:
 	HeightMap();
@@ -24,7 +24,7 @@ public:
 	virtual bool CalcPickedPosition(D3DXVECTOR3 &vOut, WORD screenX, WORD screenY) override;
 	
 	void SetSurface();
-	void SetObstacle();
+	//void SetObstacle();
 	
 };
 

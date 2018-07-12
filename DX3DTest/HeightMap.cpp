@@ -20,7 +20,7 @@ HeightMap::~HeightMap()
 void HeightMap::Init()
 {
 	//m_pAStar = new AStar(); m_pAStar->Init(); m_pAStar->InitNodes(this);
-	SetSurface();
+	//SetSurface();
 	//SetObstacle();
 	//m_pAStar->SetObstacle(m_vecObstacleVertex);
 	
@@ -156,52 +156,52 @@ void HeightMap::SetMtlTex(D3DMATERIAL9 &mtl, LPDIRECT3DTEXTURE9 pTex)
 
 void HeightMap::Update()
 {
-	if (Mouse::Get()->ButtonDown(Mouse::RBUTTON))
-	{
-		D3DXVECTOR3 pos = Mouse::Get()->GetPosition();
-			
-		if (CalcPickedPosition(pos, pos.x, pos.y) == true)
-		{
-			//GetHeight(pos.y, pos);
-			static_cast<IUnitObject*>(ObjectManager::Get()->FindObjectByTag(TAG_PLAYER))->SetDestination(pos);
-		}
-	}
+	//if (Mouse::Get()->ButtonDown(Mouse::RBUTTON))
+	//{
+	//	D3DXVECTOR3 pos = Mouse::Get()->GetPosition();
+	//		
+	//	if (CalcPickedPosition(pos, pos.x, pos.y) == true)
+	//	{
+	//		//GetHeight(pos.y, pos);
+	//		static_cast<IUnitObject*>(ObjectManager::Get()->FindObjectByTag(TAG_PLAYER))->SetDestination(pos);
+	//	}
+	//}
 }
 
 
 void HeightMap::Render()
 {
-	DX::GetDevice()->SetRenderState(D3DRS_FOGENABLE, true);
-	DX::GetDevice()->SetRenderState(D3DRS_FOGCOLOR, 0xffcccccc);
-	DX::GetDevice()->SetRenderState(D3DRS_FOGDENSITY, FtoDw(0.1f));
-	DX::GetDevice()->SetRenderState(D3DRS_FOGSTART, FtoDw(20.0f));
-	DX::GetDevice()->SetRenderState(D3DRS_FOGEND, FtoDw(40.0f));
-	DX::GetDevice()->SetRenderState(D3DRS_FOGTABLEMODE, D3DFOG_LINEAR);
+	//DX::GetDevice()->SetRenderState(D3DRS_FOGENABLE, true);
+	//DX::GetDevice()->SetRenderState(D3DRS_FOGCOLOR, 0xffcccccc);
+	//DX::GetDevice()->SetRenderState(D3DRS_FOGDENSITY, FtoDw(0.1f));
+	//DX::GetDevice()->SetRenderState(D3DRS_FOGSTART, FtoDw(20.0f));
+	//DX::GetDevice()->SetRenderState(D3DRS_FOGEND, FtoDw(40.0f));
+	//DX::GetDevice()->SetRenderState(D3DRS_FOGTABLEMODE, D3DFOG_LINEAR);
 
 	//DX::GetDevice()->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
-	DX::GetDevice()->SetRenderState(D3DRS_LIGHTING, true);
+    //DX::GetDevice()->SetRenderState(D3DRS_LIGHTING, true);
 	DX::GetDevice()->SetTransform(D3DTS_WORLD, &m_matWorld);
 	DX::GetDevice()->SetMaterial(&m_pMtlTex->GetMaterial());
 	DX::GetDevice()->SetTexture(0, m_pMtlTex->GetTexture());
 	m_pMesh->DrawSubset(0);
-	DX::GetDevice()->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
+	//DX::GetDevice()->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
 	
 	SAFE_RENDER(m_pAStar);
 	
-	//PreRender
-	DX::GetDevice()->SetRenderState(D3DRS_LIGHTING, true);
-	DX::GetDevice()->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
+	////PreRender
+	//DX::GetDevice()->SetRenderState(D3DRS_LIGHTING, true);
+	//DX::GetDevice()->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 	
 
-	DX::GetDevice()->SetMaterial(&DXUtil::BLUE_MTRL);
+	//DX::GetDevice()->SetMaterial(&DXUtil::BLUE_MTRL);
 	//DX::GetDevice()->DrawPrimitiveUP(D3DPT_TRIANGLELIST, m_vecSurfaceVertex.size() / 3,
 	//	&m_vecSurfaceVertex[0], sizeof(D3DXVECTOR3));
-	DX::GetDevice()->DrawPrimitiveUP(D3DPT_TRIANGLELIST, m_vecObstacleVertex.size() / 3, 
-		&m_vecObstacleVertex[0], sizeof(D3DXVECTOR3));
+	//DX::GetDevice()->DrawPrimitiveUP(D3DPT_TRIANGLELIST, m_vecObstacleVertex.size() / 3, 
+	//	&m_vecObstacleVertex[0], sizeof(D3DXVECTOR3));
 
-	//PostRender
-	DX::GetDevice()->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
-	DX::GetDevice()->SetRenderState(D3DRS_FOGENABLE, false);
+	////PostRender
+	//DX::GetDevice()->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
+	//DX::GetDevice()->SetRenderState(D3DRS_FOGENABLE, false);
 }
 
 
@@ -314,27 +314,27 @@ void HeightMap::SetSurface()
 }
 
 
-void HeightMap::SetObstacle()
-{
-	float posX = m_pAStar->GetNodes()[2]->GetLocation().x - 0.7f;
-	float posZ = m_pAStar->GetNodes()[30 * 4 + 2]->GetLocation().z + 0.9f;
-	float height = 6;
-
-	m_vecObstacleVertex.push_back(D3DXVECTOR3(posX, 3, posZ));
-	m_vecObstacleVertex.push_back(D3DXVECTOR3(posX, height, 0));
-	m_vecObstacleVertex.push_back(D3DXVECTOR3(posX, 3, 0));
-
-	m_vecObstacleVertex.push_back(D3DXVECTOR3(posX, 3, posZ));
-	m_vecObstacleVertex.push_back(D3DXVECTOR3(posX, height, posZ));
-	m_vecObstacleVertex.push_back(D3DXVECTOR3(posX, height, 0));
-
-	posX += 1.4f;
-	m_vecObstacleVertex.push_back(D3DXVECTOR3(posX, 3, posZ));
-	m_vecObstacleVertex.push_back(D3DXVECTOR3(posX, height, 0));
-	m_vecObstacleVertex.push_back(D3DXVECTOR3(posX, 3, 0));
-
-	m_vecObstacleVertex.push_back(D3DXVECTOR3(posX, 3, posZ));
-	m_vecObstacleVertex.push_back(D3DXVECTOR3(posX, height, posZ));
-	m_vecObstacleVertex.push_back(D3DXVECTOR3(posX, height, 0));
-}
+//void HeightMap::SetObstacle()
+//{
+//	float posX = m_pAStar->GetNodes()[2]->GetLocation().x - 0.7f;
+//	float posZ = m_pAStar->GetNodes()[30 * 4 + 2]->GetLocation().z + 0.9f;
+//	float height = 6;
+//
+//	m_vecObstacleVertex.push_back(D3DXVECTOR3(posX, 3, posZ));
+//	m_vecObstacleVertex.push_back(D3DXVECTOR3(posX, height, 0));
+//	m_vecObstacleVertex.push_back(D3DXVECTOR3(posX, 3, 0));
+//
+//	m_vecObstacleVertex.push_back(D3DXVECTOR3(posX, 3, posZ));
+//	m_vecObstacleVertex.push_back(D3DXVECTOR3(posX, height, posZ));
+//	m_vecObstacleVertex.push_back(D3DXVECTOR3(posX, height, 0));
+//
+//	posX += 1.4f;
+//	m_vecObstacleVertex.push_back(D3DXVECTOR3(posX, 3, posZ));
+//	m_vecObstacleVertex.push_back(D3DXVECTOR3(posX, height, 0));
+//	m_vecObstacleVertex.push_back(D3DXVECTOR3(posX, 3, 0));
+//
+//	m_vecObstacleVertex.push_back(D3DXVECTOR3(posX, 3, posZ));
+//	m_vecObstacleVertex.push_back(D3DXVECTOR3(posX, height, posZ));
+//	m_vecObstacleVertex.push_back(D3DXVECTOR3(posX, height, 0));
+//}
 

@@ -15,6 +15,7 @@ SceneMapTool::~SceneMapTool()
 {
     OnDestructIScene();
     SAFE_DELETE(m_pImGuizmoManager);
+    SAFE_RELEASE(m_pHeightMap);
 }
 
 void SceneMapTool::Init()
@@ -23,14 +24,23 @@ void SceneMapTool::Init()
     IDisplayObject* pObj = NULL;
     pObj = new Grid(); pObj->Init(); AddSimpleObj(pObj);
     
-    HeightMap*	m_pHeightMap = new HeightMap(); 
+
+    D3DXMATRIXA16 matS, matT, matWorld;
+    D3DXMatrixScaling(&matS, 10.0f, 1.0f, 10.0f);
+    D3DXMatrixTranslation(&matT, 0.0f, 0.0f, 0.0f);
+    matWorld = matS * matT;
+
+    m_pHeightMap = new HeightMap; //AddSimpleObj(m_pHeightMap);
     m_pHeightMap->SetDimension(257);
-    D3DXMATRIXA16 matS;
-    D3DXMatrixScaling(&matS, 0.2f, 0.03f, 0.2f);
-    m_pHeightMap->Load(ASSET_PATH + _T("Textures/heightmap/HeightMap.raw"), &matS);
+
+    m_pHeightMap->Load(_T("./Resource/heightmap/HeightMap.raw"), &matWorld);
     m_pHeightMap->SetMtlTex(D3DMATERIAL9(DXUtil::WHITE_MTRL),
-        TextureManager::Get()->GetTexture(ASSET_PATH + _T("Textures/heightmap/terrain.jpg")));
-    pObj->Init(); AddSimpleObj(pObj);
+        TextureManager::Get()->GetTexture(_T("./Resource/heightmap/terrain.jpg")));
+    m_pHeightMap->Init();
+
+    //g_pMapManager->AddMap("heightmap", m_pHeightMap);
+    //g_pMapManager->SetCurrentMap("heightmap");
+
 
 }
 
@@ -38,12 +48,13 @@ void SceneMapTool::Update()
 {
     OnUpdateIScene();
     SAFE_UPDATE(m_pImGuizmoManager);
-
+    SAFE_UPDATE(m_pHeightMap);
 }
 
 void SceneMapTool::Render()
 {
     OnRenderIScene();
     SAFE_RENDER(m_pImGuizmoManager);
+    SAFE_RENDER(m_pHeightMap);
 }
 
