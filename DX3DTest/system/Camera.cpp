@@ -17,26 +17,21 @@ void Camera::Delete()
 }
 
 Camera::Camera()
+    : m_pTarget(NULL)
+    , m_distance(1000.0f)
+    , m_basePosY(200.0f)
+    , m_basePosX(0.0f)
+    , m_up(D3DXVECTOR3(0, 1, 0))
+    , m_rotX(0.0f)
+    , m_rotY(0.0f)
+    , isPerspective(true)
+    , isHandle(false)
+    , m_viewWidth(10.0f)
 {
-	m_pTarget = NULL;
-	m_distance = 1000.0f;
-	m_basePosY = 200.0f;
-    m_basePosX = 0.0f;
 	m_eye = D3DXVECTOR3(m_basePosX, m_basePosY, -m_distance);
-    m_lookAt = D3DXVECTOR3(0, 0, 0);
-    m_SavedLookAt = m_lookAt;
-    //m_lookAt = D3DXVECTOR3(m_eye.x, m_eye.y - m_basePosY, m_eye.y + m_distance);
-	//m_lookAt = D3DXVECTOR3(m_eye.x, m_eye.y, m_eye.z+1);
-
-
-    m_up = D3DXVECTOR3(0, 1, 0);
-	m_rotX = 0.0f;
-	m_rotY = 0.0f;
+    m_SavedLookAt = D3DXVECTOR3(0, 0, 0);
     m_fov = D3DX_PI / 4.0f;
 
-    isPerspective = true;
-    isHandle = false;
-    m_viewWidth = 10.f;
 }
 
 
@@ -59,13 +54,22 @@ float X = 0;
 float Y = 0;
 void Camera::Update()
 {
+    Mouse* pMouse = Mouse::Get();
+    //스크롤링으로 m_eye 위치를 바꾸는 부분
+    m_distance -= pMouse->GetDeltaPosition().z / 2.0f;
+
+
+    m_moveDir = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
+
+
     bool isAltKeyPressed = Keyboard::Get()->KeyPress(VK_MENU);
     if (isAltKeyPressed)
     {
-        if ( Mouse::Get()->ButtonPress(Mouse::LBUTTON))
+        if (pMouse->ButtonPress(Mouse::LBUTTON))
         {
-            m_rotX += (Mouse::Get()->GetDeltaPosition().y) / 100.f;
-            m_rotY += (Mouse::Get()->GetDeltaPosition().x) / 100.f;
+            m_rotX += (pMouse->GetDeltaPosition().y) / 100.f;
+            m_rotY += (pMouse->GetDeltaPosition().x) / 100.f;
 
             //X축 회전 제한
             if (m_rotX <= -D3DX_PI * 0.4f)
@@ -80,48 +84,93 @@ void Camera::Update()
     }
     else
     {
-        if (isHandle &&Mouse::Get()->ButtonPress(Mouse::LBUTTON))
+        if (/*isHandle &&*/pMouse->ButtonPress(Mouse::LBUTTON))
         {
-            Y += (Mouse::Get()->GetDeltaPosition().y) / 100.f;
-            X -= (Mouse::Get()->GetDeltaPosition().x) / 100.f;
+            //Y += pMouse->GetDeltaPosition().y;
+            //X -= pMouse->GetDeltaPosition().x;
+
+            ImGui::Text("%f", pMouse->GetDeltaPosition().y);
+            ImGui::Text("%f", pMouse->GetDeltaPosition().x);
+
+
+            const float factor = 10.0f;
+
+
+            //screen Y 축
+            if (pMouse->GetDeltaPosition().y > 0.0f)
+            {
+                m_moveDir += getUp()*factor;
+
+            }
+            else if (pMouse->GetDeltaPosition().y < 0.0f)
+            {
+                m_moveDir += getDown()*factor;
+            }
+
+
+            //screen X 축
+            if (pMouse->GetDeltaPosition().x > 0.0f)
+            {
+                m_moveDir += getLeft()*factor;
+            }
+            else if (pMouse->GetDeltaPosition().x < 0.0f)
+            {
+                m_moveDir += getRight()*factor;
+            }
+
+
         }
     }
-
-
-    m_distance -= Mouse::Get()->GetDeltaPosition().z / 6.0f;
-    //m_distance = max(2, m_distance);
-    //m_distance = min(100, m_distance);
+    D3DXMatrixRotationYawPitchRoll(&m_matRot, m_rotY, m_rotX, 0);
 
 
 
-    m_lookAt = D3DXVECTOR3(X, Y, 0);
     m_eye = D3DXVECTOR3(0, m_basePosY, -m_distance);
+    D3DXVec3TransformCoord(&m_eye, &m_eye, &m_matRot);
 
+    m_SavedLookAt += m_moveDir;
 
-    D3DXMATRIXA16 matRot;
-    D3DXMatrixRotationYawPitchRoll(&matRot, m_rotY, m_rotX, 0);
-
-
-
-    if(!isAltKeyPressed)
-        D3DXVec3TransformCoord(&m_lookAt, &m_lookAt, &matRot);
-    D3DXVec3TransformCoord(&m_eye, &m_eye, &matRot);
+    m_eye = m_SavedLookAt + m_eye;
 
 
 
 
-    m_eye = m_lookAt + m_eye;
-    m_SavedLookAt = m_lookAt;
+
+
+
+
+    //right vector와 left vector
+    // up vector와 down vector을 구해서
+    // m_lookat의 position을 update 해 준다. 
+
+
+
+
+
+
+
+
+
+
+    //D3DXVECTOR3 lookAt = D3DXVECTOR3(X, Y, 0);
+    //m_eye = D3DXVECTOR3(0, m_basePosY, -m_distance);
+
+    //if(!isAltKeyPressed)
+    //    D3DXVec3TransformCoord(&lookAt, &lookAt, &m_matRot);
+    //D3DXVec3TransformCoord(&m_eye, &m_eye, &m_matRot);
+
+    //m_eye = lookAt + m_eye;
+    //
+    //
+    //
+    //
+    //m_SavedLookAt = lookAt;
 	
-    
-    
-    
-    
-    
-    
+
+    //뷰 space
     D3DXMatrixLookAtLH(&m_matView, &m_eye, &m_SavedLookAt, &m_up);
 	DX::GetDevice()->SetTransform(D3DTS_VIEW, &m_matView);
-
+    //프로젝션 space
     if (isPerspective)
     {
         D3DXMatrixPerspectiveFovLH(&m_matProj, m_fov,
@@ -132,7 +181,5 @@ void Camera::Update()
     {
         D3DXMatrixOrthoLH(&m_matProj, m_viewWidth, m_viewHeight, zn_defineinCameraHeader, zf_defineinCameraHeader);
         DX::GetDevice()->SetTransform(D3DTS_PROJECTION, &m_matProj);
-    }
-    
-    
+    }   
 }
