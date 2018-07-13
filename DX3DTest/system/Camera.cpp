@@ -84,13 +84,13 @@ void Camera::Update()
     }
     else
     {
-        if (/*isHandle &&*/pMouse->ButtonPress(Mouse::LBUTTON))
+        if (isHandle &&pMouse->ButtonPress(Mouse::LBUTTON))
         {
             //Y += pMouse->GetDeltaPosition().y;
             //X -= pMouse->GetDeltaPosition().x;
 
-            ImGui::Text("%f", pMouse->GetDeltaPosition().y);
-            ImGui::Text("%f", pMouse->GetDeltaPosition().x);
+            //ImGui::Text("%f", pMouse->GetDeltaPosition().y);
+            //ImGui::Text("%f", pMouse->GetDeltaPosition().x);
 
 
             const float factor = 10.0f;

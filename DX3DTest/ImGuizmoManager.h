@@ -2,11 +2,13 @@
 #include "ImGuizmo.h"
 #include "TagResource.h"
 #include "BoxCollider.h"
-#define LOADCOUNT 76
+
 class IDisplayObject;
 class Camera;
 class BoxCollider;
 extern char* ComboObjectList[static_cast<int>(TAG_RES_STATIC::COUNT)];
+extern char* ComboTerrainFeaturesList[63];
+extern char* ComboItemsList[13];
 
 struct BoxColliderInFile
 {

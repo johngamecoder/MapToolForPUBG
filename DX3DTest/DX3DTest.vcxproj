@@ -201,9 +201,9 @@
     <ClInclude Include="object\ui\UIImage.h" />
     <ClInclude Include="object\ui\UIText.h" />
     <ClInclude Include="PUBG_Object.h" />
+    <ClInclude Include="ResourceInfo.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="ResourceStructure.h" />
-    <ClInclude Include="ResPathFileName.h" />
     <ClInclude Include="SampleUI.h" />
     <ClInclude Include="sample\cube\ActionCube.h" />
     <ClInclude Include="sample\cube\ColorCube.h" />
@@ -238,6 +238,7 @@
     <ClInclude Include="System\Mouse.h" />
     <ClInclude Include="system\Time.h" />
     <ClInclude Include="system\Window.h" />
+    <ClInclude Include="TagClientOnly.h" />
     <ClInclude Include="TagResource.h" />
     <ClInclude Include="TextureBlending.h" />
     <ClInclude Include="VertexBlending.h" />
@@ -296,9 +297,9 @@
     <ClCompile Include="object\ui\UIImage.cpp" />
     <ClCompile Include="object\ui\UIText.cpp" />
     <ClCompile Include="PUBG_Object.cpp" />
+    <ClCompile Include="ResourceInfo.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="ResourceStructure.cpp" />
-    <ClCompile Include="ResPathFileName.cpp" />
     <ClCompile Include="SampleUI.cpp" />
     <ClCompile Include="sample\cube\ActionCube.cpp" />
     <ClCompile Include="sample\cube\ColorCube.cpp" />

@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "ImGuizmoManager.h"
-#include "ResPathFileName.h"
+#include "ResourceInfo.h"
 #include "PUBG_Object.h"
 
 //const char* ComboObjectList[(unsigned int)TAG_RES_STATIC::COUNT];// = { "Bandage","Church"/*,"Tree","Rock","Ware House"*/ };
@@ -136,6 +136,8 @@ void ImGuizmoManager::ConstructComboObjectList()
 {
     for (int i = 0; i < static_cast<int>(TAG_RES_STATIC::COUNT); ++i)
     {
+        if (ResourceInfo::IsItem(static_cast<TAG_RES_STATIC>(i)))
+            continue;
         ComboObjectList[i] = new char[64]();
     }
 
@@ -143,7 +145,9 @@ void ImGuizmoManager::ConstructComboObjectList()
     int num = static_cast<int>(TAG_RES_STATIC::COUNT);
     for (int i = 0; i < num; i++)
     {
-        PATHnNAME = ResPathFileName::Get(static_cast<TAG_RES_STATIC>(i));
+        //if (ResourceInfo::IsItem(static_cast<TAG_RES_STATIC>(i)))
+        //    continue;
+        PATHnNAME = ResourceInfo::GetFileNameWithoutX(static_cast<TAG_RES_STATIC>(i));
         memcpy_s(ComboObjectList[i], 64, PATHnNAME.second.c_str(), PATHnNAME.second.size());
         //ComboObjectList[i] = PATHnNAME.second.c_str();
     }
@@ -165,11 +169,11 @@ void ImGuizmoManager::ContainObject()
 
     //------ 실제 사용할 코드! 지우지 마삼! -------------------
     pair<string, string> PATHnNAME;
-    for (int i = 0; i < LOADCOUNT; i++)
+    for (int i = 0; i < static_cast<int>(TAG_RES_STATIC::COUNT); i++)
     {
         if (i == 9 || i == 16)//<<<< 이거 나중에 빼야함! (지금은 
         {
-            PATHnNAME = ResPathFileName::Get(static_cast<TAG_RES_STATIC>(i));
+            PATHnNAME = ResourceInfo::GetPathFileName(static_cast<TAG_RES_STATIC>(i));
             m_vecObjectContainer[i] = new PUBG_Object(PATHnNAME.first, PATHnNAME.second);
             if (!m_vecObjectContainer[i])
                 assert(false && "Load x failed");

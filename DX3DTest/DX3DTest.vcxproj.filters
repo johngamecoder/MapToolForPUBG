@@ -310,7 +310,8 @@
     <ClInclude Include="BoxCollider.h" />
     <ClInclude Include="TagResource.h" />
     <ClInclude Include="PUBG_Object.h" />
-    <ClInclude Include="ResPathFileName.h" />
+    <ClInclude Include="ResourceInfo.h" />
+    <ClInclude Include="TagClientOnly.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DX3DTest.cpp">
@@ -520,9 +521,9 @@
     <ClCompile Include="Bandage.cpp" />
     <ClCompile Include="BoxCollider.cpp" />
     <ClCompile Include="PUBG_Object.cpp" />
-    <ClCompile Include="ResPathFileName.cpp" />
     <ClCompile Include="ImGuizmoManager_ObjContainer.cpp" />
     <ClCompile Include="ImGuizmoManager_SaveLoadFile.cpp" />
+    <ClCompile Include="ResourceInfo.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DX3DTest.rc">
