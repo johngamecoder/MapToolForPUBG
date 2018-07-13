@@ -262,6 +262,10 @@ void ImGuizmoManager::OpenScene2(const string& fullPath)
 
     for (auto o : objs)
     {
+        // degrees to radians
+        o.m_rotation = D3DXToRadian(o.m_rotation);
+
+
         ObjInfo* obj = new ObjInfo;
         obj->list = o.m_tagResStatic;
         
@@ -270,6 +274,8 @@ void ImGuizmoManager::OpenScene2(const string& fullPath)
         obj->m_Position = o.m_position;
         obj->m_Rotation = o.m_rotation;
         obj->m_Scale = o.m_scale;
+
+
         
         D3DXMATRIXA16 s, r, t;
         D3DXMatrixScaling(&s, obj->m_Scale.x, obj->m_Scale.y, obj->m_Scale.z);
@@ -277,6 +283,9 @@ void ImGuizmoManager::OpenScene2(const string& fullPath)
         D3DXMatrixTranslation(&t, obj->m_Position.x, obj->m_Position.y, obj->m_Position.z);
         obj->m_matTransform = s * r * t;
         
+        // radians to degrees
+        obj->m_Rotation = D3DXToDegree(obj->m_Rotation);
+
         obj->objPtr = m_vecObjectContainer[static_cast<int>(obj->list)];
         
 
