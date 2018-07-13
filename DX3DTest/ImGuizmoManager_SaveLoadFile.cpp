@@ -115,119 +115,119 @@ void ImGuizmoManager::NewScene()
 
     Init();
 }
-void ImGuizmoManager::OpenScene(const string& fileName)
-{
-    Init(); // clearing the scene
-
-    std::ifstream myFile(fileName);
-    if (myFile.is_open())
-    {
-        string line;
-        getline(myFile, line);
-        if (line != fileName)
-            assert(false && "Wrong file loaded");
-
-        m_currentSceneName = line;  //opening current scene 
-        getline(myFile, line); //take out "Num of Object n"
-
-        while (!myFile.eof())
-        {
-            getline(myFile, line); //take out {
-            if (line != "{") break;
-            std::stringstream ss;
-            std::stringstream ssName;
-            std::stringstream ssMat;
-
-            ObjInfo* temp = new ObjInfo();
-            getline(myFile, line);                      temp->list = static_cast<TAG_RES_STATIC>(stoi(line));
-            getline(myFile, line);      ssName << line;     
-/*여기 고쳐야되! 어떻게 /t를 뺄꺼니?*/            string n,t; ssName >> n;ssName >> t;        temp->m_ObjName = n+" "+t;
-
-            getline(myFile, line);      ss << line;     ss >> line;     temp->m_Position.x = stof(line, 0);     ss >> line;     temp->m_Position.y = stof(line, 0);      ss >> line;    temp->m_Position.z = stof(line, 0);
-            getline(myFile, line);      ss << line;     ss >> line;     temp->m_Rotation.x = stof(line, 0);     ss >> line;     temp->m_Rotation.y = stof(line, 0);      ss >> line;    temp->m_Rotation.z = stof(line, 0);
-            getline(myFile, line);      ss << line;     ss >> line;     temp->m_Scale.x = stof(line, 0);        ss >> line;     temp->m_Scale.y = stof(line, 0);         ss >> line;    temp->m_Scale.z = stof(line, 0);
-
-            //원래 matrix를 받는 거였지만, 이걸 사용하지 말고 위에 것으로 matrix를 만들어 주자
-            //getline(myFile, line);      ssMat << line;
-            //ssMat >> line; temp->m_matTransform._11 = stof(line, 0);  ssMat >> line; temp->m_matTransform._12 = stof(line, 0);  ssMat >> line; temp->m_matTransform._13 = stof(line, 0);  ssMat >> line; temp->m_matTransform._14 = stof(line, 0);
-            //ssMat >> line; temp->m_matTransform._21 = stof(line, 0);  ssMat >> line; temp->m_matTransform._22 = stof(line, 0);  ssMat >> line; temp->m_matTransform._23 = stof(line, 0);  ssMat >> line; temp->m_matTransform._24 = stof(line, 0);
-            //ssMat >> line; temp->m_matTransform._31 = stof(line, 0);  ssMat >> line; temp->m_matTransform._32 = stof(line, 0);  ssMat >> line; temp->m_matTransform._33 = stof(line, 0);  ssMat >> line; temp->m_matTransform._34 = stof(line, 0);
-            //ssMat >> line; temp->m_matTransform._41 = stof(line, 0);  ssMat >> line; temp->m_matTransform._42 = stof(line, 0);  ssMat >> line; temp->m_matTransform._43 = stof(line, 0);  ssMat >> line; temp->m_matTransform._44 = stof(line, 0);
-            D3DXMATRIXA16 matS, matR, matT;
-            D3DXMatrixScaling(&matS, temp->m_Scale.x, temp->m_Scale.y, temp->m_Scale.z);
-            D3DXMatrixRotationYawPitchRoll(&matR, temp->m_Rotation.y, temp->m_Rotation.x, temp->m_Rotation.z);
-            D3DXMatrixTranslation(&matT, temp->m_Position.x, temp->m_Position.y, temp->m_Position.z);
-            temp->m_matTransform = matS * matR * matT;
-            
-            temp->objPtr= m_vecObjectContainer[static_cast<int>(temp->list)];
-
-            std::stringstream ssTakeTabOut;
-            getline(myFile, line); //check if it is "}" or "["
-            ssTakeTabOut << line;
-            ssTakeTabOut >> line;
-            
-            if (line == "[")
-            {
-                
-                getline(myFile, line);
-                int colliderNum = atoi(line.c_str());
-                for (int i = 0; i < colliderNum; i++)
-                {
-                    std::stringstream ssNomore;
-                    getline(myFile, line);  //take out "("
-                    getline(myFile, line);  //get parent name;
-                    BoxCollider* bc = new BoxCollider(&temp->m_ObjName);
-                    bc->Init(D3DXVECTOR3(-0.5f, -0.5f, -0.5f), D3DXVECTOR3(0.5f, 0.5f, 0.5f));
-
-                    //getline(myFile, line);      ss << line;     ss >> line;    bc->m_vCenter.x = stof(line, 0);     ss >> line;     bc->m_vCenter.y = stof(line, 0);      ss >> line;    bc->m_vCenter.z = stof(line, 0);
-                    //getline(myFile, line);      ss << line;     ss >> line;    bc->m_vExtent.x = stof(line, 0);     ss >> line;     bc->m_vExtent.y = stof(line, 0);      ss >> line;    bc->m_vExtent.z = stof(line, 0);
-
-                    getline(myFile, line);      ssNomore << line;
-                    ssNomore >> line; bc->m_matWorld._11 = stof(line, 0);  ssNomore >> line; bc->m_matWorld._12 = stof(line, 0);  ssNomore >> line; bc->m_matWorld._13 = stof(line, 0);  ssNomore >> line; bc->m_matWorld._14 = stof(line, 0);
-                    ssNomore >> line; bc->m_matWorld._21 = stof(line, 0);  ssNomore >> line; bc->m_matWorld._22 = stof(line, 0);  ssNomore >> line; bc->m_matWorld._23 = stof(line, 0);  ssNomore >> line; bc->m_matWorld._24 = stof(line, 0);
-                    ssNomore >> line; bc->m_matWorld._31 = stof(line, 0);  ssNomore >> line; bc->m_matWorld._32 = stof(line, 0);  ssNomore >> line; bc->m_matWorld._33 = stof(line, 0);  ssNomore >> line; bc->m_matWorld._34 = stof(line, 0);
-                    ssNomore >> line; bc->m_matWorld._41 = stof(line, 0);  ssNomore >> line; bc->m_matWorld._42 = stof(line, 0);  ssNomore >> line; bc->m_matWorld._43 = stof(line, 0);  ssNomore >> line; bc->m_matWorld._44 = stof(line, 0);
-
-                    bc->m_mParentTransform = temp->m_matTransform;
-                    D3DXMATRIXA16 mInvParent,check;
-                    D3DXMatrixInverse(&mInvParent, NULL, &bc->m_mParentTransform);
-                    bc->m_mTransform = bc->m_matWorld * mInvParent;
-
-
-                    temp->m_vecBoxCollider.push_back(bc);
-                    getline(myFile, line);//take out ")";
-
-                }
-                getline(myFile, line); //take out "]"
-                getline(myFile, line);  //take out "}"
-            }
-
-
-
-
-
-            //temp->objPtr = m_vecObjectContainer[temp->list];
-
-
-            m_mapObject.emplace(temp->m_ObjName, temp);
-            //m_mapObject.emplace_back(make_pair(temp->m_ObjName, temp));
-        }
-        myFile.close();
-    }
-    else
-    {
-        assert(false && "안됨.ㅜㅜ");
-    }
-
-    for (auto p : m_mapObject)
-    {
-        if (m_mapObjCount.find(p.second->list) == m_mapObjCount.end())
-        {
-            m_mapObjCount.emplace(p.second->list, 0);
-        }
-        m_mapObjCount[p.second->list]++;
-    }
-}
+//void ImGuizmoManager::OpenScene(const string& fileName)
+//{
+//    Init(); // clearing the scene
+//
+//    std::ifstream myFile(fileName);
+//    if (myFile.is_open())
+//    {
+//        string line;
+//        getline(myFile, line);
+//        if (line != fileName)
+//            assert(false && "Wrong file loaded");
+//
+//        m_currentSceneName = line;  //opening current scene 
+//        getline(myFile, line); //take out "Num of Object n"
+//
+//        while (!myFile.eof())
+//        {
+//            getline(myFile, line); //take out {
+//            if (line != "{") break;
+//            std::stringstream ss;
+//            std::stringstream ssName;
+//            std::stringstream ssMat;
+//
+//            ObjInfo* temp = new ObjInfo();
+//            getline(myFile, line);                      temp->list = static_cast<TAG_RES_STATIC>(stoi(line));
+//            getline(myFile, line);      ssName << line;     
+///*여기 고쳐야되! 어떻게 /t를 뺄꺼니?*/            string n,t; ssName >> n;ssName >> t;        temp->m_ObjName = n+" "+t;
+//
+//            getline(myFile, line);      ss << line;     ss >> line;     temp->m_Position.x = stof(line, 0);     ss >> line;     temp->m_Position.y = stof(line, 0);      ss >> line;    temp->m_Position.z = stof(line, 0);
+//            getline(myFile, line);      ss << line;     ss >> line;     temp->m_Rotation.x = stof(line, 0);     ss >> line;     temp->m_Rotation.y = stof(line, 0);      ss >> line;    temp->m_Rotation.z = stof(line, 0);
+//            getline(myFile, line);      ss << line;     ss >> line;     temp->m_Scale.x = stof(line, 0);        ss >> line;     temp->m_Scale.y = stof(line, 0);         ss >> line;    temp->m_Scale.z = stof(line, 0);
+//
+//            //원래 matrix를 받는 거였지만, 이걸 사용하지 말고 위에 것으로 matrix를 만들어 주자
+//            //getline(myFile, line);      ssMat << line;
+//            //ssMat >> line; temp->m_matTransform._11 = stof(line, 0);  ssMat >> line; temp->m_matTransform._12 = stof(line, 0);  ssMat >> line; temp->m_matTransform._13 = stof(line, 0);  ssMat >> line; temp->m_matTransform._14 = stof(line, 0);
+//            //ssMat >> line; temp->m_matTransform._21 = stof(line, 0);  ssMat >> line; temp->m_matTransform._22 = stof(line, 0);  ssMat >> line; temp->m_matTransform._23 = stof(line, 0);  ssMat >> line; temp->m_matTransform._24 = stof(line, 0);
+//            //ssMat >> line; temp->m_matTransform._31 = stof(line, 0);  ssMat >> line; temp->m_matTransform._32 = stof(line, 0);  ssMat >> line; temp->m_matTransform._33 = stof(line, 0);  ssMat >> line; temp->m_matTransform._34 = stof(line, 0);
+//            //ssMat >> line; temp->m_matTransform._41 = stof(line, 0);  ssMat >> line; temp->m_matTransform._42 = stof(line, 0);  ssMat >> line; temp->m_matTransform._43 = stof(line, 0);  ssMat >> line; temp->m_matTransform._44 = stof(line, 0);
+//            D3DXMATRIXA16 matS, matR, matT;
+//            D3DXMatrixScaling(&matS, temp->m_Scale.x, temp->m_Scale.y, temp->m_Scale.z);
+//            D3DXMatrixRotationYawPitchRoll(&matR, temp->m_Rotation.y, temp->m_Rotation.x, temp->m_Rotation.z);
+//            D3DXMatrixTranslation(&matT, temp->m_Position.x, temp->m_Position.y, temp->m_Position.z);
+//            temp->m_matTransform = matS * matR * matT;
+//            
+//            temp->objPtr= m_vecObjectContainer[static_cast<int>(temp->list)];
+//
+//            std::stringstream ssTakeTabOut;
+//            getline(myFile, line); //check if it is "}" or "["
+//            ssTakeTabOut << line;
+//            ssTakeTabOut >> line;
+//            
+//            if (line == "[")
+//            {
+//                
+//                getline(myFile, line);
+//                int colliderNum = atoi(line.c_str());
+//                for (int i = 0; i < colliderNum; i++)
+//                {
+//                    std::stringstream ssNomore;
+//                    getline(myFile, line);  //take out "("
+//                    getline(myFile, line);  //get parent name;
+//                    BoxCollider* bc = new BoxCollider(&temp->m_ObjName);
+//                    bc->Init(D3DXVECTOR3(-5.0f, -5.0f, -5.0f), D3DXVECTOR3(5.0f, 5.0f, 5.0f));
+//
+//                    //getline(myFile, line);      ss << line;     ss >> line;    bc->m_vCenter.x = stof(line, 0);     ss >> line;     bc->m_vCenter.y = stof(line, 0);      ss >> line;    bc->m_vCenter.z = stof(line, 0);
+//                    //getline(myFile, line);      ss << line;     ss >> line;    bc->m_vExtent.x = stof(line, 0);     ss >> line;     bc->m_vExtent.y = stof(line, 0);      ss >> line;    bc->m_vExtent.z = stof(line, 0);
+//
+//                    getline(myFile, line);      ssNomore << line;
+//                    ssNomore >> line; bc->m_matWorld._11 = stof(line, 0);  ssNomore >> line; bc->m_matWorld._12 = stof(line, 0);  ssNomore >> line; bc->m_matWorld._13 = stof(line, 0);  ssNomore >> line; bc->m_matWorld._14 = stof(line, 0);
+//                    ssNomore >> line; bc->m_matWorld._21 = stof(line, 0);  ssNomore >> line; bc->m_matWorld._22 = stof(line, 0);  ssNomore >> line; bc->m_matWorld._23 = stof(line, 0);  ssNomore >> line; bc->m_matWorld._24 = stof(line, 0);
+//                    ssNomore >> line; bc->m_matWorld._31 = stof(line, 0);  ssNomore >> line; bc->m_matWorld._32 = stof(line, 0);  ssNomore >> line; bc->m_matWorld._33 = stof(line, 0);  ssNomore >> line; bc->m_matWorld._34 = stof(line, 0);
+//                    ssNomore >> line; bc->m_matWorld._41 = stof(line, 0);  ssNomore >> line; bc->m_matWorld._42 = stof(line, 0);  ssNomore >> line; bc->m_matWorld._43 = stof(line, 0);  ssNomore >> line; bc->m_matWorld._44 = stof(line, 0);
+//
+//                    bc->m_mParentTransform = temp->m_matTransform;
+//                    D3DXMATRIXA16 mInvParent,check;
+//                    D3DXMatrixInverse(&mInvParent, NULL, &bc->m_mParentTransform);
+//                    bc->m_mTransform = bc->m_matWorld * mInvParent;
+//
+//
+//                    temp->m_vecBoxCollider.push_back(bc);
+//                    getline(myFile, line);//take out ")";
+//
+//                }
+//                getline(myFile, line); //take out "]"
+//                getline(myFile, line);  //take out "}"
+//            }
+//
+//
+//
+//
+//
+//            //temp->objPtr = m_vecObjectContainer[temp->list];
+//
+//
+//            m_mapObject.emplace(temp->m_ObjName, temp);
+//            //m_mapObject.emplace_back(make_pair(temp->m_ObjName, temp));
+//        }
+//        myFile.close();
+//    }
+//    else
+//    {
+//        assert(false && "안됨.ㅜㅜ");
+//    }
+//
+//    for (auto p : m_mapObject)
+//    {
+//        if (m_mapObjCount.find(p.second->list) == m_mapObjCount.end())
+//        {
+//            m_mapObjCount.emplace(p.second->list, 0);
+//        }
+//        m_mapObjCount[p.second->list]++;
+//    }
+//}
 void ImGuizmoManager::OpenScene2(const string& fullPath)
 {
     Init(); // clearing the scene
@@ -272,9 +272,9 @@ void ImGuizmoManager::OpenScene2(const string& fullPath)
         obj->m_Scale = o.m_scale;
         
         D3DXMATRIXA16 s, r, t;
-        D3DXMatrixScaling(&s, obj->m_Scale.x, obj->m_Scale.x, obj->m_Scale.x);
-        D3DXMatrixRotationYawPitchRoll(&r, obj->m_Rotation.x, obj->m_Rotation.x, obj->m_Rotation.x);
-        D3DXMatrixTranslation(&t, obj->m_Position.x, obj->m_Position.x, obj->m_Position.x);
+        D3DXMatrixScaling(&s, obj->m_Scale.x, obj->m_Scale.y, obj->m_Scale.z);
+        D3DXMatrixRotationYawPitchRoll(&r, obj->m_Rotation.y, obj->m_Rotation.x, obj->m_Rotation.z);
+        D3DXMatrixTranslation(&t, obj->m_Position.x, obj->m_Position.y, obj->m_Position.z);
         obj->m_matTransform = s * r * t;
         
         obj->objPtr = m_vecObjectContainer[static_cast<int>(obj->list)];
@@ -284,7 +284,7 @@ void ImGuizmoManager::OpenScene2(const string& fullPath)
         for (auto boxcol : o.m_boxColliders)
         {
             BoxCollider* bc = new BoxCollider(&obj->m_ObjName);
-            bc->Init(D3DXVECTOR3(-0.5f, -0.5f, -0.5f), D3DXVECTOR3(0.5f, 0.5f, 0.5f));
+            bc->Init(D3DXVECTOR3(-5.0f, -5.0f, -5.0f), D3DXVECTOR3(5.0f, 5.0f, 5.0f));
             bc->m_matWorld = boxcol.m_transform;
             bc->m_mParentTransform = obj->m_matTransform;
             

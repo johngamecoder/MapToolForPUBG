@@ -136,7 +136,7 @@ void ImGuizmoManager::ContainObject()
     pair<string, string> PATHnNAME;
     for (int i = 0; i < static_cast<int>(TAG_RES_STATIC::COUNT); i++)
     {
-        if (i==0||i == 9 || i == 16)//<<<< 이거 나중에 빼야함! (지금은 
+        if (i==22||i == 9 || i == 16)//<<<< 이거 나중에 빼야함! (지금은 
         {
             PATHnNAME = ResourceInfo::GetPathFileName(static_cast<TAG_RES_STATIC>(i));
             m_vecObjectContainer[i] = new PUBG_Object(PATHnNAME.first, PATHnNAME.second);

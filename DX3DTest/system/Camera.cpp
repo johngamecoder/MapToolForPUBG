@@ -17,7 +17,8 @@ void Camera::Delete()
 }
 
 Camera::Camera()
-    : m_pTarget(NULL)
+    : m_pTarget(nullptr)
+    , m_pCurrObjPos(nullptr)
     , m_distance(1000.0f)
     , m_basePosY(200.0f)
     , m_basePosX(0.0f)
@@ -27,11 +28,10 @@ Camera::Camera()
     , isPerspective(true)
     , isHandle(false)
     , m_viewWidth(10.0f)
+    , m_SavedLookAt(D3DXVECTOR3(0, 0, 0))
+    , m_fov(D3DX_PI / 4.0f)
 {
 	m_eye = D3DXVECTOR3(m_basePosX, m_basePosY, -m_distance);
-    m_SavedLookAt = D3DXVECTOR3(0, 0, 0);
-    m_fov = D3DX_PI / 4.0f;
-
 }
 
 
@@ -55,15 +55,20 @@ float Y = 0;
 void Camera::Update()
 {
     Mouse* pMouse = Mouse::Get();
+    Keyboard* pKeyboard = Keyboard::Get();
     //스크롤링으로 m_eye 위치를 바꾸는 부분
     m_distance -= pMouse->GetDeltaPosition().z / 2.0f;
 
 
     m_moveDir = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
+    if (pKeyboard->KeyUp('F'))
+    {
+        PressFtoMovetoTarget();
+    }
 
 
-    bool isAltKeyPressed = Keyboard::Get()->KeyPress(VK_MENU);
+    bool isAltKeyPressed = pKeyboard->KeyPress(VK_MENU);
     if (isAltKeyPressed)
     {
         if (pMouse->ButtonPress(Mouse::LBUTTON))
@@ -135,37 +140,6 @@ void Camera::Update()
 
 
 
-
-
-
-
-    //right vector와 left vector
-    // up vector와 down vector을 구해서
-    // m_lookat의 position을 update 해 준다. 
-
-
-
-
-
-
-
-
-
-
-    //D3DXVECTOR3 lookAt = D3DXVECTOR3(X, Y, 0);
-    //m_eye = D3DXVECTOR3(0, m_basePosY, -m_distance);
-
-    //if(!isAltKeyPressed)
-    //    D3DXVec3TransformCoord(&lookAt, &lookAt, &m_matRot);
-    //D3DXVec3TransformCoord(&m_eye, &m_eye, &m_matRot);
-
-    //m_eye = lookAt + m_eye;
-    //
-    //
-    //
-    //
-    //m_SavedLookAt = lookAt;
-	
 
     //뷰 space
     D3DXMatrixLookAtLH(&m_matView, &m_eye, &m_SavedLookAt, &m_up);

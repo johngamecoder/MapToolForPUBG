@@ -65,6 +65,7 @@ public:
 
     string m_currentSceneName;
     Camera* m_pCamera;
+    D3DXVECTOR3 m_currentObjPos;
 
     IDisplayObject* m_vecObjectContainer[static_cast<int>(TAG_RES_STATIC::COUNT)];
     map<TAG_RES_STATIC, int> m_mapObjCount;                   //contains number of Objects
@@ -103,6 +104,7 @@ public:
     void SetCurrentObject(ObjInfo* obj)
     {
         m_pCurrentObject = obj;
+        m_pCamera->SetCurrentObjectPos(&m_pCurrentObject->m_Position);//this is for camera, when press F, camera focus into the current object;
         //m_currentOBJName = &obj->m_ObjName;
         //resetting the position to origin
         MatChangeDX2Float(objectMatrix, &m_pCurrentObject->m_matTransform);
@@ -114,7 +116,7 @@ public:
     void InspectorImGui();
 
     void NewScene();
-    void OpenScene(const string& fileName );
+    //void OpenScene(const string& fileName );
     void OpenScene2(const string& fileName );
     void SaveScene(string& fileName );
     void ConstructComboObjectList();

@@ -31,6 +31,7 @@ void PUBG_Object::Render()
         ep.pEffect->SetMatrix("World", &m_matWorld);
         ep.pEffect->SetMatrix("View", Camera::Get()->GetViewMatrix());
         ep.pEffect->SetMatrix("Projection", Camera::Get()->GetProjMatrix());
+        ep.pEffect->CommitChanges();
 
         UINT numPasses;
         ep.pEffect->Begin(&numPasses, 0);

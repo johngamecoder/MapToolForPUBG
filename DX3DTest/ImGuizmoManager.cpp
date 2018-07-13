@@ -2,8 +2,9 @@
 #include "ImGuizmoManager.h"
 
 ImGuizmoManager::ImGuizmoManager()
+    : m_currentObjPos(D3DXVECTOR3(0.0f,0.0f,0.0f))
+    , m_pCamera(nullptr)
 {
-   m_pCamera = NULL;
    //for rendering image buttons
    m_pButtonTexture[0] = NULL; m_pButtonTexture[0] = TextureManager::Get()->GetTexture(_T("Resource/handle.png"));
    m_pButtonTexture[1] = NULL; m_pButtonTexture[1] = TextureManager::Get()->GetTexture(_T("Resource/translation.png"));
@@ -75,6 +76,7 @@ void ImGuizmoManager::Init()
     m_pCurrentObject = NULL;
 
     m_pCamera = Camera::Get();
+    m_currentObjPos;
     // Camera projection
     isPerspective  = true;
     viewWidth     = 10.f; // for orthographic
@@ -310,7 +312,7 @@ void ImGuizmoManager::EditTransform(const float * cameraView, float * cameraProj
     
     //static bool useSnap = false;
     //static float snap[3] = { 1.f, 1.f, 1.f };
-    static float bounds[] = { -0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f };
+    static float bounds[] = { -5.0f, -5.0f, -5.0f, 5.0f, 5.0f, 5.0f };
     //static float boundsSnap[] = { 0.1f, 0.1f, 0.1f };
     
     //static bool boundSizingSnap = false;
@@ -391,7 +393,7 @@ void ImGuizmoManager::EditTransform(const float * cameraView, float * cameraProj
 void ImGuizmoManager::AddBoxCollider()
 {
     BoxCollider* bc = new BoxCollider(&m_pCurrentObject->m_ObjName);
-    bc->Init(D3DXVECTOR3(-0.5f, -0.5f, -0.5f), D3DXVECTOR3(0.5f, 0.5f, 0.5f));
+    bc->Init(D3DXVECTOR3(-5.0f, -5.0f, -5.0f), D3DXVECTOR3(5.0f, 5.0f, 5.0f));
     D3DXMATRIXA16 matIdentity;
     D3DXMatrixIdentity(&matIdentity);
     bc->SetMatrix(matIdentity, m_pCurrentObject->m_matTransform);
