@@ -241,6 +241,14 @@ void ImGuizmoManager::InspectorImGui()
     {
         ImGuiIO& io = ImGui::GetIO();
         ImGui::Text("%.1f FPS", ImGui::GetIO().Framerate);
+        if (Keyboard::Get()->KeyUp('Q'))  // q Key
+        {
+            if(mCurrentGizmoOperation == ImGuizmo::HANDLE)
+                mCurrentGizmoOperation = ImGuizmo::NOTSELECTED;
+            else
+                mCurrentGizmoOperation = ImGuizmo::HANDLE;
+            boundSizing = false;
+        }
         if (m_pCurrentObject) //if current object is not picked then 
         {
 
@@ -317,27 +325,23 @@ void ImGuizmoManager::EditTransform(const float * cameraView, float * cameraProj
     
     //static bool boundSizingSnap = false;
     
-    if (ImGui::IsKeyPressed(81))  // q Key
-    {
-        mCurrentGizmoOperation = ImGuizmo::HANDLE;
-        boundSizing = false;
-    }
-    if (ImGui::IsKeyPressed(87)) // w key
+
+    if (Keyboard::Get()->KeyUp('W')) // w key
     {
         mCurrentGizmoOperation = ImGuizmo::TRANSLATE;
         boundSizing = false;
     }
-    if (ImGui::IsKeyPressed(69))// e key
+    if (Keyboard::Get()->KeyUp('E'))// e key
     {
         mCurrentGizmoOperation = ImGuizmo::ROTATE;
         boundSizing = false;
     }    
-    if (ImGui::IsKeyPressed(82)) // r Key
+    if (Keyboard::Get()->KeyUp('R')) // r Key
     {
         mCurrentGizmoOperation = ImGuizmo::SCALE;
         boundSizing = false;
     }
-    if (ImGui::IsKeyPressed(84)) // t Key
+    if (Keyboard::Get()->KeyUp('T')) // t Key
     {
         mCurrentGizmoOperation = ImGuizmo::BOUNDS;
         boundSizing = true;
@@ -407,6 +411,7 @@ void ImGuizmoManager::MouseHandleMove()
         m_pCamera->isHandle = false;
     else
         m_pCamera->isHandle = true;
+
 }
 void ImGuizmoManager::MatChangeDX2Float(OUT float * m16, IN D3DXMATRIXA16 * mat)
 {

@@ -67,14 +67,14 @@ void BoxCollider::Render()
     };
 
     const auto pD = DX::GetDevice();
-    pD->SetRenderState(D3DRS_LIGHTING, false);
+    //pD->SetRenderState(D3DRS_LIGHTING, false);
     pD->SetTransform(D3DTS_WORLD, &m_matWorld);
     pD->SetTexture(0, nullptr);
     pD->SetFVF(VERTEX_PC::FVF);
     pD->DrawIndexedPrimitiveUP(D3DPT_LINELIST, 0, m_vertices.size(),
         indices.size() / 2, indices.data(), D3DFMT_INDEX16, m_vertices.data(),
         sizeof VERTEX_PC);
-    pD->SetRenderState(D3DRS_LIGHTING, true);
+    //pD->SetRenderState(D3DRS_LIGHTING, true);
 }
 
 void BoxCollider::SetVertex(const D3DXVECTOR3 & min, const D3DXVECTOR3 & max)

@@ -50,14 +50,12 @@ void Camera::Init()
         m_rect.right / (float)m_rect.bottom, zn_defineinCameraHeader, zf_defineinCameraHeader);
 	DX::GetDevice()->SetTransform(D3DTS_PROJECTION, &m_matProj);
 }
-float X = 0;
-float Y = 0;
+
 void Camera::Update()
 {
     Mouse* pMouse = Mouse::Get();
     Keyboard* pKeyboard = Keyboard::Get();
-    //스크롤링으로 m_eye 위치를 바꾸는 부분
-    m_distance -= pMouse->GetDeltaPosition().z / 2.0f;
+
 
 
     m_moveDir = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -89,42 +87,42 @@ void Camera::Update()
     }
     else
     {
-        if (isHandle &&pMouse->ButtonPress(Mouse::LBUTTON))
+        if (isHandle)
         {
-            //Y += pMouse->GetDeltaPosition().y;
-            //X -= pMouse->GetDeltaPosition().x;
+            //스크롤링으로 m_eye 위치를 바꾸는 부분
+            m_distance -= pMouse->GetDeltaPosition().z / 2.0f;
 
-            //ImGui::Text("%f", pMouse->GetDeltaPosition().y);
-            //ImGui::Text("%f", pMouse->GetDeltaPosition().x);
-
-
-            const float factor = 10.0f;
-
-
-            //screen Y 축
-            if (pMouse->GetDeltaPosition().y > 0.0f)
+            if (pMouse->ButtonPress(Mouse::LBUTTON))
             {
-                m_moveDir += getUp()*factor;
 
+
+                const float factor = 10.0f;
+
+
+                //screen Y 축
+                if (pMouse->GetDeltaPosition().y > 0.0f)
+                {
+                    m_moveDir += getUp()*factor;
+
+                }
+                else if (pMouse->GetDeltaPosition().y < 0.0f)
+                {
+                    m_moveDir += getDown()*factor;
+                }
+
+
+                //screen X 축
+                if (pMouse->GetDeltaPosition().x > 0.0f)
+                {
+                    m_moveDir += getLeft()*factor;
+                }
+                else if (pMouse->GetDeltaPosition().x < 0.0f)
+                {
+                    m_moveDir += getRight()*factor;
+                }
             }
-            else if (pMouse->GetDeltaPosition().y < 0.0f)
-            {
-                m_moveDir += getDown()*factor;
-            }
-
-
-            //screen X 축
-            if (pMouse->GetDeltaPosition().x > 0.0f)
-            {
-                m_moveDir += getLeft()*factor;
-            }
-            else if (pMouse->GetDeltaPosition().x < 0.0f)
-            {
-                m_moveDir += getRight()*factor;
-            }
-
-
         }
+
     }
     D3DXMatrixRotationYawPitchRoll(&m_matRot, m_rotY, m_rotX, 0);
 

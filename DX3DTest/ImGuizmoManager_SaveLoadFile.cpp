@@ -18,7 +18,7 @@ void ImGuizmoManager::MenuBarImGui()
             //string fileName = "save.txt";
             //OpenScene(fileName);
 
-            string fullPath = "./Resource/save.txt";
+            string fullPath = "../../TeamAvengers_PUBG/PUBG/Client/Resource/save.txt";
             OpenScene2(fullPath);
         }
         ImGui::Separator();
@@ -42,7 +42,8 @@ void ImGuizmoManager::MenuBarImGui()
         }
         if (ImGui::MenuItem("Save", "Ctrl+S"))
         {
-            string fileName = "./Resource/save.txt";
+            string fileName = "../../TeamAvengers_PUBG/PUBG/Client/Resource/save.txt";
+            //string fileName = "./Resource/save.txt";
             SaveScene(fileName);
         }
         if (ImGui::MenuItem("Save As.."))
