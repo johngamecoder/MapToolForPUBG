@@ -66,7 +66,6 @@ public:
     string m_currentSceneName;
     Camera* m_pCamera;
 
-    //vector<IDisplayObject*> m_vecObjectContainer;   //contains Displayable Objects
     IDisplayObject* m_vecObjectContainer[static_cast<int>(TAG_RES_STATIC::COUNT)];
     map<TAG_RES_STATIC, int> m_mapObjCount;                   //contains number of Objects
     map<string, ObjInfo*> m_mapObject;
@@ -81,7 +80,8 @@ public:
 
     int hierarchySelectedObjIndex;  //Hierarchy obj tab
     int hierarchySelectedColliderIndex;  //Hierarchy obj tab
-    int comboSelect;    //selected number of object on hierarchy
+    int comboTerrainFeatureSelect;    //selected number of object on hierarchy
+    int comboItemSelect;
     bool boundSizing;   //selecting to use boundsizing or not
 
 
@@ -127,6 +127,9 @@ public:
     void MouseHandleMove();
     void MatChangeDX2Float(OUT float * m16, IN D3DXMATRIXA16 * mat);
     void MatChangeFloat2DX(OUT D3DXMATRIXA16 * mat, IN float * m16);
+
+    void ObjectLoaderButton(char* ComboList[], int selectedCombo);
+    void ObjectItemLoaderButton(char* ComboList[], int selectedCombo);
 
     HRESULT parseObjectInFile(std::ifstream& fin, ObjectInFile* Out);
     HRESULT parseBoxColliderInFile(

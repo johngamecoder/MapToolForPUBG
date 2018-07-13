@@ -5,69 +5,29 @@
 
 //const char* ComboObjectList[(unsigned int)TAG_RES_STATIC::COUNT];// = { "Bandage","Church"/*,"Tree","Rock","Ware House"*/ };
 char* ComboObjectList[static_cast<int>(TAG_RES_STATIC::COUNT)];
+char* ComboTerrainFeaturesList[63];
+char* ComboItemsList[13];
 
 void ImGuizmoManager::LoadObjectImGui()
 {
     ImGui::SetNextWindowPos(ImVec2(30, 500));
     ImGui::Begin("Object Loader");
     {
-        ImGui::Combo("", &comboSelect, ComboObjectList, static_cast<int>(TAG_RES_STATIC::COUNT));
+        ImGui::Text("Terrain Features");
         //ImGui::Combo("", &comboSelect, ComboObjectList, LOADCOUNT/*ObjList::COUNT*//*이건 갯수 넣는 부분 */);
+        //ImGui::Combo("", &comboSelect, ComboObjectList, static_cast<int>(TAG_RES_STATIC::COUNT));
+        ImGui::Combo("", &comboTerrainFeatureSelect, ComboTerrainFeaturesList, 63);
         ImGui::SameLine();
-        
 
-        static char buf1[64];
-        static bool bLoadButton = false;
-        if (ImGui::Button("Load"))
-        {
-            if (!m_vecObjectContainer[comboSelect])
-            {
-                assert(false && "no file");
-            }
-            string a = " (";
-            string b = ")";
-            string userInputName = ComboObjectList[comboSelect] + a + to_string(m_mapObjCount[static_cast<TAG_RES_STATIC>(comboSelect)] + 1) + b;
-            sprintf_s(buf1, userInputName.c_str());
-            bLoadButton = true;
+        ObjectLoaderButton(ComboTerrainFeaturesList,comboTerrainFeatureSelect);
 
-        }
-        if (bLoadButton)
-        {
-            ImGui::OpenPopup("Please name your Object");
-            if (ImGui::BeginPopupModal("Please name your Object", NULL, ImGuiWindowFlags_AlwaysAutoResize))
-            {
 
-                ImGui::InputText("", buf1, 64);
-                static bool bAlreadyHaveName = false;
-                if (bAlreadyHaveName)
-                    ImGui::Text("Already Have that Name, Please Enter new Name");
-                ImGui::Separator();
-                if (ImGui::Button("OK", ImVec2(120, 0))) {
+        ImGui::Text("Items");
+        ImGui::Combo("", &comboItemSelect, ComboItemsList, 13);
+        ImGui::SameLine();
 
-                    if (m_mapObject.find(buf1) == m_mapObject.end())
-                    {
-                        ObjectLoader(comboSelect, buf1);
-                        hierarchySelectedColliderIndex = -1;
-                        hierarchySelectedObjIndex = m_mapObject.size() - 1;
-                        bLoadButton = false;
-                        bAlreadyHaveName = false;
-                    }
-                    else
-                    {
-                        bAlreadyHaveName = true;
-                    }
-                }
-                ImGui::SetItemDefaultFocus();
-                ImGui::SameLine();
-                if (ImGui::Button("Cancel", ImVec2(120, 0))) 
-                { 
-                    bLoadButton = false;
-                    bAlreadyHaveName = false;
-                }
-                
-            }
-            ImGui::EndPopup();
-        }
+        ObjectItemLoaderButton(ComboItemsList,comboItemSelect);
+
 
         ImGui::Separator();
         if (m_pCurrentObject)
@@ -136,20 +96,25 @@ void ImGuizmoManager::ConstructComboObjectList()
 {
     for (int i = 0; i < static_cast<int>(TAG_RES_STATIC::COUNT); ++i)
     {
-        if (ResourceInfo::IsItem(static_cast<TAG_RES_STATIC>(i)))
-            continue;
         ComboObjectList[i] = new char[64]();
     }
 
     pair<string, string> PATHnNAME;
     int num = static_cast<int>(TAG_RES_STATIC::COUNT);
+    int itemcount = 0;
+    int terraincount = 0;
     for (int i = 0; i < num; i++)
     {
-        //if (ResourceInfo::IsItem(static_cast<TAG_RES_STATIC>(i)))
-        //    continue;
         PATHnNAME = ResourceInfo::GetFileNameWithoutX(static_cast<TAG_RES_STATIC>(i));
         memcpy_s(ComboObjectList[i], 64, PATHnNAME.second.c_str(), PATHnNAME.second.size());
-        //ComboObjectList[i] = PATHnNAME.second.c_str();
+        if (ResourceInfo::IsItem(static_cast<TAG_RES_STATIC>(i)))
+        {
+            ComboItemsList[itemcount++] = ComboObjectList[i];
+        }
+        else
+        {
+            ComboTerrainFeaturesList[terraincount++] = ComboObjectList[i];
+        }
     }
     
 }
@@ -171,7 +136,7 @@ void ImGuizmoManager::ContainObject()
     pair<string, string> PATHnNAME;
     for (int i = 0; i < static_cast<int>(TAG_RES_STATIC::COUNT); i++)
     {
-        if (i == 9 || i == 16)//<<<< 이거 나중에 빼야함! (지금은 
+        if (i==0||i == 9 || i == 16)//<<<< 이거 나중에 빼야함! (지금은 
         {
             PATHnNAME = ResourceInfo::GetPathFileName(static_cast<TAG_RES_STATIC>(i));
             m_vecObjectContainer[i] = new PUBG_Object(PATHnNAME.first, PATHnNAME.second);

@@ -17,7 +17,7 @@ ImGuizmoManager::ImGuizmoManager()
 ImGuizmoManager::~ImGuizmoManager()
 {
     //SAFE_DELETE(m_pCamera); 이건 여기서 중단되는것이 아니다.
-    for (int i = 0; i < LOADCOUNT; i++)
+    for (int i = 0; i < static_cast<int>(TAG_RES_STATIC::COUNT); i++)
     {
         SAFE_RELEASE(m_vecObjectContainer[i]);
     }
@@ -69,7 +69,8 @@ void ImGuizmoManager::Init()
     mCurrentGizmoOperation = ImGuizmo::NOTSELECTED;
     mCurrentGizmoMode = ImGuizmo::WORLD;
 
-    comboSelect = -1;
+    comboTerrainFeatureSelect = -1;
+    comboItemSelect = -1;
     
     m_pCurrentObject = NULL;
 
@@ -418,6 +419,219 @@ void ImGuizmoManager::MatChangeFloat2DX(OUT D3DXMATRIXA16 * mat, IN float * m16)
     mat->_21 = m16[4];mat->_22 = m16[5];mat->_23 = m16[6]; mat->_24 = m16[7];
     mat->_31 = m16[8];mat->_32 = m16[9];mat->_33 = m16[10];mat->_34 = m16[11];
     mat->_41 = m16[12];mat->_42 = m16[13];mat->_43 = m16[14];mat->_44 = m16[15];
+}
+
+void ImGuizmoManager::ObjectLoaderButton(char* ComboList[], int selectedCombo)
+{
+    static int comboNum = -1;
+
+
+    static char buf1[64];
+    static bool bLoadButton = false;
+    static bool bNotFoundLoad = false;
+    if (ImGui::Button("Load"))
+    {
+        //선택된 번호를 right list로 변환시켜주자.
+        for (int i = 0; i < static_cast<int>(TAG_RES_STATIC::COUNT); i++)
+        {
+            if (ComboList[selectedCombo]==ComboObjectList[i])
+            {
+                comboNum = i;
+                break;
+            }
+        }
+        
+        if (!m_vecObjectContainer[comboNum])
+        {
+            bNotFoundLoad = true;
+        }
+
+        string a = " (";
+        string b = ")";
+        string userInputName = ComboObjectList[comboNum] + a + to_string(m_mapObjCount[static_cast<TAG_RES_STATIC>(comboNum)] + 1) + b;
+        sprintf_s(buf1, userInputName.c_str());
+        bLoadButton = true;
+
+    }
+    if (bLoadButton)
+    {
+        ImGui::OpenPopup("Please name your Object");
+        if (ImGui::BeginPopupModal("Please name your Object", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+        {
+
+            ImGui::InputText("", buf1, 64);
+            static bool bAlreadyHaveName = false;
+            if (bAlreadyHaveName)
+                ImGui::Text("Already Have that Name, Please Enter new Name");
+            ImGui::Separator();
+            if (ImGui::Button("OK", ImVec2(120, 0))) {
+
+                if (m_mapObject.find(buf1) == m_mapObject.end())
+                {
+                    ObjectLoader(comboNum, buf1);
+                    hierarchySelectedColliderIndex = -1;
+                    hierarchySelectedObjIndex = m_mapObject.size() - 1;
+                    bLoadButton = false;
+                    bAlreadyHaveName = false;
+                }
+                else
+                {
+                    bAlreadyHaveName = true;
+                }
+            }
+            ImGui::SetItemDefaultFocus();
+            ImGui::SameLine();
+            if (ImGui::Button("Cancel", ImVec2(120, 0)))
+            {
+                bLoadButton = false;
+                bAlreadyHaveName = false;
+            }
+
+        }
+        ImGui::EndPopup();
+    }
+    if (bNotFoundLoad)
+    {
+        ImGui::OpenPopup("Object Not Found");
+        if (ImGui::BeginPopupModal("Sorry, Cannot found Object", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+        {
+
+            //ImGui::InputText("", buf1, 64);
+            //static bool bAlreadyHaveName = false;
+            //if (bAlreadyHaveName)
+            //    ImGui::Text("Already Have that Name, Please Enter new Name");
+            //ImGui::Separator();
+            //if (ImGui::Button("OK", ImVec2(120, 0))) {
+
+            //    if (m_mapObject.find(buf1) == m_mapObject.end())
+            //    {
+            //        ObjectLoader(comboNum, buf1);
+            //        hierarchySelectedColliderIndex = -1;
+            //        hierarchySelectedObjIndex = m_mapObject.size() - 1;
+            //        bLoadButton = false;
+            //        bAlreadyHaveName = false;
+            //    }
+            //    else
+            //    {
+            //        bAlreadyHaveName = true;
+            //    }
+            //}
+            //ImGui::SetItemDefaultFocus();
+            //ImGui::SameLine();
+            if (ImGui::Button("Cancel", ImVec2(120, 0)))
+            {
+                bNotFoundLoad = false;
+            }
+        }
+        ImGui::EndPopup();
+    }
+
+}
+
+void ImGuizmoManager::ObjectItemLoaderButton(char * ComboList[], int selectedCombo)
+{
+    int comboNum = -1;
+
+
+    static char buf1[64];
+    static bool bLoadButton = false;
+    static bool bNotFoundLoad = false;
+    if (ImGui::Button("Load"))
+    {
+        //선택된 번호를 right list로 변환시켜주자.
+        for (int i = 0; i < static_cast<int>(TAG_RES_STATIC::COUNT); i++)
+        {
+            if (ComboList[selectedCombo] == ComboObjectList[i])
+            {
+                comboNum = i;
+                break;
+            }
+        }
+
+        if (!m_vecObjectContainer[comboNum])
+        {
+            bNotFoundLoad = true;
+        }
+
+        string a = " (";
+        string b = ")";
+        string userInputName = ComboObjectList[comboNum] + a + to_string(m_mapObjCount[static_cast<TAG_RES_STATIC>(comboNum)] + 1) + b;
+        sprintf_s(buf1, userInputName.c_str());
+        bLoadButton = true;
+
+    }
+    if (bLoadButton)
+    {
+        ImGui::OpenPopup("Please name your Object");
+        if (ImGui::BeginPopupModal("Please name your Object", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+        {
+
+            ImGui::InputText("", buf1, 64);
+            static bool bAlreadyHaveName = false;
+            if (bAlreadyHaveName)
+                ImGui::Text("Already Have that Name, Please Enter new Name");
+            ImGui::Separator();
+            if (ImGui::Button("OK", ImVec2(120, 0))) {
+
+                if (m_mapObject.find(buf1) == m_mapObject.end())
+                {
+                    ObjectLoader(comboNum, buf1);
+                    hierarchySelectedColliderIndex = -1;
+                    hierarchySelectedObjIndex = m_mapObject.size() - 1;
+                    bLoadButton = false;
+                    bAlreadyHaveName = false;
+                }
+                else
+                {
+                    bAlreadyHaveName = true;
+                }
+            }
+            ImGui::SetItemDefaultFocus();
+            ImGui::SameLine();
+            if (ImGui::Button("Cancel", ImVec2(120, 0)))
+            {
+                bLoadButton = false;
+                bAlreadyHaveName = false;
+            }
+
+        }
+        ImGui::EndPopup();
+    }
+    if (bNotFoundLoad)
+    {
+        ImGui::OpenPopup("Object Not Found");
+        if (ImGui::BeginPopupModal("Sorry, Cannot found Object", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+        {
+
+            //ImGui::InputText("", buf1, 64);
+            //static bool bAlreadyHaveName = false;
+            //if (bAlreadyHaveName)
+            //    ImGui::Text("Already Have that Name, Please Enter new Name");
+            //ImGui::Separator();
+            //if (ImGui::Button("OK", ImVec2(120, 0))) {
+
+            //    if (m_mapObject.find(buf1) == m_mapObject.end())
+            //    {
+            //        ObjectLoader(comboNum, buf1);
+            //        hierarchySelectedColliderIndex = -1;
+            //        hierarchySelectedObjIndex = m_mapObject.size() - 1;
+            //        bLoadButton = false;
+            //        bAlreadyHaveName = false;
+            //    }
+            //    else
+            //    {
+            //        bAlreadyHaveName = true;
+            //    }
+            //}
+            //ImGui::SetItemDefaultFocus();
+            //ImGui::SameLine();
+            if (ImGui::Button("Cancel", ImVec2(120, 0)))
+            {
+                bNotFoundLoad = false;
+            }
+        }
+        ImGui::EndPopup();
+    }
 }
 
 BoxColliderInFile::BoxColliderInFile()
