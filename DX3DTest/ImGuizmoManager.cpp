@@ -76,6 +76,7 @@ void ImGuizmoManager::Init()
     m_pCurrentObject = NULL;
 
     m_pCamera = Camera::Get();
+    m_pCamera->SetGizmoOperation(&mCurrentGizmoOperation);
     m_currentObjPos;
     // Camera projection
     isPerspective  = true;
@@ -430,7 +431,7 @@ void ImGuizmoManager::MatChangeFloat2DX(OUT D3DXMATRIXA16 * mat, IN float * m16)
 
 void ImGuizmoManager::ObjectLoaderButton(char* ComboList[], int selectedCombo)
 {
-    static int comboNum = -1;
+    static int comboNumForTF = -1;
 
 
     static char buf1[64];
@@ -443,19 +444,19 @@ void ImGuizmoManager::ObjectLoaderButton(char* ComboList[], int selectedCombo)
         {
             if (ComboList[selectedCombo]==ComboObjectList[i])
             {
-                comboNum = i;
+                comboNumForTF = i;
                 break;
             }
         }
         
-        if (!m_vecObjectContainer[comboNum])
+        if (!m_vecObjectContainer[comboNumForTF])
         {
             bNotFoundLoad = true;
         }
 
         string a = " (";
         string b = ")";
-        string userInputName = ComboObjectList[comboNum] + a + to_string(m_mapObjCount[static_cast<TAG_RES_STATIC>(comboNum)] + 1) + b;
+        string userInputName = ComboObjectList[comboNumForTF] + a + to_string(m_mapObjCount[static_cast<TAG_RES_STATIC>(comboNumForTF)] + 1) + b;
         sprintf_s(buf1, userInputName.c_str());
         bLoadButton = true;
 
@@ -475,7 +476,7 @@ void ImGuizmoManager::ObjectLoaderButton(char* ComboList[], int selectedCombo)
 
                 if (m_mapObject.find(buf1) == m_mapObject.end())
                 {
-                    ObjectLoader(comboNum, buf1);
+                    ObjectLoader(comboNumForTF, buf1);
                     hierarchySelectedColliderIndex = -1;
                     hierarchySelectedObjIndex = m_mapObject.size() - 1;
                     bLoadButton = false;
@@ -537,7 +538,7 @@ void ImGuizmoManager::ObjectLoaderButton(char* ComboList[], int selectedCombo)
 
 void ImGuizmoManager::ObjectItemLoaderButton(char * ComboList[], int selectedCombo)
 {
-    int comboNum = -1;
+    static int comboNumForItm = -1;
 
 
     static char buf1[64];
@@ -550,19 +551,19 @@ void ImGuizmoManager::ObjectItemLoaderButton(char * ComboList[], int selectedCom
         {
             if (ComboList[selectedCombo] == ComboObjectList[i])
             {
-                comboNum = i;
+                comboNumForItm = i;
                 break;
             }
         }
 
-        if (!m_vecObjectContainer[comboNum])
+        if (!m_vecObjectContainer[comboNumForItm])
         {
             bNotFoundLoad = true;
         }
 
         string a = " (";
         string b = ")";
-        string userInputName = ComboObjectList[comboNum] + a + to_string(m_mapObjCount[static_cast<TAG_RES_STATIC>(comboNum)] + 1) + b;
+        string userInputName = ComboObjectList[comboNumForItm] + a + to_string(m_mapObjCount[static_cast<TAG_RES_STATIC>(comboNumForItm)] + 1) + b;
         sprintf_s(buf1, userInputName.c_str());
         bLoadButton = true;
 
@@ -582,7 +583,7 @@ void ImGuizmoManager::ObjectItemLoaderButton(char * ComboList[], int selectedCom
 
                 if (m_mapObject.find(buf1) == m_mapObject.end())
                 {
-                    ObjectLoader(comboNum, buf1);
+                    ObjectLoader(comboNumForItm, buf1);
                     hierarchySelectedColliderIndex = -1;
                     hierarchySelectedObjIndex = m_mapObject.size() - 1;
                     bLoadButton = false;

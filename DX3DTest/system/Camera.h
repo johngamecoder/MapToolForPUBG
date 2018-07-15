@@ -1,4 +1,5 @@
 #pragma once
+#include "ImGuizmo.h"
 #define zn_defineinCameraHeader 1
 #define zf_defineinCameraHeader 100000.0f
 class Camera
@@ -17,6 +18,8 @@ public:
 	D3DXMATRIXA16	m_matProj;
 
     D3DXMATRIXA16   m_matRot;
+
+    ImGuizmo::OPERATION* m_operation;
 
     float           m_basePosX;
 	float			m_basePosY;
@@ -81,6 +84,10 @@ public:
 	void Init();
 	void Update();
 	void SetTarget(D3DXVECTOR3* pTarget) { m_pTarget = pTarget; }
+    void SetGizmoOperation(ImGuizmo::OPERATION* operation)
+    {
+        m_operation = operation;
+    }
     void SetCurrentObjectPos(D3DXVECTOR3* curObjPos)
     {
         m_pCurrObjPos = curObjPos;

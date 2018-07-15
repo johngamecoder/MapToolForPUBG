@@ -125,6 +125,7 @@ public:
     void ObjectLoader(const int index, const string& userInputName);
     void AddBoxCollider();
     void DeleteObject();
+    void DeleteBoxCollider(int index);
 
     void MouseHandleMove();
     void MatChangeDX2Float(OUT float * m16, IN D3DXMATRIXA16 * mat);

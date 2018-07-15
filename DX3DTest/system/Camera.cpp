@@ -56,7 +56,12 @@ void Camera::Update()
     Mouse* pMouse = Mouse::Get();
     Keyboard* pKeyboard = Keyboard::Get();
 
-
+    if (*m_operation != ImGuizmo::NOTSELECTED)
+    {
+        //스크롤링으로 m_eye 위치를 바꾸는 부분
+        m_distance -= pMouse->GetDeltaPosition().z / 2.0f;
+    }
+    
 
     m_moveDir = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
@@ -87,12 +92,10 @@ void Camera::Update()
     }
     else
     {
-        if (isHandle)
-        {
-            //스크롤링으로 m_eye 위치를 바꾸는 부분
-            m_distance -= pMouse->GetDeltaPosition().z / 2.0f;
 
-            if (pMouse->ButtonPress(Mouse::LBUTTON))
+
+
+            if (isHandle&&pMouse->ButtonPress(Mouse::LBUTTON))
             {
 
 
@@ -121,7 +124,7 @@ void Camera::Update()
                     m_moveDir += getRight()*factor;
                 }
             }
-        }
+
 
     }
     D3DXMatrixRotationYawPitchRoll(&m_matRot, m_rotY, m_rotX, 0);
