@@ -225,6 +225,7 @@ void ImGuizmoManager::HierarchyImGui()
                         selected = i;
                         hierarchySelectedColliderIndex = i;
                         D3DXMATRIXA16 matWorldforBoxCollider = m_pCurrentObject->m_vecBoxCollider[i]->m_mTransform * m_pCurrentObject->m_vecBoxCollider[i]->m_mParentTransform;
+                        SendCurrentObjBoxColliderPos(D3DXVECTOR3(matWorldforBoxCollider._41, matWorldforBoxCollider._42, matWorldforBoxCollider._43));
                         MatChangeDX2Float(objectMatrix, &matWorldforBoxCollider);
                     }
                 }

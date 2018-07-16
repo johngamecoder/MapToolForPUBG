@@ -184,6 +184,7 @@ void ImGuizmoManager::ContainObject()
         if (i == 1 || i == 2 //총알들
             || i == 12 || i == 13 || i == 14 //방어구들
             || i==22    //wareHouse_A
+            || i == 68 //rock
             || i == 73 || i == 75 //QBZ, Kar98k
             )
         {

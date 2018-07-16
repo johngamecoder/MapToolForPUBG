@@ -32,7 +32,7 @@ public:
     float           m_viewWidth;  //orthographic
 	
     D3DXVECTOR3*	m_pTarget;
-    D3DXVECTOR3*    m_pCurrObjPos;
+    D3DXVECTOR3    m_pCurrObjPos;
 
 public:
     RECT m_rect;    //client rect
@@ -88,13 +88,13 @@ public:
     {
         m_operation = operation;
     }
-    void SetCurrentObjectPos(D3DXVECTOR3* curObjPos)
+    void SetCurrentObjectPos(D3DXVECTOR3 curObjPos)
     {
         m_pCurrObjPos = curObjPos;
     }
     void PressFtoMovetoTarget() { 
         if(m_pCurrObjPos)
-            m_SavedLookAt = *m_pCurrObjPos;
+            m_SavedLookAt = m_pCurrObjPos;
     }
 	const D3DXVECTOR3& GetPosition() { return m_eye; }
 	D3DXMATRIXA16* GetViewMatrix() { return &m_matView; }

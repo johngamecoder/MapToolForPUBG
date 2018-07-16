@@ -18,7 +18,7 @@ void Camera::Delete()
 
 Camera::Camera()
     : m_pTarget(nullptr)
-    , m_pCurrObjPos(nullptr)
+    , m_pCurrObjPos(D3DXVECTOR3(0,0,0))
     , m_distance(1000.0f)
     , m_basePosY(200.0f)
     , m_basePosX(0.0f)

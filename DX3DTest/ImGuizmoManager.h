@@ -104,10 +104,14 @@ public:
     void SetCurrentObject(ObjInfo* obj)
     {
         m_pCurrentObject = obj;
-        m_pCamera->SetCurrentObjectPos(&m_pCurrentObject->m_Position);//this is for camera, when press F, camera focus into the current object;
+        m_pCamera->SetCurrentObjectPos(m_pCurrentObject->m_Position);//this is for camera, when press F, camera focus into the current object;
         //m_currentOBJName = &obj->m_ObjName;
         //resetting the position to origin
         MatChangeDX2Float(objectMatrix, &m_pCurrentObject->m_matTransform);
+    }
+    void SendCurrentObjBoxColliderPos(D3DXVECTOR3 pos)
+    {
+        m_pCamera->SetCurrentObjectPos(pos);
     }
 
     void MenuBarImGui();
