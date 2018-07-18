@@ -26,17 +26,22 @@ void SceneMapTool::Init()
     
 
     D3DXMATRIXA16 matS, matT, matWorld;
-    //D3DXMatrixScaling(&matS, 30.0f, 0.1f, 30.0f);
-    D3DXMatrixScaling(&matS, 30.f, 10.f, 30.f);
+    D3DXMatrixScaling(&matS, 30.0f, 10.0f, 30.0f);
+    //D3DXMatrixScaling(&matS, 30.0f, 1.0f, 30.0f);
     D3DXMatrixTranslation(&matT, 0.0f, 0.0f, 0.0f);
     matWorld = matS * matT;
 
     m_pHeightMap = new HeightMap; //AddSimpleObj(m_pHeightMap);
+    //m_pHeightMap->SetDimension(257);
     m_pHeightMap->SetDimension(256);
 
-    m_pHeightMap->Load(_T("./Resource/heightmap/HeightMap.raw"), &matWorld);
+    //m_pHeightMap->Load(_T("./Resource/heightmap/HeightMap.raw"), &matWorld);
+    //m_pHeightMap->SetMtlTex(D3DMATERIAL9(DXUtil::WHITE_MTRL),
+    //    TextureManager::Get()->GetTexture(_T("./Resource/heightmap/terrain.jpg")));
+
+    m_pHeightMap->Load(_T("./Resource/heightmap/testing/HeightMap.raw"), &matWorld);
     m_pHeightMap->SetMtlTex(D3DMATERIAL9(DXUtil::WHITE_MTRL),
-        TextureManager::Get()->GetTexture(_T("./Resource/heightmap/terrain.jpg")));
+        TextureManager::Get()->GetTexture(_T("./Resource/heightmap/testing/Plain_BaseColor.tga")));
     m_pHeightMap->Init();
 
     //g_pMapManager->AddMap("heightmap", m_pHeightMap);

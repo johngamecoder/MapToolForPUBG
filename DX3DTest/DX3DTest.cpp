@@ -15,7 +15,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
     UNREFERENCED_PARAMETER(lpCmdLine);
 
 	D3DInfo info;
-	info.appName = _T("DirectX Game");
+	info.appName = _T("PUBG Map Tool");
 	info.hInstance = hInstance;
 	info.isFullScreen = false;
 	info.hWnd = NULL;
