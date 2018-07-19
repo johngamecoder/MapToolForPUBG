@@ -59,7 +59,7 @@ void Camera::Update()
     if (*m_operation != ImGuizmo::NOTSELECTED)
     {
         //스크롤링으로 m_eye 위치를 바꾸는 부분
-        m_distance -= pMouse->GetDeltaPosition().z / 2.0f;
+        m_distance -= pMouse->GetDeltaPosition().z*10.0f;
     }
     
 
@@ -99,7 +99,7 @@ void Camera::Update()
             {
 
 
-                const float factor = 10.0f;
+                const float factor = 100.0f;
 
 
                 //screen Y 축

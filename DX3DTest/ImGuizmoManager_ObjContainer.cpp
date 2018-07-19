@@ -181,11 +181,75 @@ void ImGuizmoManager::ContainObject()
     pair<string, string> PATHnNAME;
     for (int i = 0; i < static_cast<int>(TAG_RES_STATIC::COUNT); i++)
     {
-        if (i == 1 || i == 2 //총알들
-            || i == 12 || i == 13 || i == 14 //방어구들
-            || i==22    //wareHouse_A
-            || i == 68 //rock
-            || i == 73 || i == 75 //QBZ, Kar98k
+        if (
+            //buildings (사용함)
+             i == 15    //AbandonedTownHall,
+            || i == 16  //church
+            || i == 17  //Museum,
+            || i == 18  //OldWoodenShed_1,
+            || i == 19  //OldWoodenShed_2,
+            || i == 20  //OldWoodenShed_3,
+            || i == 21  //PoliceStation,
+            || i == 22  //wareHouse_A
+            || i == 23  //WareHouse_B,
+
+            ////Exterior
+
+            //////- BrokenVehicle
+            //|| i == 26//BrokenBus,
+            //|| i == 27//BrokenCar,
+            //|| i == 28//BrokenMeshTruck,
+            //|| i == 29//BrokenPoliceCar,
+            //|| i == 30//BrokenTractorGunnyBag,
+            //|| i == 31//BrokenUaz3151,
+            
+            ////-Container (사용함)
+            || i == 32//ContainerBox_A,
+            || i == 33//ContainerBox_B,
+            || i == 34//ContainerSmall_1,
+            || i == 35//ContainerSmall_2,
+
+            //////- HayBale
+            //|| i == 36//HeyBale_1,
+            //|| i == 37//HeyBale_2,
+
+            ////////- MetalBarrel
+            //|| i == 38//MetalBarrel_Blue,
+            //|| i == 39//MetalBarrel_Gray,
+            //|| i == 40//MetalBarrel_Green,
+            //|| i == 41//MetalBarrel_Red,
+
+            //////- MetalFence
+            //|| i == 42//MetalFence_A,
+            //|| i == 43//MetalFence_Long,
+
+            //////- PicketFence
+            //|| i == 44//PicketFence_Short_A,
+            //|| i == 45//PicketFence_Short_B,
+            //|| i == 46//PicketFence_Short_C,
+            
+            ////- Powerline 전보대
+            //|| i == 47  //Powerline_1,
+            //|| i == 48  //Powerline_2,
+
+            ////- RadioTower
+            //|| i == 49  //RadioTower_1,
+            //|| i == 50  //RadioTower_2,
+
+            //////- SandBag
+            //|| i == 51  //Sandbag_1,
+            //|| i == 52  //Sandbag_2,
+
+            ////- Silo   (사용함)
+            || i == 53  //Silo_A,
+            || i == 54  //Silo_B,
+
+            //////- Etc
+            //|| i == 55  //CityStreetSign,
+            //|| i == 56  //Lighthouse,
+            //|| i == 57  //MetalShelf,
+            //|| i == 58  //TableSet,
+            //|| i == 59  //Tower,
             )
         {
             PATHnNAME = ResourceInfo::GetPathFileName(static_cast<TAG_RES_STATIC>(i));

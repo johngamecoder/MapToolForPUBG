@@ -186,7 +186,7 @@ void HeightMap::Render()
 	m_pMesh->DrawSubset(0);
 	//DX::GetDevice()->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
 	
-	SAFE_RENDER(m_pAStar);
+	//SAFE_RENDER(m_pAStar);
 	
 	////PreRender
 	//DX::GetDevice()->SetRenderState(D3DRS_LIGHTING, true);
