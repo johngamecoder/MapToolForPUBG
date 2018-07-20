@@ -192,7 +192,7 @@ void ImGuizmoManager::ContainObject()
             || i == 21  //PoliceStation,
             || i == 22  //wareHouse_A
             || i == 23  //WareHouse_B,
-
+            || i == 1
             ////Exterior
 
             //////- BrokenVehicle
