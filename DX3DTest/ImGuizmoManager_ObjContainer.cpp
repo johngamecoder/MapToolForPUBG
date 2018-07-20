@@ -209,24 +209,24 @@ void ImGuizmoManager::ContainObject()
             || i == 34//ContainerSmall_1,
             || i == 35//ContainerSmall_2,
 
-            //////- HayBale
-            //|| i == 36//HeyBale_1,
-            //|| i == 37//HeyBale_2,
+            ////- HayBale (사용함)
+            || i == 36//HayBale_1,
+            || i == 37//HayBale_2,
 
-            ////////- MetalBarrel
-            //|| i == 38//MetalBarrel_Blue,
-            //|| i == 39//MetalBarrel_Gray,
-            //|| i == 40//MetalBarrel_Green,
-            //|| i == 41//MetalBarrel_Red,
+            //////- MetalBarrel (사용함)
+            || i == 38//MetalBarrel_Blue,
+            || i == 39//MetalBarrel_Gray,
+            || i == 40//MetalBarrel_Green,
+            || i == 41//MetalBarrel_Red,
 
-            //////- MetalFence
-            //|| i == 42//MetalFence_A,
-            //|| i == 43//MetalFence_Long,
+            ////- metalfence
+            || i == 42//metalfence_a,
+            || i == 43//metalfence_long,
 
-            //////- PicketFence
-            //|| i == 44//PicketFence_Short_A,
-            //|| i == 45//PicketFence_Short_B,
-            //|| i == 46//PicketFence_Short_C,
+            ////- PicketFence
+            || i == 44//PicketFence_Short_A,
+            || i == 45//PicketFence_Short_B,
+            || i == 46//PicketFence_Short_C,
             
             ////- Powerline 전보대
             //|| i == 47  //Powerline_1,
@@ -243,10 +243,11 @@ void ImGuizmoManager::ContainObject()
             ////- Silo   (사용함)
             || i == 53  //Silo_A,
             || i == 54  //Silo_B,
+            || i == 56  //Lighthouse,
 
-            //////- Etc
+            ////////- Etc
             //|| i == 55  //CityStreetSign,
-            //|| i == 56  //Lighthouse,
+            //
             //|| i == 57  //MetalShelf,
             //|| i == 58  //TableSet,
             //|| i == 59  //Tower,

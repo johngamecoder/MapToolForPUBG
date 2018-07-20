@@ -47,13 +47,17 @@ void SceneMapTool::Init()
     D3DXMatrixTranslation(&matT, 0.0f, 0.0f, 0.0f);
     matWorld = matS * matT;
 
+    //m_pHeightMap = new HeightMap;
+    //m_pHeightMap->SetDimension(256);
+    //m_pHeightMap->Load(_T("./Resource/heightmap/testing/HeightMap.raw"), &matWorld);
+    //m_pHeightMap->SetMtlTex(D3DMATERIAL9(DXUtil::WHITE_MTRL),
+    //    TextureManager::Get()->GetTexture(_T("./Resource/heightmap/terrain.jpg")));
+
     m_pHeightMap = new HeightMap;
     m_pHeightMap->SetDimension(256);
-    m_pHeightMap->Load(_T("./Resource/heightmap/testing/HeightMap.raw"), &matWorld);
+    m_pHeightMap->Load(_T("./Resource/heightmap/testing/HeightMap_128.raw"), &matWorld);
     m_pHeightMap->SetMtlTex(D3DMATERIAL9(DXUtil::WHITE_MTRL),
-        TextureManager::Get()->GetTexture(_T("./Resource/heightmap/terrain.jpg")));
-
-
+        TextureManager::Get()->GetTexture(_T("./Resource/heightmap/terrain.jpg"/*testing/HeightMap.png"*/)));
 
 
     /*
