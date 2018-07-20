@@ -2,6 +2,9 @@
 #include "ImGuizmoManager.h"
 #include <stdio.h>
 #include <sstream>
+#include <iostream>
+#include <chrono>
+#include <ctime>
 //#include "BoxCollider.h"
 
 void ImGuizmoManager::MenuBarImGui()
@@ -42,8 +45,41 @@ void ImGuizmoManager::MenuBarImGui()
             string fileName = "../../TeamAvengers_PUBG/PUBG/Client/Resource/save.txt";
             SaveScene(fileName);
             
-            string backup = "./Resource/SaveBackUp/save.txt";
-            SaveScene(backup);
+
+
+
+
+            
+            //혹시 몰라서 마지막 백업을 해놓았다
+            string backupPath = "./Resource/SaveBackUp/UpdateBackup/";
+
+            time_t now_time;
+            char buf[256];
+            time(&now_time); //현재 초 단위 시간을 측정
+            ctime_s(buf, sizeof(buf), &now_time);
+            
+            stringstream ss;
+            ss.str(buf);
+
+            string namePath , buffer;
+            while (ss)
+            {
+                ss >> buffer;
+                namePath += buffer;
+            }
+            
+            stringstream ss2;
+            ss2.str(namePath);
+            string token;
+            string addup;
+            while (getline(ss2, token,':'))
+            {
+                addup += token;
+            }
+
+            backupPath += addup;
+            backupPath += ".txt";
+            SaveScene(backupPath);
         }
         if (ImGui::MenuItem("Save As.."))
         {

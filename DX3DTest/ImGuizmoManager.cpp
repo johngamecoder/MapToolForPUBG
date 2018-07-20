@@ -485,10 +485,6 @@ void ImGuizmoManager::ObjectLoaderButton(char* ComboList[], int selectedCombo)
                     hierarchySelectedObjIndex = m_mapObject.size() - 1;
                     bLoadButton = false;
                     bAlreadyHaveName = false;
-
-                    //혹시 몰라서 마지막 백업을 해놓았다
-                    string backup = "./Resource/SaveBackUp/UpdateBackup/updateSave.txt";
-                    SaveScene(backup);
                 }
                 else
                 {
