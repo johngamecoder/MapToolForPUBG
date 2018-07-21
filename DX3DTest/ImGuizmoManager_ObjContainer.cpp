@@ -183,50 +183,50 @@ void ImGuizmoManager::ContainObject()
     {
         if (
             //buildings (사용함)
-             i == 15    //AbandonedTownHall,
-            || i == 16  //church
-            || i == 17  //Museum,
-            || i == 18  //OldWoodenShed_1,
-            || i == 19  //OldWoodenShed_2,
-            || i == 20  //OldWoodenShed_3,
-            || i == 21  //PoliceStation,
-            || i == 22  //wareHouse_A
-            || i == 23  //WareHouse_B,
+             i == 15    //AbandonedTownHall
+            || i == 16  //Church
+            || i == 17  //Museum
+            || i == 18  //OldWoodenShed_1
+            || i == 19  //OldWoodenShed_2
+            || i == 20  //OldWoodenShed_3
+            || i == 21  //PoliceStation
+            || i == 22  //WareHouse_A
+            || i == 23  //WareHouse_B
             || i == 1
             ////Exterior
 
             //////- BrokenVehicle
-            //|| i == 26//BrokenBus,
-            //|| i == 27//BrokenCar,
-            //|| i == 28//BrokenMeshTruck,
-            //|| i == 29//BrokenPoliceCar,
-            //|| i == 30//BrokenTractorGunnyBag,
-            //|| i == 31//BrokenUaz3151,
+            //|| i == 26//BrokenBus
+            //|| i == 27//BrokenCar
+            //|| i == 28//BrokenMeshTruck
+            //|| i == 29//BrokenPoliceCar
+            //|| i == 30//BrokenTractorGunnyBag
+            //|| i == 31//BrokenUaz3151
             
             ////-Container (사용함)
-            || i == 32//ContainerBox_A,
-            || i == 33//ContainerBox_B,
-            || i == 34//ContainerSmall_1,
-            || i == 35//ContainerSmall_2,
+            || i == 32//ContainerBox_A
+            || i == 33//ContainerBox_B
+            || i == 34//ContainerSmall_1
+            || i == 35//ContainerSmall_2
 
             ////- HayBale (사용함)
-            || i == 36//HayBale_1,
-            || i == 37//HayBale_2,
+            || i == 36//HayBale_1
+            || i == 37//HayBale_2
 
-            //////- MetalBarrel (사용함)
-            || i == 38//MetalBarrel_Blue,
-            || i == 39//MetalBarrel_Gray,
-            || i == 40//MetalBarrel_Green,
-            || i == 41//MetalBarrel_Red,
+            ////////- MetalBarrel 
+            //|| i == 38//MetalBarrel_Blue
+            //|| i == 39//MetalBarrel_Gray
+            //|| i == 40//MetalBarrel_Green
+            //|| i == 41//MetalBarrel_Red
 
-            ////- metalfence
-            || i == 42//metalfence_a,
-            || i == 43//metalfence_long,
+            //////- metalfence
+            //|| i == 42//metalfence_a
+            //|| i == 43//metalfence_long
 
-            ////- PicketFence
-            || i == 44//PicketFence_Short_A,
-            || i == 45//PicketFence_Short_B,
-            || i == 46//PicketFence_Short_C,
+            //////- PicketFence
+            //|| i == 44//PicketFence_Short_A
+            //|| i == 45//PicketFence_Short_B
+            //|| i == 46//PicketFence_Short_C
             
             ////- Powerline 전보대
             //|| i == 47  //Powerline_1,
@@ -241,9 +241,9 @@ void ImGuizmoManager::ContainObject()
             //|| i == 52  //Sandbag_2,
 
             ////- Silo   (사용함)
-            || i == 53  //Silo_A,
-            || i == 54  //Silo_B,
-            || i == 56  //Lighthouse,
+            || i == 53  //Silo_A
+            || i == 54  //Silo_B
+            || i == 56  //Lighthouse
 
             ////////- Etc
             //|| i == 55  //CityStreetSign,

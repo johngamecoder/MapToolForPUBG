@@ -41,7 +41,7 @@ void SceneMapTool::Init()
     ////---------------------------------------------------------
 
 
-    //Real map
+    //New map
     D3DXMATRIXA16 matS, matT, matWorld;
     D3DXMatrixScaling(&matS, 100.0f, 50.0f, 100.0f);
     D3DXMatrixTranslation(&matT, 0.0f, 0.0f, 0.0f);
