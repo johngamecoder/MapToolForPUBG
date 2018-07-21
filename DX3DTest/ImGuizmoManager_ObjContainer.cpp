@@ -165,25 +165,15 @@ void ImGuizmoManager::ConstructComboObjectList()
 }
 void ImGuizmoManager::ContainObject()
 {  
-    ////---testing 용 code-------------
-    //m_vecObjectContainer.resize(LOADCOUNT);
-    //pair<string, string> PATHnNAME;
-    //PATHnNAME = ResPathFileName::Get(static_cast<TAG_RES_STATIC>(9));
-    //m_vecObjectContainer[0] = new PUBG_Object(PATHnNAME.first, PATHnNAME.second);
-    //m_vecObjectContainer[0]->Init();
-    //m_mapObjCount.emplace(static_cast<TAG_RES_STATIC>(9), 0);
-    //PATHnNAME = ResPathFileName::Get(static_cast<TAG_RES_STATIC>(16));
-    //m_vecObjectContainer[1] = new PUBG_Object(PATHnNAME.first, PATHnNAME.second);
-    //m_vecObjectContainer[1]->Init();
-    //m_mapObjCount.emplace(static_cast<TAG_RES_STATIC>(16), 0);
-
     //------ 실제 사용할 코드! 지우지 마삼! -------------------
     pair<string, string> PATHnNAME;
     for (int i = 0; i < static_cast<int>(TAG_RES_STATIC::COUNT); i++)
     {
         if (
+            i == 1      //5탄, scale을 위해 사용
+            
             //buildings (사용함)
-             i == 15    //AbandonedTownHall
+            || i == 15    //AbandonedTownHall
             || i == 16  //Church
             || i == 17  //Museum
             || i == 18  //OldWoodenShed_1
@@ -192,7 +182,7 @@ void ImGuizmoManager::ContainObject()
             || i == 21  //PoliceStation
             || i == 22  //WareHouse_A
             || i == 23  //WareHouse_B
-            || i == 1
+            
             ////Exterior
 
             //////- BrokenVehicle
@@ -251,6 +241,28 @@ void ImGuizmoManager::ContainObject()
             //|| i == 57  //MetalShelf,
             //|| i == 58  //TableSet,
             //|| i == 59  //Tower,
+
+            //////Vegetation
+            //////- Bush
+            //|| i == 61//DeadGrass
+            //|| i == 62//Dogwood
+
+            //////- Grass
+            //|| i == 63//Grass_1
+            //|| i == 64//Grass_2
+
+            //////- Rock
+            //|| i == 65//Desert_Cover_Rock_Combine_1
+            //|| i == 66//Desert_Cover_Rock_Combine_2
+            //|| i == 67//Desert_Mashup
+            //|| i == 68//Rock_1
+            //|| i == 69//Rock_2
+            //
+            //////- Tree
+            //|| i == 70//AlaskaCedar
+            //|| i == 71//AmericanElem
+            //|| i == 72//LondonPlane
+
             )
         {
             PATHnNAME = ResourceInfo::GetPathFileName(static_cast<TAG_RES_STATIC>(i));
