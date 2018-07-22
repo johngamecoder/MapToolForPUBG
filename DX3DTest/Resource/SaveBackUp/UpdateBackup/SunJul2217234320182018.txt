@@ -1,4 +1,4 @@
-./Resource/SaveBackUp/save.txt
+./Resource/SaveBackUp/UpdateBackup/SunJul2217234320182018.txt
 Num of Object 29
 {
 	1
@@ -17,7 +17,7 @@ Num of Object 29
 {
 	16
 	Church (1)
-	12800.000000 5800.000000 12800.000000
+	12800.000000 4950.000000 12800.000000
 	0.000000 -89.999947 0.000000
 	0.999990 0.999982 1.000000
 }
