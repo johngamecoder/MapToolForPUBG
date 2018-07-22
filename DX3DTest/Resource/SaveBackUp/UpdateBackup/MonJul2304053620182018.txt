@@ -1,4 +1,4 @@
-./Resource/SaveBackUp/save.txt
+./Resource/SaveBackUp/UpdateBackup/MonJul2304053620182018.txt
 Num of Object 53
 {
 	1
@@ -105,7 +105,7 @@ Num of Object 53
 {
 	26
 	BrokenBus (1)
-	15955.688477 4738.485840 18650.189453
+	15270.085938 4749.192871 18841.476563
 	0.000000 30.658983 0.000000
 	1.000000 1.000000 1.000000
 }
