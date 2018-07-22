@@ -203,15 +203,15 @@ void ImGuizmoManager::ContainObject()
             || i == 36//HayBale_1
             || i == 37//HayBale_2
 
-            ////////- MetalBarrel (우리_사용예정)
-            || i == 38//MetalBarrel_Blue
-            || i == 39//MetalBarrel_Gray
-            || i == 40//MetalBarrel_Green
-            || i == 41//MetalBarrel_Red
+            ////////- MetalBarrel
+            //|| i == 38//MetalBarrel_Blue
+            //|| i == 39//MetalBarrel_Gray
+            //|| i == 40//MetalBarrel_Green
+            //|| i == 41//MetalBarrel_Red
 
             //////- metalfence
-            || i == 42//metalfence_a
-            || i == 43//metalfence_long
+            //|| i == 42//metalfence_a
+            //|| i == 43//metalfence_long
 
             //////- PicketFence (우리_사용함)
             || i == 44//PicketFence_Short_A
@@ -238,7 +238,7 @@ void ImGuizmoManager::ContainObject()
             ////////- Etc
             || i == 55  //CityStreetSign,
             //
-            //|| i == 57  //MetalShelf,
+            //|| i == 57 //MetalShelf,
             || i == 58  //TableSet, (우리_사용함)
             || i == 59  //Tower,    (우리_사용함)
 
