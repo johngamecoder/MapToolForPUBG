@@ -60,7 +60,7 @@ void Camera::Update()
     if (*m_operation != ImGuizmo::NOTSELECTED)
     {
         //스크롤링으로 m_eye 위치를 바꾸는 부분
-        m_distance -= pMouse->GetDeltaPosition().z*2.0f;
+        m_distance -= pMouse->GetDeltaPosition().z/**2.0f*/;
     }
     
 
