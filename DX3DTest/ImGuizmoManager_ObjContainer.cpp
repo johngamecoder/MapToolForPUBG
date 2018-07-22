@@ -203,20 +203,20 @@ void ImGuizmoManager::ContainObject()
             || i == 36//HayBale_1
             || i == 37//HayBale_2
 
-            //////- MetalBarrel 
-            || i == 38//MetalBarrel_Blue
-            || i == 39//MetalBarrel_Gray
-            || i == 40//MetalBarrel_Green
-            || i == 41//MetalBarrel_Red
+            ////////- MetalBarrel 
+            //|| i == 38//MetalBarrel_Blue
+            //|| i == 39//MetalBarrel_Gray
+            //|| i == 40//MetalBarrel_Green
+            //|| i == 41//MetalBarrel_Red
 
-            ////- metalfence
-            || i == 42//metalfence_a
-            || i == 43//metalfence_long
+            //////- metalfence
+            //|| i == 42//metalfence_a
+            //|| i == 43//metalfence_long
 
-            ////- PicketFence
-            || i == 44//PicketFence_Short_A
-            || i == 45//PicketFence_Short_B
-            || i == 46//PicketFence_Short_C
+            //////- PicketFence
+            //|| i == 44//PicketFence_Short_A
+            //|| i == 45//PicketFence_Short_B
+            //|| i == 46//PicketFence_Short_C
             
             ////- Powerline Àüº¸´ë
             //|| i == 47  //Powerline_1,
