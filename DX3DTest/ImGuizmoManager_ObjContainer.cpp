@@ -173,7 +173,7 @@ void ImGuizmoManager::ContainObject()
             i == 1      //5탄, scale을 위해 사용
             
             //buildings (사용함)
-            || i == 15    //AbandonedTownHall
+            || i == 15  //AbandonedTownHall
             || i == 16  //Church
             || i == 17  //Museum
             || i == 18  //OldWoodenShed_1
@@ -190,7 +190,7 @@ void ImGuizmoManager::ContainObject()
             //|| i == 27//BrokenCar
             //|| i == 28//BrokenMeshTruck
             //|| i == 29//BrokenPoliceCar
-            //|| i == 30//BrokenTractorGunnyBag
+            || i == 30//BrokenTractorGunnyBag (우리_사용함)
             //|| i == 31//BrokenUaz3151
             
             ////-Container (사용함)
@@ -213,12 +213,12 @@ void ImGuizmoManager::ContainObject()
             //|| i == 42//metalfence_a
             //|| i == 43//metalfence_long
 
-            //////- PicketFence
-            //|| i == 44//PicketFence_Short_A
-            //|| i == 45//PicketFence_Short_B
-            //|| i == 46//PicketFence_Short_C
+            //////- PicketFence (우리_사용함)
+            || i == 44//PicketFence_Short_A
+            || i == 45//PicketFence_Short_B
+            || i == 46//PicketFence_Short_C
             
-            ////- Powerline 전보대
+            ////- Powerline 전봇대
             //|| i == 47  //Powerline_1,
             //|| i == 48  //Powerline_2,
 
@@ -226,9 +226,9 @@ void ImGuizmoManager::ContainObject()
             //|| i == 49  //RadioTower_1,
             //|| i == 50  //RadioTower_2,
 
-            //////- SandBag
-            //|| i == 51  //Sandbag_1,
-            //|| i == 52  //Sandbag_2,
+            //////- SandBag (우리_사용함)
+            || i == 51  //Sandbag_1,
+            || i == 52  //Sandbag_2,
 
             ////- Silo   (사용함)
             || i == 53  //Silo_A
@@ -239,17 +239,17 @@ void ImGuizmoManager::ContainObject()
             //|| i == 55  //CityStreetSign,
             //
             //|| i == 57  //MetalShelf,
-            //|| i == 58  //TableSet,
+            || i == 58  //TableSet, (우리_사용함)
             //|| i == 59  //Tower,
 
             //////Vegetation
-            //////- Bush
-            //|| i == 61//DeadGrass
-            //|| i == 62//Dogwood
+            //////- Bush (우리_사용함)
+            || i == 61//DeadGrass
+            || i == 62//Dogwood
 
-            //////- Grass
-            //|| i == 63//Grass_1
-            //|| i == 64//Grass_2
+            //////- Grass (우리_사용함)
+            || i == 63//Grass_1
+            || i == 64//Grass_2
 
             //////- Rock
             //|| i == 65//Desert_Cover_Rock_Combine_1
@@ -258,10 +258,10 @@ void ImGuizmoManager::ContainObject()
             //|| i == 68//Rock_1
             //|| i == 69//Rock_2
             //
-            //////- Tree
-            //|| i == 70//AlaskaCedar
-            //|| i == 71//AmericanElem
-            //|| i == 72//LondonPlane
+            //////- Tree (우리_사용함)
+            || i == 70//AlaskaCedar
+            || i == 71//AmericanElem
+            || i == 72//LondonPlane
 
             )
         {
