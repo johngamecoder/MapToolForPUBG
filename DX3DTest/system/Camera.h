@@ -80,6 +80,21 @@ public:
         return downDir;
     }
 
+    D3DXVECTOR3 getFront()
+    {
+        D3DXVECTOR3 frontDir = D3DXVECTOR3(0.0f, 0.0f, 1.0f);
+        D3DXVec3TransformCoord(&frontDir, &frontDir, &m_matRot);
+        D3DXVec3Normalize(&frontDir, &frontDir);
+        return frontDir;
+    }
+    D3DXVECTOR3 getBack()
+    {
+        D3DXVECTOR3 backDir = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
+        D3DXVec3TransformCoord(&backDir, &backDir, &m_matRot);
+        D3DXVec3Normalize(&backDir, &backDir);
+        return backDir;
+    }
+
 
 	void Init();
 	void Update();
