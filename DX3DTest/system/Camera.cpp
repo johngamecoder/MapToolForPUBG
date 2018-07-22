@@ -1,3 +1,4 @@
+
 #include "stdAfx.h"
 #include "Camera.h"
 
@@ -59,7 +60,7 @@ void Camera::Update()
     if (*m_operation != ImGuizmo::NOTSELECTED)
     {
         //스크롤링으로 m_eye 위치를 바꾸는 부분
-        m_distance -= pMouse->GetDeltaPosition().z*10.0f;
+        m_distance -= pMouse->GetDeltaPosition().z/**2.0f*/;
     }
     
 
@@ -69,6 +70,8 @@ void Camera::Update()
     {
         PressFtoMovetoTarget();
     }
+
+
 
 
     bool isAltKeyPressed = pKeyboard->KeyPress(VK_MENU);
@@ -99,7 +102,7 @@ void Camera::Update()
             {
 
 
-                const float factor = 100.0f;
+                const float factor = 10.0f;
 
 
                 //screen Y 축
@@ -135,6 +138,33 @@ void Camera::Update()
     D3DXVec3TransformCoord(&m_eye, &m_eye, &m_matRot);
 
     m_SavedLookAt += m_moveDir;
+
+    const float factor = 10.0f;
+    if (pKeyboard->KeyPress('I'))
+    {
+        m_SavedLookAt += getUp()*factor;;
+    }
+    if (pKeyboard->KeyPress('K'))
+    {
+        m_SavedLookAt += getDown()*factor;
+    }
+    if (pKeyboard->KeyPress('J'))
+    {
+        m_SavedLookAt += getLeft()*factor;;
+    }
+    if (pKeyboard->KeyPress('L'))
+    {
+        m_SavedLookAt += getRight()*factor;
+    }
+    if (pKeyboard->KeyPress('U'))
+    {
+        m_SavedLookAt += getFront()*factor;
+    }
+    if (pKeyboard->KeyPress('O'))
+    {
+        m_SavedLookAt += getBack()*factor;
+    }
+
 
     m_eye = m_SavedLookAt + m_eye;
 

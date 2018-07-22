@@ -175,11 +175,11 @@ void ImGuizmoManager::ContainObject()
             //buildings (사용함)
             || i == 15  //AbandonedTownHall
             || i == 16  //Church
-            || i == 17  //Museum
+            //|| i == 17  //Museum
             || i == 18  //OldWoodenShed_1
             || i == 19  //OldWoodenShed_2
             || i == 20  //OldWoodenShed_3
-            || i == 21  //PoliceStation
+            //|| i == 21  //PoliceStation
             || i == 22  //WareHouse_A
             || i == 23  //WareHouse_B
             
@@ -227,8 +227,8 @@ void ImGuizmoManager::ContainObject()
             || i == 50  //RadioTower_2,
 
             //////- SandBag (우리_사용함)
-            || i == 51  //Sandbag_1,
-            || i == 52  //Sandbag_2,
+            || i == 51  //Sandbag_1
+            || i == 52  //Sandbag_2
 
             ////- Silo   (사용함)
             || i == 53  //Silo_A
