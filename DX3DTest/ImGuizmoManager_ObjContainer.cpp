@@ -175,11 +175,11 @@ void ImGuizmoManager::ContainObject()
             //buildings (사용함)
             || i == 15  //AbandonedTownHall
             || i == 16  //Church
-            || i == 17  //Museum
+            //|| i == 17  //Museum
             || i == 18  //OldWoodenShed_1
             || i == 19  //OldWoodenShed_2
             || i == 20  //OldWoodenShed_3
-            || i == 21  //PoliceStation
+            //|| i == 21  //PoliceStation
             || i == 22  //WareHouse_A
             || i == 23  //WareHouse_B
             
@@ -219,16 +219,16 @@ void ImGuizmoManager::ContainObject()
             || i == 46//PicketFence_Short_C
             
             ////- Powerline 전봇대
-            //|| i == 47  //Powerline_1,
-            //|| i == 48  //Powerline_2,
+            //|| i == 47  //Powerline_1
+            //|| i == 48  //Powerline_2
 
             ////- RadioTower
-            //|| i == 49  //RadioTower_1,
-            //|| i == 50  //RadioTower_2,
+            //|| i == 49  //RadioTower_1
+            //|| i == 50  //RadioTower_2
 
             //////- SandBag (우리_사용함)
-            || i == 51  //Sandbag_1,
-            || i == 52  //Sandbag_2,
+            || i == 51  //Sandbag_1
+            || i == 52  //Sandbag_2
 
             ////- Silo   (사용함)
             || i == 53  //Silo_A
@@ -236,11 +236,11 @@ void ImGuizmoManager::ContainObject()
             || i == 56  //Lighthouse
 
             ////////- Etc
-            //|| i == 55  //CityStreetSign,
+            //|| i == 55  //CityStreetSign
             //
-            //|| i == 57  //MetalShelf,
-            || i == 58  //TableSet, (우리_사용함)
-            //|| i == 59  //Tower,
+            //|| i == 57  //MetalShelf
+            || i == 58  //TableSet (우리_사용함)
+            //|| i == 59  //Tower
 
             //////Vegetation
             //////- Bush (우리_사용함)
