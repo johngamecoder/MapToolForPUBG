@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "SceneManager.h"
 #include "./scene/SceneGrid.h"
-#include "./scene/SceneObjMap.h"
 #include "./scene/SceneHeightmap.h"
 #include "./scene/SceneTest.h"
 #include "SceneMapTool.h"

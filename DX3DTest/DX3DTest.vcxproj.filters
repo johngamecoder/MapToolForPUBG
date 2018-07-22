@@ -141,9 +141,6 @@
     <ClInclude Include="scene\SceneHeightmap.h">
       <Filter>Source Files\4.Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="scene\SceneObjMap.h">
-      <Filter>Source Files\4.Scenes</Filter>
-    </ClInclude>
     <ClInclude Include="scene\SceneTest.h">
       <Filter>Source Files\4.Scenes</Filter>
     </ClInclude>
@@ -366,9 +363,6 @@
       <Filter>Source Files\4.Scenes</Filter>
     </ClCompile>
     <ClCompile Include="scene\SceneHeightmap.cpp">
-      <Filter>Source Files\4.Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="scene\SceneObjMap.cpp">
       <Filter>Source Files\4.Scenes</Filter>
     </ClCompile>
     <ClCompile Include="scene\SceneTest.cpp">

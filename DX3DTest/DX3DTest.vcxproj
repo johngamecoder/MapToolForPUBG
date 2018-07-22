@@ -226,7 +226,6 @@
     <ClInclude Include="SceneMapTool.h" />
     <ClInclude Include="scene\SceneGrid.h" />
     <ClInclude Include="scene\SceneHeightmap.h" />
-    <ClInclude Include="scene\SceneObjMap.h" />
     <ClInclude Include="scene\SceneTest.h" />
     <ClInclude Include="stb_rect_pack.h" />
     <ClInclude Include="stb_textedit.h" />
@@ -318,7 +317,6 @@
     <ClCompile Include="SceneMapTool.cpp" />
     <ClCompile Include="scene\SceneGrid.cpp" />
     <ClCompile Include="scene\SceneHeightmap.cpp" />
-    <ClCompile Include="scene\SceneObjMap.cpp" />
     <ClCompile Include="scene\SceneTest.cpp" />
     <ClCompile Include="system\Camera.cpp" />
     <ClCompile Include="System\Debug.cpp" />
