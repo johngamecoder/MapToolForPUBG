@@ -49,9 +49,6 @@ void ImGuizmoManager::MenuBarImGui()
             fileName = "./Resource/SaveBackUp/save.txt";
             SaveScene(fileName);
 
-
-
-            
             //혹시 몰라서 마지막 백업을 해놓았다
             string backupPath = "./Resource/SaveBackUp/UpdateBackup/";
 
