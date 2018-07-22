@@ -186,7 +186,7 @@ void ImGuizmoManager::ContainObject()
             ////Exterior
 
             //////- BrokenVehicle
-            //|| i == 26//BrokenBus
+            || i == 26//BrokenBus (우리_사용함)
             //|| i == 27//BrokenCar
             //|| i == 28//BrokenMeshTruck
             //|| i == 29//BrokenPoliceCar
@@ -219,12 +219,12 @@ void ImGuizmoManager::ContainObject()
             || i == 46//PicketFence_Short_C
             
             ////- Powerline 전봇대
-            //|| i == 47  //Powerline_1,
-            //|| i == 48  //Powerline_2,
+            || i == 47  //Powerline_1,
+            || i == 48  //Powerline_2,
 
             ////- RadioTower
-            //|| i == 49  //RadioTower_1,
-            //|| i == 50  //RadioTower_2,
+            || i == 49  //RadioTower_1,
+            || i == 50  //RadioTower_2,
 
             //////- SandBag (우리_사용함)
             || i == 51  //Sandbag_1,
@@ -236,11 +236,11 @@ void ImGuizmoManager::ContainObject()
             || i == 56  //Lighthouse
 
             ////////- Etc
-            //|| i == 55  //CityStreetSign,
+            || i == 55  //CityStreetSign,
             //
             //|| i == 57  //MetalShelf,
             || i == 58  //TableSet, (우리_사용함)
-            //|| i == 59  //Tower,
+            || i == 59  //Tower,    (우리_사용함)
 
             //////Vegetation
             //////- Bush (우리_사용함)
@@ -252,11 +252,11 @@ void ImGuizmoManager::ContainObject()
             || i == 64//Grass_2
 
             //////- Rock
-            //|| i == 65//Desert_Cover_Rock_Combine_1
-            //|| i == 66//Desert_Cover_Rock_Combine_2
+            || i == 65//Desert_Cover_Rock_Combine_1
+            || i == 66//Desert_Cover_Rock_Combine_2
             //|| i == 67//Desert_Mashup
-            //|| i == 68//Rock_1
-            //|| i == 69//Rock_2
+            || i == 68//Rock_1
+            || i == 69//Rock_2
             //
             //////- Tree (우리_사용함)
             || i == 70//AlaskaCedar
