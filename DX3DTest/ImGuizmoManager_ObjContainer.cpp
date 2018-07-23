@@ -219,12 +219,12 @@ void ImGuizmoManager::ContainObject()
             || i == 46//PicketFence_Short_C
             
             ////- Powerline 전봇대 (우리_사용함)
-            || i == 47  //Powerline_1,
-            || i == 48  //Powerline_2,
+            || i == 47  //Powerline_1
+            || i == 48  //Powerline_2
 
             ////- RadioTower (우리_사용함)
-            || i == 49  //RadioTower_1,
-            || i == 50  //RadioTower_2,
+            || i == 49  //RadioTower_1
+            || i == 50  //RadioTower_2
 
             //////- SandBag (우리_사용함)
             || i == 51  //Sandbag_1
