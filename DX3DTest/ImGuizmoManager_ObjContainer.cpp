@@ -179,7 +179,7 @@ void ImGuizmoManager::ContainObject()
             || i == 18  //OldWoodenShed_1
             || i == 19  //OldWoodenShed_2
             || i == 20  //OldWoodenShed_3
-            //|| i == 21  //PoliceStation
+            || i == 21  //PoliceStation - 집인데 편의상 경찰서로
             || i == 22  //WareHouse_A
             || i == 23  //WareHouse_B
             
@@ -204,14 +204,14 @@ void ImGuizmoManager::ContainObject()
             || i == 37//HayBale_2
 
             ////////- MetalBarrel
-            //|| i == 38//MetalBarrel_Blue
-            //|| i == 39//MetalBarrel_Gray
-            //|| i == 40//MetalBarrel_Green
-            //|| i == 41//MetalBarrel_Red
+            || i == 38//MetalBarrel_Blue
+            || i == 39//MetalBarrel_Gray
+            || i == 40//MetalBarrel_Green
+            || i == 41//MetalBarrel_Red
 
             //////- metalfence
-            //|| i == 42//metalfence_a
-            //|| i == 43//metalfence_long
+            || i == 42//metalfence_a
+            || i == 43//metalfence_long
 
             //////- PicketFence (우리_사용함)
             || i == 44//PicketFence_Short_A
@@ -238,7 +238,7 @@ void ImGuizmoManager::ContainObject()
             ////////- Etc
             || i == 55  //CityStreetSign,
             //
-            //|| i == 57 //MetalShelf,
+            || i == 57  //MetalShelf,
             || i == 58  //TableSet, (우리_사용함)
             || i == 59  //Tower,    (우리_사용함)
 
