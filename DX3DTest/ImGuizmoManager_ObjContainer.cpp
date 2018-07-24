@@ -173,13 +173,13 @@ void ImGuizmoManager::ContainObject()
             i == 1      //5탄, scale을 위해 사용
             
             //buildings (사용함)
-            || i == 15  //AbandonedTownHall
+            //|| i == 15  //AbandonedTownHall
             || i == 16  //Church
-            //|| i == 17  //Museum
+            || i == 17  //Museum
             || i == 18  //OldWoodenShed_1
             || i == 19  //OldWoodenShed_2
             || i == 20  //OldWoodenShed_3
-            //|| i == 21  //PoliceStation
+            || i == 21  //PoliceStation
             || i == 22  //WareHouse_A
             || i == 23  //WareHouse_B
             
