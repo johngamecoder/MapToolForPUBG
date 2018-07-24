@@ -173,9 +173,9 @@ void ImGuizmoManager::ContainObject()
             i == 1      //5탄, scale을 위해 사용
             
             //buildings (사용함)
-            || i == 15  //AbandonedTownHall
+            //|| i == 15  //AbandonedTownHall
             || i == 16  //Church
-            //|| i == 17  //Museum
+            || i == 17  //Museum - 지붕없는 집인데 편의상 뮤지엄으로
             || i == 18  //OldWoodenShed_1
             || i == 19  //OldWoodenShed_2
             || i == 20  //OldWoodenShed_3
@@ -184,6 +184,8 @@ void ImGuizmoManager::ContainObject()
             || i == 23  //WareHouse_B
             
             ////Exterior
+            || i == 24  //AmmoBox_1
+            || i == 25  //AmmoBox_2
 
             //////- BrokenVehicle
             || i == 26//BrokenBus (우리_사용함)
@@ -210,8 +212,8 @@ void ImGuizmoManager::ContainObject()
             || i == 41//MetalBarrel_Red
 
             //////- metalfence
-            || i == 42//metalfence_a
-            || i == 43//metalfence_long
+            //|| i == 42//metalfence_a
+            //|| i == 43//metalfence_long
 
             //////- PicketFence (우리_사용함)
             || i == 44//PicketFence_Short_A
@@ -237,7 +239,7 @@ void ImGuizmoManager::ContainObject()
 
             ////////- Etc
             || i == 55  //CityStreetSign,
-            //
+            
             || i == 57  //MetalShelf,
             || i == 58  //TableSet, (우리_사용함)
             || i == 59  //Tower,    (우리_사용함)
