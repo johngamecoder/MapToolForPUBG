@@ -189,7 +189,7 @@ void ImGuizmoManager::ContainObject()
 
             //////- BrokenVehicle
             || i == 26//BrokenBus (우리_사용함)
-            //|| i == 27//BrokenCar
+            || i == 27//BrokenCar
             //|| i == 28//BrokenMeshTruck
             //|| i == 29//BrokenPoliceCar
             || i == 30//BrokenTractorGunnyBag (우리_사용함)
@@ -242,7 +242,7 @@ void ImGuizmoManager::ContainObject()
             
             || i == 57  //MetalShelf,
             || i == 58  //TableSet, (우리_사용함)
-            || i == 59  //Tower,    (우리_사용함)
+            //|| i == 59  //Tower,
 
             //////Vegetation
             //////- Bush (우리_사용함)
@@ -254,8 +254,8 @@ void ImGuizmoManager::ContainObject()
             || i == 64//Grass_2
 
             //////- Rock
-            || i == 65//Desert_Cover_Rock_Combine_1
-            || i == 66//Desert_Cover_Rock_Combine_2
+            //|| i == 65//Desert_Cover_Rock_Combine_1
+            //|| i == 66//Desert_Cover_Rock_Combine_2
             //|| i == 67//Desert_Mashup - 텍스쳐 쪽 문제 있으니 우선 사용하지 말 것
             || i == 68//Rock_1
             || i == 69//Rock_2
