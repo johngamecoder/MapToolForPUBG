@@ -4,7 +4,7 @@
 #include "PUBG_Object.h"
 
 char* ComboObjectList[static_cast<int>(TAG_RES_STATIC::COUNT)];
-char* ComboTerrainFeaturesList[63];
+char* ComboTerrainFeaturesList[69];
 char* ComboItemsList[13];
 
 void ImGuizmoManager::LoadObjectImGui()
@@ -17,7 +17,7 @@ void ImGuizmoManager::LoadObjectImGui()
         ImGui::RadioButton("Items", &e, 1);
         if (e == 0)
         {
-            ImGui::Combo("", &comboTerrainFeatureSelect, ComboTerrainFeaturesList, 63);
+            ImGui::Combo("", &comboTerrainFeatureSelect, ComboTerrainFeaturesList, 69);
             {
                 ImGui::SameLine();
                 ObjectLoaderButton(ComboTerrainFeaturesList, comboTerrainFeatureSelect);
