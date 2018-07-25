@@ -242,7 +242,7 @@ void ImGuizmoManager::ContainObject()
             
             || i == 57  //MetalShelf,(우리_사용함)
             || i == 58  //TableSet,  (우리_사용함)
-            || i == 59  //Tower,     (우리_사용함)
+            //|| i == 59  //Tower,     (우리_사용함)
 
             //////Vegetation
             //////- Bush (우리_사용함)
