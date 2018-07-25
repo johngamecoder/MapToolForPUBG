@@ -1,4 +1,4 @@
-./Resource/SaveBackUp/save.txt
+./Resource/SaveBackUp/UpdateBackup/WedJul2520093620182018.txt
 Num of Object 107
 {
 	1
@@ -1608,7 +1608,7 @@ Num of Object 107
 	21
 	PoliceStation (1)
 	8000.000000 4501.000000 4500.000000
-	179.999893 0.000005 -179.999893
+	-179.999893 -0.000005 179.999893
 	1.000000 1.000000 1.000000
 }
 {

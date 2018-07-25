@@ -203,7 +203,7 @@ void ImGuizmoManager::ContainObject()
 
             ////- HayBale (사용함)
             || i == 36//HayBale_1
-            || i == 37//HayBale_2
+            //|| i == 37//HayBale_2
 
             ////////- MetalBarrel(우리_사용함)
             || i == 38//MetalBarrel_Blue
@@ -218,7 +218,7 @@ void ImGuizmoManager::ContainObject()
             //////- PicketFence (우리_사용함)
             || i == 44//PicketFence_Short_A
             || i == 45//PicketFence_Short_B
-            || i == 46//PicketFence_Short_C
+            //|| i == 46//PicketFence_Short_C
             
             ////- Powerline 전봇대 (우리_사용함)
             || i == 47  //Powerline_1
@@ -242,7 +242,7 @@ void ImGuizmoManager::ContainObject()
             
             || i == 57  //MetalShelf,(우리_사용함)
             || i == 58  //TableSet,  (우리_사용함)
-            //|| i == 59  //Tower,     (우리_사용함)
+            //|| i == 59  //Tower,
 
             //////Vegetation
             //////- Bush (우리_사용함)
@@ -256,7 +256,7 @@ void ImGuizmoManager::ContainObject()
             //////- Rock
             //|| i == 65//Desert_Cover_Rock_Combine_1
             //|| i == 66//Desert_Cover_Rock_Combine_2
-            //|| i == 67//Desert_Mashup - 텍스쳐 쪽 문제 있으니 사용하지 말 것
+            //|| i == 67//Desert_Mashup
             || i == 68//Rock_1(우리_사용함)
             || i == 69//Rock_2(우리_사용함)
             //
@@ -265,6 +265,14 @@ void ImGuizmoManager::ContainObject()
             || i == 71//AmericanElem
             || i == 72//LondonPlane
 
+            //////Wall이랑 Door추가함
+            || i == 76//Door_InDoor
+            || i == 77//Door_OutDoor
+
+            || i == 78//Wall_1
+            //|| i == 79//Wall_2
+            //|| i == 80//Wall_End
+            || i == 81//Wall_End_Long
             )
         {
             PATHnNAME = ResourceInfo::GetPathFileName(static_cast<TAG_RES_STATIC>(i));

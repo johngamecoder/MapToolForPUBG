@@ -134,9 +134,20 @@ enum class TAG_RES_STATIC
     // SR
     Kar98k,
 
+//Door, Wall
+    //Door
+    Door_InDoor,
+    Door_OutDoor,
+    //Wall
+    Wall_1,
+    Wall_2,
+    Wall_End,
+    Wall_End_Long,
+
 //// Height Map
 //    HeightMap,
-//    
+
+//
     COUNT
 };
 
