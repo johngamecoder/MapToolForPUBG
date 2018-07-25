@@ -184,12 +184,12 @@ void ImGuizmoManager::ContainObject()
             || i == 23  //WareHouse_B
             
             ////Exterior
-            || i == 24  //AmmoBox_1
-            || i == 25  //AmmoBox_2
+            || i == 24  //AmmoBox_1 (우리_사용함)
+            || i == 25  //AmmoBox_2 (우리_사용함)
 
             //////- BrokenVehicle
             || i == 26//BrokenBus (우리_사용함)
-            //|| i == 27//BrokenCar
+            || i == 27//BrokenCar (우리_사용함)
             //|| i == 28//BrokenMeshTruck
             //|| i == 29//BrokenPoliceCar
             || i == 30//BrokenTractorGunnyBag (우리_사용함)
@@ -205,7 +205,7 @@ void ImGuizmoManager::ContainObject()
             || i == 36//HayBale_1
             || i == 37//HayBale_2
 
-            ////////- MetalBarrel
+            ////////- MetalBarrel(우리_사용함)
             || i == 38//MetalBarrel_Blue
             || i == 39//MetalBarrel_Gray
             || i == 40//MetalBarrel_Green
@@ -238,11 +238,11 @@ void ImGuizmoManager::ContainObject()
             || i == 56  //Lighthouse
 
             ////////- Etc
-            || i == 55  //CityStreetSign,
+            || i == 55  //CityStreetSign,(우리_사용함)
             
-            || i == 57  //MetalShelf,
-            || i == 58  //TableSet, (우리_사용함)
-            || i == 59  //Tower,    (우리_사용함)
+            || i == 57  //MetalShelf,(우리_사용함)
+            || i == 58  //TableSet,  (우리_사용함)
+            || i == 59  //Tower,     (우리_사용함)
 
             //////Vegetation
             //////- Bush (우리_사용함)
@@ -254,11 +254,11 @@ void ImGuizmoManager::ContainObject()
             || i == 64//Grass_2
 
             //////- Rock
-            || i == 65//Desert_Cover_Rock_Combine_1
-            || i == 66//Desert_Cover_Rock_Combine_2
-            //|| i == 67//Desert_Mashup - 텍스쳐 쪽 문제 있으니 우선 사용하지 말 것
-            || i == 68//Rock_1
-            || i == 69//Rock_2
+            //|| i == 65//Desert_Cover_Rock_Combine_1
+            //|| i == 66//Desert_Cover_Rock_Combine_2
+            //|| i == 67//Desert_Mashup - 텍스쳐 쪽 문제 있으니 사용하지 말 것
+            || i == 68//Rock_1(우리_사용함)
+            || i == 69//Rock_2(우리_사용함)
             //
             //////- Tree (우리_사용함)
             || i == 70//AlaskaCedar
