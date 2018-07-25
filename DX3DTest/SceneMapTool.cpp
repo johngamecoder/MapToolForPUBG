@@ -57,7 +57,7 @@ void SceneMapTool::Init()
     m_pHeightMap->SetDimension(256);
     m_pHeightMap->Load(_T("./Resource/heightmap/testing/HeightMap_128.raw"), &matWorld);
     m_pHeightMap->SetMtlTex(D3DMATERIAL9(DXUtil::WHITE_MTRL),
-        TextureManager::Get()->GetTexture(_T("./Resource/heightmap/terrain.jpg"/*testing/HeightMap.png"*/)));
+        TextureManager::Get()->GetTexture(_T("./Resource/heightmap/ground_d_8192.png"/*testing/HeightMap.png"*/)));
 
 
     /*
