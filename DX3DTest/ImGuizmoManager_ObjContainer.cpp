@@ -199,7 +199,7 @@ void ImGuizmoManager::ContainObject()
             || i == 32//ContainerBox_A
             || i == 33//ContainerBox_B
             || i == 34//ContainerSmall_1
-            || i == 35//ContainerSmall_2
+            //|| i == 35//ContainerSmall_2 (우리야 이거 나중에 wall로 바꿔줘!)
 
             ////- HayBale (사용함)
             || i == 36//HayBale_1
@@ -270,8 +270,8 @@ void ImGuizmoManager::ContainObject()
             || i == 77//Door_OutDoor
 
             || i == 78//Wall_1
-            //|| i == 79//Wall_2
-            //|| i == 80//Wall_End
+            || i == 79//Wall_2
+            || i == 80//Wall_End
             || i == 81//Wall_End_Long
             )
         {
