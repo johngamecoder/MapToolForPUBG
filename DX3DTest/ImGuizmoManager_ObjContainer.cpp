@@ -4,7 +4,7 @@
 #include "PUBG_Object.h"
 
 char* ComboObjectList[static_cast<int>(TAG_RES_STATIC::COUNT)];
-char* ComboTerrainFeaturesList[69];
+char* ComboTerrainFeaturesList[71];
 char* ComboItemsList[13];
 
 void ImGuizmoManager::LoadObjectImGui()
@@ -17,7 +17,7 @@ void ImGuizmoManager::LoadObjectImGui()
         ImGui::RadioButton("Items", &e, 1);
         if (e == 0)
         {
-            ImGui::Combo("", &comboTerrainFeatureSelect, ComboTerrainFeaturesList, 69);
+            ImGui::Combo("", &comboTerrainFeatureSelect, ComboTerrainFeaturesList, 71);
             {
                 ImGui::SameLine();
                 ObjectLoaderButton(ComboTerrainFeaturesList, comboTerrainFeatureSelect);
@@ -199,7 +199,7 @@ void ImGuizmoManager::ContainObject()
             || i == 32//ContainerBox_A
             || i == 33//ContainerBox_B
             || i == 34//ContainerSmall_1
-            //|| i == 35//ContainerSmall_2 (우리야 이거 나중에 wall로 바꿔줘!)
+            //|| i == 35//ContainerSmall_2 (우리야 이거 나중에 wall로 바꿔줘!) -> Wall_3, Wall_4추가했어요!!
 
             ////- HayBale (사용함)
             || i == 36//HayBale_1
@@ -266,13 +266,15 @@ void ImGuizmoManager::ContainObject()
             || i == 72//LondonPlane
 
             //////Wall이랑 Door추가함
-            || i == 76//Door_InDoor
+            //|| i == 76//Door_InDoor
             || i == 77//Door_OutDoor
 
             || i == 78//Wall_1
             || i == 79//Wall_2
             || i == 80//Wall_End
             || i == 81//Wall_End_Long
+            || i == 82//Wall_3
+            || i == 83//Wall_4
             )
         {
             PATHnNAME = ResourceInfo::GetPathFileName(static_cast<TAG_RES_STATIC>(i));

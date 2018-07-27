@@ -505,6 +505,16 @@ pair<string, string> ResourceInfo::GetFileNameWithoutX(const TAG_RES_STATIC tag)
                 filePath = "DoorAndWall/";
                 fileName = "Wall_End_Long";
                 break;
+
+            case TAG_RES_STATIC::Wall_3:
+                filePath = "DoorAndWall/";
+                fileName = "Wall_3";
+                break;
+
+            case TAG_RES_STATIC::Wall_4:
+                filePath = "DoorAndWall/";
+                fileName = "Wall_4";
+                break;
             }
         }
 
@@ -1023,6 +1033,16 @@ pair<string, string> ResourceInfo::GetPathFileName(const TAG_RES_STATIC tag)
             case TAG_RES_STATIC::Wall_End_Long:
                 filePath = "DoorAndWall/";
                 fileName = "Wall_End_Long";
+                break;
+
+            case TAG_RES_STATIC::Wall_3:
+                filePath = "DoorAndWall/";
+                fileName = "Wall_3";
+                break;
+
+            case TAG_RES_STATIC::Wall_4:
+                filePath = "DoorAndWall/";
+                fileName = "Wall_4";
                 break;
             }
         }

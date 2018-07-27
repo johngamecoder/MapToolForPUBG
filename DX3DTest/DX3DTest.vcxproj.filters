@@ -144,15 +144,6 @@
     <ClInclude Include="scene\SceneTest.h">
       <Filter>Source Files\4.Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="model\obj\DrawingGroup.h">
-      <Filter>Source Files\3.Object\ObjModel</Filter>
-    </ClInclude>
-    <ClInclude Include="model\obj\ObjLoader.h">
-      <Filter>Source Files\3.Object\ObjModel</Filter>
-    </ClInclude>
-    <ClInclude Include="model\obj\ObjMap.h">
-      <Filter>Source Files\3.Object\ObjModel</Filter>
-    </ClInclude>
     <ClInclude Include="model\ase\Asciitok.h">
       <Filter>Source Files\3.Object\AseModel</Filter>
     </ClInclude>
@@ -367,15 +358,6 @@
     </ClCompile>
     <ClCompile Include="scene\SceneTest.cpp">
       <Filter>Source Files\4.Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="model\obj\DrawingGroup.cpp">
-      <Filter>Source Files\3.Object\ObjModel</Filter>
-    </ClCompile>
-    <ClCompile Include="model\obj\ObjLoader.cpp">
-      <Filter>Source Files\3.Object\ObjModel</Filter>
-    </ClCompile>
-    <ClCompile Include="model\obj\ObjMap.cpp">
-      <Filter>Source Files\3.Object\ObjModel</Filter>
     </ClCompile>
     <ClCompile Include="model\ase\AseLoader.cpp">
       <Filter>Source Files\3.Object\AseModel</Filter>

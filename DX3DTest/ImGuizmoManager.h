@@ -7,7 +7,7 @@ class IDisplayObject;
 class Camera;
 class BoxCollider;
 extern char* ComboObjectList[static_cast<int>(TAG_RES_STATIC::COUNT)];
-extern char* ComboTerrainFeaturesList[69];
+extern char* ComboTerrainFeaturesList[71];
 extern char* ComboItemsList[13];
 
 struct BoxColliderInFile
