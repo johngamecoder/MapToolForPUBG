@@ -171,7 +171,12 @@ void ImGuizmoManager::ContainObject()
     {
         if (
             i == 1      //5탄, scale을 위해 사용
-            
+            || i == 2   //7탄,
+            || i == 12  //    Armor_Lv1,
+            || i == 13  // Back_Lv1,
+            || i == 14  // Head_Lv1,
+            || i == 73 //QBZ
+            || i == 75 //Kar98k
             //buildings (사용함)
             //|| i == 15  //AbandonedTownHall
             || i == 16  //Church
@@ -267,7 +272,7 @@ void ImGuizmoManager::ContainObject()
 
             //////Wall이랑 Door추가함
             //|| i == 76//Door_InDoor
-            || i == 77//Door_OutDoor
+            //|| i == 77//Door_OutDoor
 
             || i == 78//Wall_1
             || i == 79//Wall_2
