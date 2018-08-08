@@ -1,6 +1,6 @@
 # MapToolForPUBG
 - Map tool create for [Team avengers] PUBG Project
-Project Link : https://github.com/oneofthezombies/TeamAvengers_PUBG
+- Project Link : https://github.com/oneofthezombies/TeamAvengers_PUBG
 
 # Tools used for programming
 - C/C++
